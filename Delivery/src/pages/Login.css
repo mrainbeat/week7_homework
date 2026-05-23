@@ -1,0 +1,115 @@
+/* 화면 전체 중앙 정렬을 위한 컨테이너 */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9; /* 임의의 배경색, 필요시 변경 */
+}
+
+/* 피그마 기준 로그인 메인 박스 */
+.login-box {
+  width: 625px;
+  height: 704px;
+  background-color: #ffffff;
+  border: 2px solid #ffffff; /* 피그마에 표시된 푸른색 테두리 라인 */
+  border-radius: 8px; /* 살짝 부드러운 라운딩 처리를 원할 때 설정 */
+  padding: 60px 40px; /* 내부 여유 공간 */
+  box-sizing: border-box;
+  border-radius: 16px; /* 박스 모서리를 둥글게 (숫자가 커질수록 더 둥글어짐) */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* 은은하고 부드러운 그림자 효과 */
+  /* 내부 아이템들을 세로로 정렬 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 로고/타이틀 */
+.login-title {
+  color: #ff3344; /* 피그마의 붉은 계열 타이틀 색상 */
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+/* 폼 영역 전체 넓이 채우기 */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* 내부 요소가 공간을 골고루 쓰도록 설정 */
+}
+
+/* 라벨 + 인풋 그룹 */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.input-group label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.input-group input {
+  width: 553px;
+  height: 63px;
+  padding: 0 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 20px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+/* 인풋창에 마우스 올리거나 클릭했을 때 효과 */
+.input-group input:focus {
+  border-color: #0099ff;
+}
+
+/* 회원가입 유도 링크 */
+.signup-link-group {
+  text-align: center;
+  font-size: 15px;
+  color: #aaaaaa;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.signup-link {
+  color: #f0485f;
+  text-decoration: none;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+/* 하단 로그인 버튼 디자인 */
+.login-btn {
+  width: 168px; /* 독립적인 서치 버튼 느낌의 아담한 가로폭 */
+  height: 54px;
+  background-color: #f0f0f0; /* 활성화 전 연한 회색 톤 */
+  color: #555555;
+  border: none;
+  border-radius: 20px; /* 둥근 버튼 형태 */
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 48px auto; /* 가로 중앙 정렬 */
+  transition: all 0.2s ease;
+}
+
+/* 버튼 마우스 호버 효과 */
+.login-btn:hover {
+  background-color: #0099ff;
+  color: #ffffff;
+}
