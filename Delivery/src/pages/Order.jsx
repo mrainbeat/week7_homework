@@ -36,7 +36,7 @@ const Order = () => {
         left={
           <div className="flex gap-[48px] items-center">
             <Link to="/Menu" className="cursor-pointer">
-              <img src={Leftarrow} alt="왼쪽화실표" />
+              <img src={Leftarrow} alt="왼쪽화살표" />
             </Link>
             <span className="text-[36px] font-bold">장바구니</span>
           </div>

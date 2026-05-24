@@ -1,8 +1,16 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'GmarketSansMedium', 'sans-serif';
+  /* 폰트 설정: fallback 폰트인 sans-serif는 따옴표를 제외합니다 */
+  --font-sans: 'GmarketSansMedium', sans-serif;
 
+  /* 반응형 브레이크포인트 설정 (크기순 정렬) */
   --breakpoint-ph: 402px;
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
   --breakpoint-dt: 1725px;
 }
