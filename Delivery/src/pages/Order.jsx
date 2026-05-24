@@ -1,5 +1,6 @@
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
+import { StoreMockData } from '../mocks/mock';
 
 const Order = () => {
   return (
@@ -10,7 +11,7 @@ const Order = () => {
             <img src={Leftarrow} alt="왼쪽화실표" />
             <span className="text-[36px] font-bold">장바구니</span>
           </div>
-        }
+        
       />
     </div>
   );

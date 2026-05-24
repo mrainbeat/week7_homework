@@ -1,6 +1,7 @@
 import Navbar from '../components/layouts/Navbar';
 import cart from '../assets/cart.svg';
 import { Link, useLocation } from 'react-router-dom';
+import FoodBoard from '../components/Main/FoodBoard';
 
 const Menu = () => {
   return (
@@ -17,6 +18,9 @@ const Menu = () => {
           </div>
         }
       />
+      <div>
+        <FoodBoard />
+      </div>
     </div>
   );
 };
