@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
-import Signup from './pages/ Signup';
+import Signup from './pages/Signup';
 import Menu from './pages/Menu';
 import Order from './pages/Order';
 import Layout from './components/layouts/Layout';
@@ -10,7 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="npm/Login" element={<Login />}></Route>
+        <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/Menu" replace />} />
