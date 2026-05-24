@@ -1,10 +1,13 @@
-const FoodCard = () => {
+const FoodCard = ({ id, name, star, type, image }) => {
   return (
     <div>
-      <img></img>
-      <div>왕꼬치</div>
-      <div>왕꼬치</div>
-      <div>왕꼬치</div>
+      <img src={image} alt={name} />
+      <div>
+        <h3>{name}</h3>
+        <p>⭐️{star}</p>
+        <hr />
+        <p>{type}</p>
+      </div>
     </div>
   );
 };

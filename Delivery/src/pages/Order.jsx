@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
-<<<<<<< HEAD
-import { StoreMockData } from '../mocks/mock';
-=======
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Order.css';
->>>>>>> b267af82920d93b3b4204b9031e65c5dbdaeaad8
 
 const Order = () => {
   const navigate = useNavigate();
@@ -40,11 +36,11 @@ const Order = () => {
         left={
           <div className="flex gap-[48px] items-center">
             <Link to="/Menu" className="cursor-pointer">
-              <img src={Leftarrow} alt="왼쪽화실표" />
+              <img src={Leftarrow} alt="왼쪽화살표" />
             </Link>
             <span className="text-[36px] font-bold">장바구니</span>
           </div>
-        
+        }
       />
 
       {/* 메인 레이아웃 박스 */}
