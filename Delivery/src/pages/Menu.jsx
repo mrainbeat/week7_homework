@@ -1,8 +1,25 @@
+import React, { useEffect } from 'react';
 import Navbar from '../components/layouts/Navbar';
 import cart from '../assets/cart.svg';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Menu = () => {
+  const navigate = useNavigate();
+  const loginStatus = localStorage.getItem('isLoggedIn');
+
+  // 🛡️ 로그인 제한 가드
+  useEffect(() => {
+    if (loginStatus !== 'true') {
+      // 비로그인시 로그인으로 이동
+      navigate('/Login', { replace: true });
+    }
+  }, [loginStatus, navigate]);
+
+  // 🚪 로그아웃 버튼 동작 함수
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+  };
+
   return (
     <div>
       <Navbar
@@ -12,7 +29,12 @@ const Menu = () => {
             <Link to="/Order" className="cursor-pointer">
               <img src={cart} alt="장바구니" />
             </Link>
-            <Link to="/Login" className="hover:text-black">
+
+            <Link
+              to="/Login"
+              className="hover:text-black"
+              onClick={handleLogout}
+            >
               {' '}
               로그아웃
             </Link>
