@@ -10,7 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/Login" element={<Login />}></Route>
+        <Route path="npm/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/Menu" replace />} />

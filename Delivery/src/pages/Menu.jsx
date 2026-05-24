@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/layouts/Navbar';
 import cart from '../assets/cart.svg';
-<<<<<<< HEAD
-import { Link, useLocation } from 'react-router-dom';
 import FoodBoard from '../components/Main/FoodBoard';
-=======
 import { Link, useLocation, useNavigate } from 'react-router-dom';
->>>>>>> b267af82920d93b3b4204b9031e65c5dbdaeaad8
 
 const Menu = () => {
   const navigate = useNavigate();
@@ -50,9 +46,7 @@ const Menu = () => {
           </div>
         }
       />
-      <div>
-        <FoodBoard />
-      </div>
+      <FoodBoard />
     </div>
   );
 };
