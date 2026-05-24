@@ -1,0 +1,280 @@
+/* ==========================================================================
+   1. 전체 페이지 배경 및 기본 뼈대
+   ========================================================================== */
+.order-page-container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   2. 메인 레이아웃 박스 (피그마 정밀 수치 + 상하좌우 중앙 정렬)
+   - 전체 가로: 1200px / 세로: 604px
+   - 두 상자 사이 간격: 69px
+   - 네비바를 제외한 나머지 화면에서 완벽한 상하 정중앙 배치
+   ========================================================================== */
+.order-main-content {
+  width: 1200px !important;
+  height: 604px !important;
+  margin: 0 auto !important; /* 좌우 정중앙 배정 */
+
+  flex: 1 !important; /* 네비바 아래 남는 가로세로 공간을 가득 채움 */
+  display: flex !important;
+  flex-direction: row !important; /* 수평 가로 정렬 고정 */
+  justify-content: center !important; /* 가로축 정중앙 배치 */
+  align-items: center !important; /* 세로축 정중앙 배치 */
+  gap: 69px !important; /* 두 상자 사이의 간격 69px */
+  box-sizing: border-box !important;
+}
+
+/* ==========================================================================
+   3. 🛒 왼쪽 섹션: 장바구니 영역 상자 (563px * 604px)
+   ========================================================================== */
+.cart-section {
+  width: 563px !important; /* 장바구니 상자 가로폭 고정 */
+  height: 604px !important; /* 장바구니 상자 세로높이 고정 */
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
+/* 장바구니 플레이트 내부 디자인 (배경색과 그림자 제거) */
+.cart-list-card,
+.cart-empty-box {
+  width: 100% !important;
+  height: 100% !important; /* 부모 고정 높이 604px를 100% 그대로 계승 */
+  background-color: transparent !important; /* 배경색 투명하게 제거 */
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: none !important; /* 그림자 효과 제거 */
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
+/* 3-1. 장바구니가 비어있을 때 정중앙 배치 */
+.cart-empty-box {
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.cart-empty-text {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 32px;
+}
+
+/* 쇼핑하러 가기 버튼 */
+.shopping-btn {
+  padding: 14px 40px;
+  background-color: #fff5a5;
+  color: #333333;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 12px;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease;
+}
+
+.shopping-btn:hover {
+  background-color: #ffe869;
+}
+
+/* 3-2. 장바구니에 아이템이 존재할 때 */
+.cart-list-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #111111;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #f1f3f5;
+  padding-bottom: 16px;
+}
+
+/* 내부 아이템 스크롤 메커니즘 */
+.cart-items-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.cart-item-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 16px 0;
+  border-bottom: 1px solid #f8f9fa;
+}
+
+.cart-item-row:last-child {
+  border-bottom: none;
+}
+
+.cart-item-info {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px;
+}
+
+.cart-item-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222222;
+}
+
+.cart-item-meta {
+  font-size: 15px;
+  color: #aaaaaa;
+}
+
+.cart-item-total-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #111111;
+}
+
+/* ==========================================================================
+   4. 💳 오른쪽 섹션: 결제하기 카드 상자 (568px * 604px)
+   ========================================================================== */
+.payment-card {
+  width: 568px !important; /* 결제 상자 가로폭 고정 */
+  height: 604px !important; /* 결제 상자 세로높이 고정 */
+  background-color: #ffffff;
+  border-radius: 32px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid #f8f9fa;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
+.payment-title {
+  font-size: 36px;
+  font-weight: 900;
+  text-align: center;
+  color: #111111;
+  margin-bottom: 32px;
+}
+
+.payment-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #f0485f;
+  margin-bottom: 16px;
+  display: block;
+  letter-spacing: 0.5px;
+}
+
+/* 독립형 버튼 2x2 격자 배열 배치 규칙 */
+.payment-method-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 36px !important;
+}
+
+/* 개별 결제버튼 기본 디자인 */
+.method-btn {
+  padding: 16px 0;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background-color: #f8f9fa;
+  color: #555555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.method-btn:hover {
+  background-color: #e9ecef;
+}
+
+/* 버튼 활성화 테마 */
+.method-btn.active {
+  background-color: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+/* 총액 표기 영역 */
+.price-summary-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 24px;
+  border-top: 1px solid #f1f3f5;
+  padding-top: 24px;
+}
+
+.price-summary-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #111111;
+}
+
+.price-summary-value {
+  font-size: 28px;
+  font-weight: 900;
+  color: #111111;
+}
+
+/* 하단 최종 결제제출 버튼 */
+.submit-payment-btn {
+  width: 100%;
+  padding: 20px 0;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 16px;
+  text-align: center;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s ease;
+  margin-top: auto !important; /* 최하단 고정 */
+}
+
+/* 활성화 상태 */
+.submit-payment-btn.clickable {
+  background-color: #111111;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.submit-payment-btn.clickable:hover {
+  background-color: #222222;
+}
+
+/* 비활성화 상태 */
+.submit-payment-btn.disabled {
+  background-color: #f1f3f5;
+  color: #aaaaaa;
+  cursor: not-allowed;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 1240px) {
+  .order-main-content {
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 40px !important;
+    margin-top: 40px !important;
+    margin-bottom: 40px !important;
+    padding: 0 20px !important;
+  }
+  .cart-section,
+  .payment-card {
+    width: 100% !important;
+    max-width: 568px !important;
+    height: auto !important;
+  }
+  .cart-list-card,
+  .cart-empty-box {
+    height: auto !important;
+    min-height: 400px !important;
+  }
+}
