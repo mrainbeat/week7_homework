@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f9f9f9; /* 임의의 배경색, 필요시 변경 */
+  background-color: #f9f9f9;
 }
 
 /* 피그마 기준 로그인 메인 박스 */
@@ -12,7 +12,7 @@
   width: 625px;
   height: 704px;
   background-color: #ffffff;
-  border: 2px solid #ffffff; /* 피그마에 표시된 푸른색 테두리 라인 */
+  border: 2px solid #ffffff;
   border-radius: 8px; /* 살짝 부드러운 라운딩 처리를 원할 때 설정 */
   padding: 60px 40px; /* 내부 여유 공간 */
   box-sizing: border-box;
@@ -112,4 +112,41 @@
 .login-btn:hover {
   background-color: #0099ff;
   color: #ffffff;
+}
+@media (max-width: 640px) {
+  /* 1. 메인 박스가 모바일 화면 폭을 넘지 못하도록 최대 폭 강제 제한 */
+  .login-box {
+    width: 100% !important;
+    max-width: calc(
+      100vw - 40px
+    ) !important; /* 화면 좌우에 최소 20px씩 여백 강제 확보 */
+    height: auto !important; /* 고정 높이 704px 해제 */
+    padding: 40px 20px !important; /* 내부 여백을 좁혀서 공간 확보 */
+  }
+
+  /* 2. 폼 영역도 부모 박스 너비를 절대 넘지 못하도록 고정 */
+  .login-form {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 3. 라벨과 인풋을 감싸는 그룹도 가로폭 100% 고정 */
+  .input-group {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 4. 🔥 [핵심] 인풋창이 부모 박스 안으로 무조건 쏙 들어가도록 강제 */
+  .input-group input {
+    width: 100% !important; /* 기존의 고정 553px를 무조건 무시 */
+    max-width: 100% !important;
+    box-sizing: border-box !important; /* 패딩이 가로폭을 늘리지 않도록 안쪽 계산 설정 */
+    font-size: 16px !important;
+    height: 54px !important;
+  }
+
+  .login-title {
+    font-size: 28px !important;
+    margin-bottom: 32px !important;
+  }
 }
