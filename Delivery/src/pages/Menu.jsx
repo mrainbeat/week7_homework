@@ -6,10 +6,12 @@ const Menu = () => {
   return (
     <div>
       <Navbar
-        left={<span className="text-[36px] font-bold">장바구니</span>}
+        left={<span className="text-[36px] font-bold">어쩌구저쩌구</span>}
         right={
           <div className="flex gap-[38px] items-center">
-            <img src={cart} alt="장바구니" />
+            <Link to="/Order" className="cursor-pointer">
+              <img src={cart} alt="장바구니" />
+            </Link>
             <Link to="/Login" className="hover:text-black">
               {' '}
               로그아웃
