@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css'; // CSS 파일 연결
 
 export default function Login() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('로그인 시도:', { id, password });
-    // 추후 로그인 로직 구현부
+
+    if (id === 'test' && password === '1234') {
+      localStorage.setItem('isLoggedIn', 'true');
+      navigate('/Menu');
+    } else {
+      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+      setPassword('');
+    }
   };
 
   return (
