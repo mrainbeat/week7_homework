@@ -208,7 +208,6 @@
 .input-group input:focus {
   border-color: #0099ff;
 }
-/* --- Signup.css에 추가할 스타일 --- */
 
 /* 1. 뒤로가기 버튼의 기준점이 되도록 signup-box에 relative 추가 */
 .signup-box {

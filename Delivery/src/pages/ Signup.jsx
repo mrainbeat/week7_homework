@@ -27,7 +27,7 @@ export default function Signup() {
   return (
     <div className="signup-container">
       <div className="signup-box">
-        {/* 4. ⬅️ 왼쪽 위 뒤로가기 아이콘 버튼 추가 */}
+        {/* 4. 왼쪽 위 뒤로가기 아이콘 버튼 추가 */}
         <button
           className="back-btn"
           onClick={() => navigate('/Login')}

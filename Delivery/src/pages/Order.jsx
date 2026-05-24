@@ -2,29 +2,29 @@ import React, { useEffect, useState } from 'react';
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './Order.css'; // 🌟 파낸 CSS 파일 연동
+import './Order.css';
 
 const Order = () => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
 
-  // 🛒 로컬스토리지에서 장바구니 상품 데이터 읽기
+  // 로컬스토리지에서 장바구니 상품 데이터 읽기
   const [cartItems, setCartItems] = useState(() => {
     const savedCart = localStorage.getItem('cartItems');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // 💳 선택된 결제 방법 상태
+  // 선택된 결제 방법 상태
   const [paymentMethod, setPaymentMethod] = useState('');
 
-  // 🛡️ 로그인 제한 가드
+  // 로그인 제한 가드
   useEffect(() => {
     if (loginStatus !== 'true') {
       navigate('/Login', { replace: true });
     }
   }, [loginStatus, navigate]);
 
-  // 💰 총 결제 금액 실시간 계산
+  // 총 결제 금액 실시간 계산
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -32,7 +32,6 @@ const Order = () => {
 
   return (
     <div className="order-page-container">
-      {/* 민준님이 주신 원래 Navbar 구조 100% 동일하게 유지 */}
       <Navbar
         left={
           <div className="flex gap-[48px] items-center">
@@ -44,9 +43,9 @@ const Order = () => {
         }
       />
 
-      {/* 📦 메인 레이아웃 박스 */}
+      {/* 메인 레이아웃 박스 */}
       <div className="order-main-content">
-        {/* 🛒 왼쪽 섹션: 장바구니 목록 확인 */}
+        {/* 왼쪽 섹션: 장바구니 목록 확인 */}
         <div className="cart-section">
           {cartItems.length === 0 ? (
             /* 1) 장바구니가 텅 비었을 때 */
@@ -77,7 +76,7 @@ const Order = () => {
           )}
         </div>
 
-        {/* 💳 오른쪽 섹션: 결제 카드 레이어 */}
+        {/*  오른쪽 섹션: 결제 카드 레이어 */}
         <div className="payment-card">
           <h2 className="payment-title">결제하기</h2>
 
