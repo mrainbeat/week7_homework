@@ -16,11 +16,17 @@ const FoodBoard = () => {
     <div className="max-w-[1200px] min-h-[775px] pt-[201px] mx-[264px]">
       <div className="flex gap-[24px] mb-[72px] text-white items-center">
         {categories.map((item) => (
-          <FilterButton key={item} category={item} />
+          <FilterButton
+            key={item}
+            category={item}
+            active={category === item}
+            // 현재 선택된 버튼인지 여부를 감지함, onclick시 category변수가 변경됨
+            onClick={() => setCategory(item)}
+          />
         ))}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-[24px] gap-y-8">
-        {StoreMockData.map((item) => (
+        {filteredFoods.map((item) => (
           <FoodCard
             key={item.id}
             name={item.name}

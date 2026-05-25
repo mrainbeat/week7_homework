@@ -23,7 +23,7 @@ const Menu = () => {
   return (
     <div>
       <Navbar
-        left={<span className="text-[36px] font-bold">어쩌구저쩌구</span>}
+        left={<span className="text-[36px] font-bold">주문하기 </span>}
         right={
           <div className="flex gap-[38px] items-center">
             <Link to="/Order" className="cursor-pointer">
