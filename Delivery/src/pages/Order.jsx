@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import CartList from '../components/CartList';
 import './Order.css';
 
-const Order = ({ cart }) => {
+const Order = ({ cart, addToCart }) => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
 
@@ -23,6 +24,17 @@ const Order = ({ cart }) => {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  // 장바구니 데이터를 가게이름 기준으로 하나로 축소하기
+  // reduce(누적할 배열, 현재 아이템) -> return 다음으로 넘길 값
+  const groupedCart = cart.reduce((groups, item) => {
+    if (!groups[item.storeName]) {
+      groups[item.storeName] = [];
+      //새로운 가게라면 빈배열을 생성함
+    }
+    groups[item.storeName].push(item);
+    return groups;
+  }, {});
 
   return (
     <div className="order-page-container">
@@ -51,20 +63,17 @@ const Order = ({ cart }) => {
             </div>
           ) : (
             /* 2) 상품 데이터가 들어있을 때 */
-            <div className="cart-list-card">
-              <h3 className="cart-list-title">담은 상품</h3>
-              {cart.map((item) => (
-                <div key={item.id} className="cart-item-row">
-                  <div className="cart-item-info">
-                    <span className="cart-item-name">[{item.storeName}]</span>
-                    <span className="cart-item-name">{item.menuName}</span>
-                    <span className="cart-item-meta">
-                      {item.price.toLocaleString()}원 · {item.quantity}개
-                    </span>
+            <div className="rounded-lg flex flex-col gap-[51px]">
+              {Object.keys(groupedCart).map((storeName) => (
+                <div className="bg-white rounded-xl overflow-hidden">
+                  <div className="bg-[#FDF7C3] text-[20px] py-[12px] px-[24px] ">
+                    <h4>{storeName}</h4>
                   </div>
-                  <span className="cart-item-total-price">
-                    {(item.price * item.quantity).toLocaleString()}원
-                  </span>
+                  <div>
+                    {groupedCart[storeName].map((item) => (
+                      <CartList item={item} addToCart={addToCart} />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

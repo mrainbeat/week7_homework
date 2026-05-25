@@ -45,7 +45,10 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/Menu" replace />} />
           <Route path="Menu" element={<Menu addToCart={addToCart} />}></Route>
-          <Route path="Order" element={<Order cart={cart} />}></Route>
+          <Route
+            path="Order"
+            element={<Order cart={cart} addToCart={addToCart} />}
+          ></Route>
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
