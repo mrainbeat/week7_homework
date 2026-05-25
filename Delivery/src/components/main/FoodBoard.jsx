@@ -22,10 +22,19 @@ const FoodBoard = () => {
   };
 
   // 각 아이템의 타입과 현재 카테고리 타입을 비교후 열치하는 타입만 필터링하기
-  const filteredFoods =
-    category === '전체'
-      ? StoreMockData
-      : StoreMockData.filter((food) => food.type === category);
+  // 기타 선택 시 한/중식 외의 음식만 필터링하도록 만들기
+  const filteredFoods = () => {
+    if (category === '전체') {
+      return StoreMockData;
+    }
+    if (category === '기타') {
+      return StoreMockData.filter(
+        (item) => item.type !== '한식' && item.type !== '중식'
+      );
+    }
+    return StoreMockData.filter((item) => item.type === category);
+  };
+
   return (
     <div className="max-w-[1200px] min-h-[775px] pt-[201px] mx-[264px]">
       <div className="flex gap-[24px] mb-[72px] text-white items-center">
@@ -40,7 +49,7 @@ const FoodBoard = () => {
         ))}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-[24px] gap-y-8">
-        {filteredFoods.map((item) => (
+        {filteredFoods().map((item) => (
           <FoodCard
             key={item.id}
             name={item.name}
