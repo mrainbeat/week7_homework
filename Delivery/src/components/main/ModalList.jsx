@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import minus from '../../assets/minus.svg';
+import plus from '../../assets/plus.svg';
 
 const ModalList = ({ id, name, detail, price }) => {
   const [selectedFood, setSelectedFood] = useState(false);
@@ -8,7 +10,7 @@ const ModalList = ({ id, name, detail, price }) => {
     setSelectedFood(item); //클릭한 데이터 저장
   };
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between items-center">
       <div className="flex flex-col">
         <h6 className="text-[20px]">{name}</h6>
         <p className="text-[12px] mt-[7px] mb-[13px] text-[#858585]">
@@ -25,17 +27,20 @@ const ModalList = ({ id, name, detail, price }) => {
             담기
           </button>
         ) : (
-          <div className="flex">
+          <div className="flex gap-[32px] w-[155px] h-[56px] items-center">
             <button
               onClick={() => {
                 if (count > 1) setCount(count - 1);
                 else setSelectedFood(false);
               }}
+              class
             >
-              -
+              <img src={minus} alt="minus" />
             </button>
-            <div>{count}</div>
-            <button onClick={() => setCount(count + 1)}>+</button>
+            <div className="text-[24px]">{count}</div>
+            <button onClick={() => setCount(count + 1)}>
+              <img src={plus} alt="plus" />
+            </button>
           </div>
         )}
       </div>
