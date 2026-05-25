@@ -4,7 +4,7 @@ import cart from '../assets/cart.svg';
 import FoodBoard from '../components/main/FoodBoard';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const Menu = () => {
+const Menu = ({ addToCart }) => {
   const navigate = useNavigate();
 
   // 로그인 상태를 리액트 state로 관리
@@ -46,7 +46,7 @@ const Menu = () => {
           </div>
         }
       />
-      <FoodBoard />
+      <FoodBoard addToCart={addToCart} />
     </div>
   );
 };

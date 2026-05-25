@@ -16,19 +16,19 @@ export const StoreMockData = [
     image: FoodImg1,
     menus: [
       {
-        id: 'm1', // 따옴표 추가
+        id: 'm1',
         name: '마라탕 1인분',
         detail: '마라탕 500g 기본 재료',
         price: 10000,
       },
       {
-        id: 'm2', // 따옴표 추가
+        id: 'm2',
         name: '꿔바로우(소)',
         detail: '바삭 쫄깃 꿔바로우(7조각)',
         price: 12000,
       },
       {
-        id: 'm3', // 따옴표 추가
+        id: 'm3',
         name: '마라샹궈(소)',
         detail: '떡볶이보단 마라샹궈',
         price: 20000,
@@ -43,19 +43,19 @@ export const StoreMockData = [
     image: FoodImg2,
     menus: [
       {
-        id: 'm4', // 따옴표 추가
+        id: 'm4',
         name: '두찜 까만찜닭',
         detail: '달콤 짭조름한 간장소스로 만든 까만찜닭',
         price: 27800,
       },
       {
-        id: 'm5', // 따옴표 추가
+        id: 'm5',
         name: '[HOT] 두찜 실비한우곱찜닭', // 끝에 있는 ] 오타 제거
         detail: '통통한 한우대창에 매운 김치 다대기가 뜸뿍',
         price: 34800,
       },
       {
-        id: 'm6', // 따옴표 추가
+        id: 'm6',
         name: '[원조K로제] 두찜 로제찜닭',
         detail: 'K로제의 원조 두찜만의 특제소스',
         price: 30800,
@@ -70,19 +70,19 @@ export const StoreMockData = [
     image: FoodImg3,
     menus: [
       {
-        id: 'm7', // 따옴표 추가
+        id: 'm7',
         name: '[대표] 고추마요 치킨',
         detail: '고추마요 소스와 할라피뇨의 환상적인 조합',
         price: 24900,
       },
       {
-        id: 'm8', // 따옴표 추가
+        id: 'm8',
         name: '씬 후라이드',
         detail: '가장 얇고 담백한 튀김옷의 후라이드',
         price: 22900,
       },
       {
-        id: 'm9', // 따옴표 추가
+        id: 'm9',
         name: '블랙알리오',
         detail: '깊고 진한 간장과 담백한 마늘의 조화로 독보적인 맛',
         price: 24900,
@@ -175,11 +175,11 @@ export const StoreMockData = [
     name: '장충동 왕족발',
     star: 4.7,
     type: '한식',
-    image: FoodImg7, // FoodImg5 -> FoodImg7로 변경
+    image: FoodImg7,
     menus: [
       {
         id: 'm19',
-        name: '한방 족발 (소)', // 보쌈 -> 족발로 자연스럽게 변경
+        name: '한방 족발 (소)',
         detail: '몸에 좋은 한약재와 함께 푹 삶아내어 잡내 없이 부드러운 족발',
         price: 29000,
       },
@@ -202,7 +202,7 @@ export const StoreMockData = [
     name: '월미당',
     star: 4.4,
     type: '아시안',
-    image: FoodImg8, // FoodImg6 -> FoodImg8로 변경
+    image: FoodImg8,
     menus: [
       {
         id: 'm22',

@@ -2,7 +2,7 @@ import Close from '../../assets/ion_close-outline.svg';
 import ModalList from './ModalList';
 import { StoreMockData } from '../../mocks/mock';
 
-const FoodModal = ({ item, onClose }) => {
+const FoodModal = ({ item, onClose, addToCart }) => {
   return (
     <div className="fixed bg-black/50 z-50 flex items-center justify-center inset-0">
       <div className="bg-white h-[667px] w-[738px] flex flex-col p-[40px]">
@@ -22,6 +22,8 @@ const FoodModal = ({ item, onClose }) => {
               name={show.name}
               detail={show.detail}
               price={show.price}
+              storeName={item.name}
+              addToCart={addToCart}
             />
           ))}
         </div>

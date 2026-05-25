@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
 
-const FoodBoard = () => {
+const FoodBoard = ({ addToCart }) => {
   const [category, setCategory] = useState('전체');
   const categories = ['전체', '중식', '한식', '기타'];
 
@@ -62,7 +62,12 @@ const FoodBoard = () => {
         ))}
       </div>
       {isModalOpen && (
-        <FoodModal item={selectedMenu} onClose={handleMenuClose} />
+        <FoodModal
+          item={selectedMenu}
+          onClose={handleMenuClose}
+          //모달에 App함수 넘겨줌
+          addToCart={addToCart}
+        />
       )}
     </div>
   );

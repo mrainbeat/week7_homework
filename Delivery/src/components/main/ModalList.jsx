@@ -2,7 +2,7 @@ import { useState } from 'react';
 import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
 
-const ModalList = ({ id, name, detail, price }) => {
+const ModalList = ({ id, name, detail, price, storeName, addToCart }) => {
   const [selectedFood, setSelectedFood] = useState(false);
   const [count, setCount] = useState(1);
 
@@ -21,7 +21,17 @@ const ModalList = ({ id, name, detail, price }) => {
       <div>
         {!selectedFood ? (
           <button
-            onClick={() => setSelectedFood(true)}
+            onClick={() => {
+              setSelectedFood(true);
+              setCount(1);
+              addToCart({
+                id,
+                menuName: name,
+                price,
+                storeName,
+                quantity: 1,
+              });
+            }}
             className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg bg-[#FDF7C3] cursor-pointer"
           >
             담기
@@ -30,15 +40,46 @@ const ModalList = ({ id, name, detail, price }) => {
           <div className="flex gap-[32px] w-[155px] h-[56px] items-center">
             <button
               onClick={() => {
-                if (count > 1) setCount(count - 1);
-                else setSelectedFood(false);
+                //수량 하나 배기
+                if (count > 1) {
+                  setCount(count - 1);
+                  addToCart({
+                    id,
+                    menuName: name,
+                    price,
+                    storeName,
+                    quantity: -1,
+                  });
+                } else {
+                  setSelectedFood(false);
+                  //1-1 해서 아예 0으로 만들기
+                  addToCart({
+                    id,
+                    menuName: name,
+                    price,
+                    storeName,
+                    quantity: -1,
+                  });
+                }
               }}
-              class
             >
               <img src={minus} alt="minus" />
             </button>
             <div className="text-[24px]">{count}</div>
-            <button onClick={() => setCount(count + 1)}>
+            <button
+              //수량 하나 더하기
+              onClick={() => {
+                setCount(count + 1);
+                //수량 하나 더하기
+                addToCart({
+                  id,
+                  menuName: name,
+                  price,
+                  storeName,
+                  quantity: 1,
+                });
+              }}
+            >
               <img src={plus} alt="plus" />
             </button>
           </div>

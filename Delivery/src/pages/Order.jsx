@@ -4,15 +4,9 @@ import Navbar from '../components/layouts/Navbar';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Order.css';
 
-const Order = () => {
+const Order = ({ cart }) => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
-
-  // 로컬스토리지에서 장바구니 상품 데이터 읽기
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem('cartItems');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
 
   // 선택된 결제 방법 상태
   const [paymentMethod, setPaymentMethod] = useState('');
@@ -25,7 +19,7 @@ const Order = () => {
   }, [loginStatus, navigate]);
 
   // 총 결제 금액 실시간 계산
-  const totalPrice = cartItems.reduce(
+  const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
@@ -47,7 +41,7 @@ const Order = () => {
       <div className="order-main-content">
         {/* 왼쪽 섹션: 장바구니 목록 확인 */}
         <div className="cart-section">
-          {cartItems.length === 0 ? (
+          {cart.length === 0 ? (
             /* 1) 장바구니가 텅 비었을 때 */
             <div className="cart-empty-box">
               <p className="cart-empty-text">장바구니가 비어있습니다.</p>
@@ -59,10 +53,11 @@ const Order = () => {
             /* 2) 상품 데이터가 들어있을 때 */
             <div className="cart-list-card">
               <h3 className="cart-list-title">담은 상품</h3>
-              {cartItems.map((item, index) => (
-                <div key={index} className="cart-item-row">
+              {cart.map((item) => (
+                <div key={item.id} className="cart-item-row">
                   <div className="cart-item-info">
-                    <span className="cart-item-name">{item.name}</span>
+                    <span className="cart-item-name">[{item.storeName}]</span>
+                    <span className="cart-item-name">{item.menuName}</span>
                     <span className="cart-item-meta">
                       {item.price.toLocaleString()}원 · {item.quantity}개
                     </span>
@@ -109,7 +104,7 @@ const Order = () => {
           {/* 최종 결제하기 버튼 활성화 분기 처리 */}
           <button
             type="button"
-            disabled={!paymentMethod || cartItems.length === 0}
+            disabled={!paymentMethod || cart.length === 0}
             className={`submit-payment-btn ${
               paymentMethod && cartItems.length > 0 ? 'clickable' : 'disabled'
             }`}
