@@ -2,10 +2,24 @@ import FoodCard from './FoodCard';
 import { StoreMockData } from '../../mocks/mock';
 import { useState } from 'react';
 import FilterButton from './FilterButton';
+import FoodModal from './FoodModal';
 
 const FoodBoard = () => {
   const [category, setCategory] = useState('전체');
   const categories = ['전체', '중식', '한식', '기타'];
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMenu, setSelectedMenu] = useState(null);
+
+  const handleMenuClick = (item) => {
+    setSelectedMenu(item); //클릭한 데이터 저장
+    setIsModalOpen(true); //모달 열기
+  };
+
+  const handleMenuClose = (item) => {
+    setSelectedMenu(null);
+    setIsModalOpen(false);
+  };
 
   // 각 아이템의 타입과 현재 카테고리 타입을 비교후 열치하는 타입만 필터링하기
   const filteredFoods =
@@ -33,9 +47,14 @@ const FoodBoard = () => {
             star={item.star}
             type={item.type}
             image={item.image}
+            //누르면 열리도록 ture로 만듦
+            onClick={() => handleMenuClick(item)}
           />
         ))}
       </div>
+      {isModalOpen && (
+        <FoodModal item={selectedMenu} onClose={handleMenuClose} />
+      )}
     </div>
   );
 };

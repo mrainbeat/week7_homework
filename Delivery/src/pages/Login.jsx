@@ -24,7 +24,7 @@ export default function Login() {
     <div className="login-container">
       <div className="login-box">
         {/* 타이틀 로고 영역 */}
-        <h1 className="login-title">어쩌구저쩌구</h1>
+        <h1 className="login-title">로그인하기</h1>
 
         <form onSubmit={handleSubmit} className="login-form">
           {/* 아이디 입력 영역 */}

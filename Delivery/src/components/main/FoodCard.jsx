@@ -1,6 +1,9 @@
-const FoodCard = ({ id, name, star, type, image }) => {
+const FoodCard = ({ id, name, star, type, image, onClick }) => {
   return (
-    <div className="h-[322px] w-full bg-white rounded-lg overflow-hidden">
+    <div
+      onClick={onClick}
+      className="h-[322px] w-full bg-white rounded-lg overflow-hidden hover:shadow-lg cursor-pointer"
+    >
       <div className="w-full h-[182px]">
         <img src={image} alt={name} className="w-full h-full object-cover" />
       </div>

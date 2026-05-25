@@ -1,0 +1,19 @@
+import Close from '../../assets/ion_close-outline.svg';
+const FoodModal = ({ item, onClose }) => {
+  return (
+    <div className="fixed bg-black/50 z-50 flex items-center justify-center inset-0">
+      <div className="bg-white h-[667px] w-[738px] flex flex-col p-[40px]">
+        <div className="flex justify-between items-start w-full">
+          <div>
+            <h3 className="font-bold text-[36px]">{item.name}</h3>
+            <p className="text-[20px]">⭐️ {item.star}</p>
+          </div>
+          <img src={Close} alt="닫기" onClick={onClose} />
+        </div>
+        <hr className="border-[#CAC8C8] my-[40px]" />
+      </div>
+    </div>
+  );
+};
+
+export default FoodModal;
