@@ -1,9 +1,17 @@
 @import 'tailwindcss';
 
-@theme {
-  /* 폰트 설정: fallback 폰트인 sans-serif는 따옴표를 제외합니다 */
-  --font-sans: 'GmarketSansMedium', sans-serif;
+/* 1. 폰트 파일이나 웹폰트 주소를 먼저 브라우저에 등록해야 합니다! (예시: 지마켓 산스) */
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 
+@theme {
+  /* 폰트 설정: ⚠️ 전체를 감싸던 따옴표를 지우고 개별 폰트만 나열합니다 */
+  --font-sans: 'GmarketSansMedium', sans-serif;
   /* 반응형 브레이크포인트 설정 (크기순 정렬) */
   --breakpoint-ph: 402px;
   --breakpoint-xs: 480px;

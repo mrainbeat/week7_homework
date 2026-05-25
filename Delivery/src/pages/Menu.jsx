@@ -4,7 +4,7 @@ import cart from '../assets/cart.svg';
 import FoodBoard from '../components/main/FoodBoard';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const Menu = () => {
+const Menu = ({ addToCart }) => {
   const navigate = useNavigate();
 
   // 로그인 상태를 리액트 state로 관리
@@ -23,7 +23,7 @@ const Menu = () => {
   return (
     <div>
       <Navbar
-        left={<span className="text-[36px] font-bold">어쩌구저쩌구</span>}
+        left={<span className="text-[36px] font-bold">주문하기 </span>}
         right={
           <div className="flex gap-[38px] items-center">
             <Link to="/Order" className="cursor-pointer">
@@ -46,7 +46,7 @@ const Menu = () => {
           </div>
         }
       />
-      <FoodBoard />
+      <FoodBoard addToCart={addToCart} />
     </div>
   );
 };
