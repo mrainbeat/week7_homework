@@ -2,8 +2,9 @@ import '../../pages/Order.css';
 import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
 import { useState } from 'react';
+import remove from '../../assets/ion_close-outline.svg';
 
-const CartList = ({ item, addToCart }) => {
+const CartList = ({ item, addToCart, removeCartItem, minusFromCart }) => {
   return (
     <div>
       <div
@@ -16,7 +17,7 @@ const CartList = ({ item, addToCart }) => {
             {item.price.toLocaleString()}원
           </span>
         </div>
-        <div className="flex gap-[32px] w-[155px] h-[56px] items-center">
+        <div className="flex gap-[32px] w-[199px] h-[56px] items-center">
           <button
             onClick={() => {
               //수량 하나 배기
@@ -29,14 +30,7 @@ const CartList = ({ item, addToCart }) => {
                   quantity: -1,
                 });
               } else {
-                //1-1 해서 아예 0으로 만들기
-                addToCart({
-                  id: item.id,
-                  menuName: item.menuName,
-                  price: item.price,
-                  storeName: item.storeName,
-                  quantity: -1,
-                });
+                removeCartItem(item.id);
               }
             }}
           >
@@ -56,6 +50,13 @@ const CartList = ({ item, addToCart }) => {
             }}
           >
             <img src={plus} alt="plus" />
+          </button>
+          <button
+            onClick={() => {
+              removeCartItem(item.id);
+            }}
+          >
+            <img src={remove} alt="remove" />
           </button>
         </div>
       </div>

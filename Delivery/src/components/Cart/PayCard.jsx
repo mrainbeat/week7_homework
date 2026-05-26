@@ -6,7 +6,7 @@ import '../../pages/Order.css';
 import CompleteOrder from '../../pages/CompleteOrder';
 
 // 부모로부터 마스터 데이터를 다이렉트로 상속받습니다.
-const PayCard = ({ cart = [] }) => {
+const PayCard = ({ cart = [], addToCart, removeCartItem, minusFromCart }) => {
   const [paymentMethod, setPaymentMethod] = useState('');
   // 총 결제 금액 실시간 계산
   const totalPrice = cart.reduce(

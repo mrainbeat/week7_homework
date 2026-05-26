@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import CartList from '../components/Cart/CartList';
 import './Order.css';
 
-const Order = ({ cart = [], addToCart }) => {
+const Order = ({ cart = [], addToCart, removeCartItem, minusFromCart }) => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
 
@@ -74,7 +74,12 @@ const Order = ({ cart = [], addToCart }) => {
                   </div>
                   <div>
                     {groupedCart[storeName].map((item) => (
-                      <CartList item={item} addToCart={addToCart} />
+                      <CartList
+                        item={item}
+                        addToCart={addToCart}
+                        removeCartItem={removeCartItem}
+                        minusFromCart={minusFromCart}
+                      />
                     ))}
                   </div>
                 </div>
