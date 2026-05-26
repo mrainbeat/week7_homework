@@ -63,7 +63,7 @@ const Order = ({ cart, addToCart }) => {
             </div>
           ) : (
             /* 2) 상품 데이터가 들어있을 때 */
-            <div className="rounded-lg flex flex-col gap-[51px]">
+            <div className="rounded-lg flex flex-col gap-[51px] mt-[83px] dt:mt-[5px]">
               {Object.keys(groupedCart).map((storeName) => (
                 <div className="bg-white rounded-xl overflow-hidden">
                   <div className="bg-[#FDF7C3] text-[20px] py-[12px] px-[24px] ">
@@ -115,7 +115,7 @@ const Order = ({ cart, addToCart }) => {
             type="button"
             disabled={!paymentMethod || cart.length === 0}
             className={`submit-payment-btn ${
-              paymentMethod && cartItems.length > 0 ? 'clickable' : 'disabled'
+              paymentMethod && cart.length > 0 ? 'clickable' : 'disabled'
             }`}
           >
             {totalPrice === 0 ? '00,000' : totalPrice.toLocaleString()}원

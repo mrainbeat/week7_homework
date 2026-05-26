@@ -6,7 +6,10 @@ import { useState } from 'react';
 const CartList = ({ item, addToCart }) => {
   return (
     <div>
-      <div key={item.id} className="py-[12px] px-[24px] flex justify-between">
+      <div
+        key={item.id}
+        className="py-[12px] px-[24px] flex flex-col items-center dt:flex-row justify-between"
+      >
         <div className="flex flex-col">
           <span className="text-[24px]">{item.menuName}</span>
           <span className="text-[24px] text-[#F0485F]">

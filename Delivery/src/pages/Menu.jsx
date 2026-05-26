@@ -25,21 +25,24 @@ const Menu = ({ addToCart }) => {
       <Navbar
         left={<span className="text-[36px] font-bold">주문하기 </span>}
         right={
-          <div className="flex gap-[38px] items-center">
-            <Link to="/Order" className="cursor-pointer">
+          <div className="flex flex-col dt:flex-row dt:gap-[38px] dt:items-center font-bold">
+            <Link to="/Order" className="hidden dt:block cursor-pointer">
               <img src={cart} alt="장바구니" />
+            </Link>
+            <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
+              장바구니
             </Link>
 
             {isLoggedIn ? (
               <Link
                 to="/Login"
-                className="hover:text-black"
+                className="hover:text-black text-[20px]"
                 onClick={handleLogout}
               >
                 로그아웃
               </Link>
             ) : (
-              <Link to="/Login" className="hover:text-black">
+              <Link to="/Login" className="hover:text-black text-[20px] ">
                 로그인
               </Link>
             )}

@@ -36,8 +36,8 @@ const FoodBoard = ({ addToCart }) => {
   };
 
   return (
-    <div className="max-w-[1200px] min-h-[775px] pt-[201px] mx-[264px]">
-      <div className="flex gap-[24px] mb-[72px] text-white items-center">
+    <div className="max-w-[280px] min-h-[794px] pt-[135px]  dt:max-w-[1200px] dt:min-h-[775px] dt:pt-[201px] mx-auto">
+      <div className="flex gap-[24px] mb-[72px] text-white items-center overflow-x-auto">
         {categories.map((item) => (
           <FilterButton
             key={item}
@@ -48,7 +48,7 @@ const FoodBoard = ({ addToCart }) => {
           />
         ))}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-[24px] gap-y-8">
+      <div className="grid grid-cols-1 dt:grid-cols-4 gap-x-[24px] gap-y-8 pb-10">
         {filteredFoods().map((item) => (
           <FoodCard
             key={item.id}
