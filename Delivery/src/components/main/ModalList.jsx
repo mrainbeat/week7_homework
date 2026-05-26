@@ -10,7 +10,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart }) => {
     setSelectedFood(item); //클릭한 데이터 저장
   };
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex flex-col dt:flex-row dt:justify-between">
       <div className="flex flex-col">
         <h6 className="text-[20px]">{name}</h6>
         <p className="text-[12px] mt-[7px] mb-[13px] text-[#858585]">
@@ -32,7 +32,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart }) => {
                 quantity: 1,
               });
             }}
-            className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg bg-[#FDF7C3] cursor-pointer"
+            className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg mt-[12px] dt:my-[13px] bg-[#FDF7C3] cursor-pointer"
           >
             담기
           </button>

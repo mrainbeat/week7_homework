@@ -6,6 +6,8 @@ import Menu from './pages/Menu';
 import Order from './pages/Order';
 import Layout from './components/layouts/Layout';
 import NotFound from './pages/NotFound';
+import PayCard from './components/Cart/PayCard';
+import CompleteOrder from './pages/CompleteOrder';
 
 function App() {
   //모든 음식을 담을 리스트 만들기
@@ -37,15 +39,39 @@ function App() {
     });
   };
 
+  //아예 삭제하는 함수
+  const removeCartItem = (id) => {
+    setCart((prev) => {
+      const updatedCart = prev.filter((item) => item.id !== id);
+
+      localStorage.setItem('myCart', JSON.stringify(updatedCart));
+      return updatedCart;
+    });
+  };
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
+        <Route path="/CompleteOrder" element={<CompleteOrder />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/Menu" replace />} />
-          <Route path="Menu" element={<Menu addToCart={addToCart} />}></Route>
-          <Route path="Order" element={<Order cart={cart} />}></Route>
+          <Route
+            path="Menu"
+            element={<Menu addToCart={addToCart} pageType="main" />}
+          ></Route>
+          <Route
+            path="Order"
+            element={
+              <Order
+                cart={cart}
+                addToCart={addToCart}
+                removeCartItem={removeCartItem}
+              />
+            }
+          />
+          <Route path="PayCard" element={<PayCard cart={cart} />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
