@@ -4,7 +4,7 @@ import plus from '../../assets/plus.svg';
 import { useState } from 'react';
 import remove from '../../assets/ion_close-outline.svg';
 
-const CartList = ({ item, addToCart, removeCartItem, minusFromCart }) => {
+const CartList = ({ item, addToCart, removeCartItem }) => {
   return (
     <div>
       <div

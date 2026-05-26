@@ -39,29 +39,6 @@ function App() {
     });
   };
 
-  //수량을 하나씩 줄이다가 0이 되면 삭제하는 함수
-  const minusFromCart = (id) => {
-    setCart((prev) => {
-      const targetItem = prev.find((item) => item.id === id);
-      let updatedCart = [];
-
-      if (targetItem && targetItem.quantity > 1) {
-        updatedCart = prev.map((item) =>
-          item.id === id
-            ? {
-                ...item,
-                quantity: item.quantity - 1,
-              }
-            : item
-        );
-      } else {
-        updatedCart = prev.filter((item) => item.id !== id);
-      }
-      localStorage.setItem('myCart', JSON.stringify(updatedCart));
-      return updatedCart;
-    });
-  };
-
   //아예 삭제하는 함수
   const removeCartItem = (id) => {
     setCart((prev) => {
@@ -77,6 +54,7 @@ function App() {
       <Routes>
         <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
+        <Route path="/CompleteOrder" element={<CompleteOrder />} />
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/Menu" replace />} />
           <Route
@@ -90,14 +68,12 @@ function App() {
                 cart={cart}
                 addToCart={addToCart}
                 removeCartItem={removeCartItem}
-                minusFromCart={minusFromCart}
               />
             }
           />
           <Route path="PayCard" element={<PayCard cart={cart} />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
-        <Route path="/CompleteOrder" element={<CompleteOrder />} />
       </Routes>
     </BrowserRouter>
   );

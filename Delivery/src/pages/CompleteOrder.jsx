@@ -12,7 +12,7 @@ const CompleteOrder = () => {
         </p>
         <Link
           to="/Menu"
-          className="bg-[#F0485F] px-[64px] py-[16px] rounded-xl"
+          className="bg-[#F0485F] px-[64px] py-[16px] rounded-xl text-white"
         >
           홈으로
         </Link>

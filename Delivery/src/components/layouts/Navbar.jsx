@@ -1,5 +1,7 @@
 import cart from '../../assets/cart.svg';
 import card from '../../assets/card.svg';
+import close from '../../assets/close.svg';
+import hamburger from '../../assets/hamburger.svg';
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -30,7 +32,7 @@ const Navbar = ({ left, right }) => {
             onClick={() => setIsOpen(!isOpen)}
             className="dt:hidden text-2xl cursor-pointer"
           >
-            {isOpen ? 'X' : '☰'}
+            {isOpen ? <img src={close} /> : <img src={hamburger} />}
           </button>
         )}
       </div>

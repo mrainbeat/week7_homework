@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import CartList from '../components/Cart/CartList';
 import './Order.css';
 
-const Order = ({ cart = [], addToCart, removeCartItem, minusFromCart }) => {
+const Order = ({ cart = [], addToCart, removeCartItem }) => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
 
@@ -78,7 +78,6 @@ const Order = ({ cart = [], addToCart, removeCartItem, minusFromCart }) => {
                         item={item}
                         addToCart={addToCart}
                         removeCartItem={removeCartItem}
-                        minusFromCart={minusFromCart}
                       />
                     ))}
                   </div>
@@ -90,7 +89,7 @@ const Order = ({ cart = [], addToCart, removeCartItem, minusFromCart }) => {
 
         {/*  오른쪽 섹션: 결제 카드 레이어 */}
         <div className="hidden dt:block">
-          <PayCard />
+          <PayCard cart={cart} />
         </div>
       </div>
     </div>
