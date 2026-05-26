@@ -1,16 +1,39 @@
-# React + Vite
+# 7주차 과제
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+피그마 시안의 디자인을 반영하고, 로컬스토리지(localStorage)를 활용하여 상태 변화를 실시간으로 추적합니다.
 
-Currently, two official plugins are available:
+## 기술 스택
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* 프레임워크: React (Vite)
+* 스타일링: CSS3 (Vanilla CSS)
+* 라우팅: React Router DOM
 
-## React Compiler
+## 레이아웃 및 디자인 가이드
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+피그마 시안에 명시된 단위를 레이아웃에 반영하였으며, 화면 해상도 변화에도 깨지지 않는 CSS 기법을 사용했습니다.
 
-## Expanding the ESLint configuration
+1. 로그인 / 회원가입 페이지
+* 입력 칸(Input): 모바일 환경에서 부모 상자를 벗어나지 않도록 너비 리셋 및 box-sizing 설정 적용.
+* 인터페이스: 독립적인 버튼 및 입력 칸 형태로 구현.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+2. 장바구니 및 결제 페이지 (Order)
+* 구조: 왼쪽 장바구니 상자는 배경색과 그림자 효과를 제거하여 전체 배경과 동화되는 형태로 구성하고, 오른쪽 결제 카드는 흰색 카드 레이아웃을 유지.
+* 화면 배치: 브라우저 세로 공간을 동적으로 계산하여 네비게이션 바 하단 구역에서 상하좌우 정중앙에 위치하도록 구현.
+
+## 핵심 로직 및 데이터 연동
+
+1. 메뉴(Menu) 컴포넌트 및 로컬스토리지 연동
+메뉴 페이지와 결제 페이지 간의 데이터 연동은 브라우저 공용 저장소인 localStorage를 매개체로 작동합니다.
+* 컴포넌트 구조: FoodBoard, FoodCard, FoodModal, ModalList로 세분화하여 설계.
+* 기능 구현: 모달 창에서 최종 선택한 메뉴와 수량을 로컬스토리지에 저장하는 함수를 구현했습니다.
+* Key: cartItems
+* Value Data Type: 객체 배열(Array)
+
+```json
+[
+  {
+    "name": "치즈버거 세트",
+    "price": 8500,
+    "quantity": 2
+  }
+]
