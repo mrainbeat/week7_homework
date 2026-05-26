@@ -7,6 +7,7 @@ import Order from './pages/Order';
 import Layout from './components/layouts/Layout';
 import NotFound from './pages/NotFound';
 import PayCard from './components/Cart/PayCard';
+import CompleteOrder from './pages/CompleteOrder';
 
 function App() {
   //모든 음식을 담을 리스트 만들기
@@ -59,6 +60,7 @@ function App() {
           />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
+        <Route path="/CompleteOrder" element={<CompleteOrder />} />
       </Routes>
     </BrowserRouter>
   );

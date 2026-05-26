@@ -3,6 +3,7 @@ import Navbar from '../../components/layouts/Navbar';
 import { Link, useLocation } from 'react-router-dom';
 import Leftarrow from '../../assets/fa-solid_arrow-left.svg';
 import '../../pages/Order.css';
+import CompleteOrder from '../../pages/CompleteOrder';
 
 // 부모로부터 마스터 데이터를 다이렉트로 상속받습니다.
 const PayCard = ({ cart = [] }) => {
@@ -52,15 +53,15 @@ const PayCard = ({ cart = [] }) => {
       </div>
 
       {/* 최종 결제하기 버튼 */}
-      <button
-        type="button"
+      <Link
+        to="/CompleteOrder"
         disabled={!paymentMethod || cartLength === 0}
         className={`submit-payment-btn ${
           paymentMethod && cartLength > 0 ? 'clickable' : 'disabled'
         } cursor-pointer`}
       >
         {totalPrice === 0 ? '0' : totalPrice.toLocaleString()}원 결제하기
-      </button>
+      </Link>
     </div>
   );
 };
