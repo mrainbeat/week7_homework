@@ -81,8 +81,10 @@
 ```
 ---
 
-```json
+
 ## 📁 프로젝트 구조 
+
+```json
 📦 DELIVERY
 └── 📂 src
     ├── 📂 assets
