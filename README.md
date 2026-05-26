@@ -93,39 +93,39 @@
 본 프로젝트의 소스코드는 루트 경로의 Delivery 폴더 내에서 관리됩니다.
 
 ```
-Plaintext
-week7_homework (Root)
-├── README.md (현재 파일)
-└── Delivery/
-    └── src/
-        ├── 📂 assets/
-        │   └── 🎨 plus.svg
-        ├── 📂 components/
-        │   ├── 📂 layouts/
-        │   │   └── ⚛️ Layout.jsx
-        │   ├── 📂 main/
-        │   │   ├── ⚛️ FilterButton.jsx
-        │   │   ├── ⚛️ FoodBoard.jsx
-        │   │   ├── ⚛️ FoodCard.jsx
-        │   │   ├── ⚛️ FoodModal.jsx
-        │   │   └── ⚛️ ModalList.jsx
-        │   └── ⚛️ CartList.jsx
-        ├── 📂 mocks/
-        │   └── 📜 mock.js
-        ├── 📂 pages/
-        │   ├── 🎨 Login.css
-        │   ├── ⚛️ Login.jsx
-        │   ├── ⚛️ Menu.jsx
-        │   ├── ⚛️ NotFound.jsx
-        │   ├── 🎨 Order.css
-        │   ├── ⚛️ Order.jsx
-        │   ├── 🎨 Signup.css
-        │   └── ⚛️ Signup.jsx
-        ├── 📂 stores/
-        ├── 🎨 App.css
-        ├── ⚛️ App.jsx
-        ├── 🎨 index.css
-        └── ⚛️ main.jsx
+Delivery/
+└── src/
+    ├── 📂 apis/
+    ├── 📂 assets/
+    ├── 📂 components/
+    │   ├── 📂 Cart/
+    │   │   ├── ⚛️ CartList.jsx
+    │   │   └── ⚛️ PayCard.jsx
+    │   ├── 📂 layouts/
+    │   │   ├── ⚛️ Layout.jsx
+    │   │   └── ⚛️ Navbar.jsx
+    │   └── 📂 main/
+    │       ├── ⚛️ FoodBoard.jsx
+    │       ├── ⚛️ FoodCard.jsx
+    │       ├── ⚛️ FoodModal.jsx
+    │       └── ⚛️ ModalList.jsx
+    ├── 📂 mocks/
+    │   └── 📜 mock.js
+    ├── 📂 pages/
+    │   ├── ⚛️ CompleteOrder.jsx
+    │   ├── 🎨 Login.css
+    │   ├── ⚛️ Login.jsx
+    │   ├── ⚛️ Menu.jsx
+    │   ├── ⚛️ NotFound.jsx
+    │   ├── 🎨 Order.css
+    │   ├── ⚛️ Order.jsx
+    │   ├── 🎨 Signup.css
+    │   └── ⚛️ Signup.jsx
+    ├── 📂 stores/
+    ├── 🎨 App.css
+    ├── ⚛️ App.jsx
+    ├── 🎨 index.css
+    └── ⚛️ main.jsx
 ```
 
 ## 🌿 브랜치 전략 및 작업 분담
@@ -135,14 +135,14 @@ week7_homework (Root)
 
 ### seoyoung
 
-* **navbar 레이아웃 및 컴포넌트 구현
+* navbar 레이아웃 및 컴포넌트 구현
 
-* **menu: FoodBoard, FoodCard, FilterButton, FoodModal, ModalList 컴포넌트 설계 및 연동
+* menu: FoodBoard, FoodCard, FilterButton, FoodModal, ModalList 컴포넌트 설계 및 연동
 
-* ** order: cartList 연동 및 데이터 처리
+* order: cartList 연동 및 데이터 처리 및 Payment 반응형 구현 
 
 ### minjun
 
-* **Login / Signup 페이지 UI 및 유효성 검증 로직 구현
+* Login / Signup 페이지 UI 및 유효성 검증 로직 구현
 
-* **Order 페이지 기본 레이아웃 구성
+* Order 페이지 기본 레이아웃 구성
