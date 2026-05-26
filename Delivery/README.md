@@ -81,6 +81,7 @@
 ```
 ---
 
+```json
 ## 📁 프로젝트 구조 
 📦 DELIVERY
 └── 📂 src
@@ -112,6 +113,7 @@
     ├── ⚛️ App.jsx
     ├── 🎨 index.css
     └── ⚛️ main.jsx
+```
 
 ## 브랜치 전략
 * **main
