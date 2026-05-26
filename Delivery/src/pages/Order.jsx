@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
+import PayCard from '../components/Cart/PayCard';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import CartList from '../components/CartList';
+import CartList from '../components/Cart/CartList';
 import './Order.css';
 
-const Order = ({ cart, addToCart }) => {
+const Order = ({ cart = [], addToCart }) => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
 
@@ -39,6 +40,8 @@ const Order = ({ cart, addToCart }) => {
   return (
     <div className="order-page-container">
       <Navbar
+        totalPrice={totalPrice} // 📌 이거 한 줄 추가
+        cartLength={cart.length} // 📌 이거 한 줄 추가
         left={
           <div className="flex gap-[48px] items-center">
             <Link to="/Menu" className="cursor-pointer">
@@ -81,46 +84,8 @@ const Order = ({ cart, addToCart }) => {
         </div>
 
         {/*  오른쪽 섹션: 결제 카드 레이어 */}
-        <div className="payment-card">
-          <h2 className="payment-title">결제하기</h2>
-
-          <span className="payment-label">결제 방법</span>
-
-          {/* 독립형 버튼 격자 그리드 구조 */}
-          <div className="payment-method-grid">
-            {['카카오페이', '네이버페이', '카드 결제', '무통장 입금'].map(
-              (method) => (
-                <button
-                  key={method}
-                  type="button"
-                  onClick={() => setPaymentMethod(method)}
-                  className={`method-btn ${paymentMethod === method ? 'active' : ''}`}
-                >
-                  {method}
-                </button>
-              )
-            )}
-          </div>
-
-          {/* 결제금액 표기 */}
-          <div className="price-summary-row">
-            <span className="price-summary-label">총 결제금액</span>
-            <span className="price-summary-value">
-              {totalPrice.toLocaleString()}원
-            </span>
-          </div>
-
-          {/* 최종 결제하기 버튼 활성화 분기 처리 */}
-          <button
-            type="button"
-            disabled={!paymentMethod || cart.length === 0}
-            className={`submit-payment-btn ${
-              paymentMethod && cart.length > 0 ? 'clickable' : 'disabled'
-            }`}
-          >
-            {totalPrice === 0 ? '00,000' : totalPrice.toLocaleString()}원
-            결제하기
-          </button>
+        <div className="hidden dt:block">
+          <PayCard />
         </div>
       </div>
     </div>

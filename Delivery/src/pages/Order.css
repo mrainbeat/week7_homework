@@ -190,14 +190,16 @@
 }
 
 .method-btn:hover {
-  background-color: #e9ecef;
+  background-color: #ffffff !important;
+  color: #f0485f !important;
+  border: 2px solid #f0485f !important;
 }
 
 /* 버튼 활성화 테마 */
 .method-btn.active {
-  background-color: #111111;
-  color: #ffffff;
-  border-color: #111111;
+  background-color: #ffffff !important;
+  color: #f0485f !important;
+  border: 2px solid #f0485f !important;
 }
 
 /* 총액 표기 영역 */
@@ -233,25 +235,24 @@
   border: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
   transition: all 0.2s ease;
-  margin-top: auto !important; /* 최하단 고정 */
+  margin-top: auto !important;
+}
+
+.submit-payment-btn.disabled {
+  background-color: #f1f3f5 !important;
+  color: #aaaaaa !important;
+  cursor: not-allowed;
 }
 
 /* 활성화 상태 */
 .submit-payment-btn.clickable {
-  background-color: #111111;
-  color: #ffffff;
+  background-color: #f0485f !important;
+  color: #ffffff !important;
   cursor: pointer;
 }
 
 .submit-payment-btn.clickable:hover {
   background-color: #222222;
-}
-
-/* 비활성화 상태 */
-.submit-payment-btn.disabled {
-  background-color: #f1f3f5;
-  color: #aaaaaa;
-  cursor: not-allowed;
 }
 
 /* 모바일 반응형 */
@@ -266,15 +267,35 @@
     margin-bottom: 40px !important;
     padding: 0 20px !important;
   }
-  .cart-section,
-  .payment-card {
+  .cart-section {
     width: 100% !important;
     max-width: 568px !important;
     height: auto !important;
+    margin-top: 0px !important;
+  }
+  .payment-card {
+    width: 100% !important;
+    max-width: none !important;
+    height: calc(100vh - 83px) !important;
+    background-color: #ffffff !important;
+    border: none !important;
+    border-radius: 0px !important; /* 👈 [핵심] 둥근 모서리 완전히 삭제 */
+    box-shadow: none !important;
+    padding: 30px 24px !important; /* 내부 여백만 깔끔하게 유지 */
+    margin-top: 100px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
   }
   .cart-list-card,
   .cart-empty-box {
     height: auto !important;
     min-height: 400px !important;
+  }
+  .payment-method-grid {
+    display: grid !important;
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    margin-bottom: 36px !important;
   }
 }

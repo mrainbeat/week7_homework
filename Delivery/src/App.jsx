@@ -6,6 +6,7 @@ import Menu from './pages/Menu';
 import Order from './pages/Order';
 import Layout from './components/layouts/Layout';
 import NotFound from './pages/NotFound';
+import PayCard from './components/Cart/PayCard';
 
 function App() {
   //모든 음식을 담을 리스트 만들기
@@ -44,11 +45,18 @@ function App() {
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/Menu" replace />} />
-          <Route path="Menu" element={<Menu addToCart={addToCart} />}></Route>
+          <Route
+            path="Menu"
+            element={<Menu addToCart={addToCart} pageType="main" />}
+          ></Route>
           <Route
             path="Order"
             element={<Order cart={cart} addToCart={addToCart} />}
-          ></Route>
+          />
+          <Route
+            path="PayCard"
+            element={<PayCard cart={cart} addToCart={addToCart} />}
+          />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

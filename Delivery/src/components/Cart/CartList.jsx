@@ -1,6 +1,6 @@
-import '../pages/Order.css';
-import minus from '../assets/minus.svg';
-import plus from '../assets/plus.svg';
+import '../../pages/Order.css';
+import minus from '../../assets/minus.svg';
+import plus from '../../assets/plus.svg';
 import { useState } from 'react';
 
 const CartList = ({ item, addToCart }) => {
