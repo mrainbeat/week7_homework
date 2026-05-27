@@ -3,12 +3,12 @@ import { Outlet } from 'react-router-dom';
 
 import Navbar from './Navbar';
 
-const Layout = () => {
+const Layout = ({ cart = [], addToCart }) => {
   return (
     <div>
       <Navbar />
       <div className="bg-[#F5F5F5] min-h-screen">
-        <Outlet />
+        <Outlet context={{ cart, addToCart }} />
       </div>
     </div>
   );
