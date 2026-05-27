@@ -51,7 +51,7 @@ export default function Signup() {
         </button>
 
         {/* 타이틀 로고 영역 */}
-        <h1 className="signup-title">어쩌구저쩌구</h1>
+        <h1 className="signup-title">회원가입</h1>
 
         <form onSubmit={handleSubmit} className="signup-form">
           {/* 아이디 입력 영역 */}
