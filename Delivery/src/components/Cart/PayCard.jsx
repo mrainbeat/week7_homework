@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Navbar from '../../components/layouts/Navbar';
 import { Link, useLocation } from 'react-router-dom';
 import Leftarrow from '../../assets/fa-solid_arrow-left.svg';
-import '../../pages/Order.css';
 import CompleteOrder from '../../pages/CompleteOrder';
+import Payment from './Payment';
 
 // 부모로부터 마스터 데이터를 다이렉트로 상속받습니다.
 const PayCard = ({ cart = [] }) => {
@@ -14,7 +14,7 @@ const PayCard = ({ cart = [] }) => {
     0
   );
   return (
-    <div className="payment-card h-full">
+    <div className="bg-white overflow-hidden h-screen w-full dt:h-[604px] dt:w-[568px] dt:rounded-[20px]">
       <Navbar
         left={
           <div className="flex gap-[48px] items-center">
@@ -25,43 +25,47 @@ const PayCard = ({ cart = [] }) => {
           </div>
         }
       />
-      <h2 className="payment-title">결제하기</h2>
+      <div className="flex flex-col items-center h-full w-full py-[83px] px-[24px] justify-center bg-white gap-4">
+        <h2 className="text-[36px] font-blod">결제하기</h2>
+        <div className="flex flex-col items-center justify-center gap-4">
+          <span className="w-full text-left text-[#F0485F]">결제 방법</span>
 
-      <span className="payment-label">결제 방법</span>
+          {/* 결제 수단 버튼 구조 */}
+          <div className="grid grid-cols-1 dt:grid-cols-2 gap-4 ">
+            {['카카오페이', '네이버페이', '카드 결제', '무통장 입금'].map(
+              (method) => (
+                <Payment
+                  onClick={() => {
+                    setPaymentMethod(method);
+                  }}
+                  paymentMethod={paymentMethod}
+                  id={method}
+                  key={method}
+                />
+              )
+            )}
+          </div>
 
-      {/* 결제 수단 버튼 구조 */}
-      <div className="payment-method-grid">
-        {['카카오페이', '네이버페이', '카드 결제', '무통장 입금'].map(
-          (method) => (
-            <button
-              key={method}
-              type="button"
-              className={`method-btn ${paymentMethod === method ? 'active' : ''}`}
-            >
-              {method}
-            </button>
-          )
-        )}
+          {/* 결제금액 표기 */}
+          <div className="flex flex-row justify-between w-full mt-[92px] dt:mt-[120px] text-[20px] font-bold">
+            <span>총 결제금액</span>
+            <span>{totalPrice.toLocaleString()}원</span>
+          </div>
+
+          {/* 최종 결제하기 버튼 */}
+          <Link
+            to={!paymentMethod || cart.length === 0 ? '#' : '/CompleteOrder'}
+            onClick={(e) => {
+              if (!paymentMethod || cart.length === 0) {
+                e.preventDefault();
+              }
+            }}
+            className={`flex items-center justify-center text-center cursor-pointer mt-[92px] dt:mt-[28px] rounded-[16px] text-white text-[20px] px-[35px] py-[12px] dt:px-[55px] dt:py-[15px] h-[78px] w-[177px] dt:h-[54px] dt:w-[303px] ${!paymentMethod || cart.length === 0 ? 'bg-[#CCCCCC]' : 'bg-[#F0485F]'}`}
+          >
+            {totalPrice === 0 ? '0' : totalPrice.toLocaleString()}원 결제하기
+          </Link>
+        </div>
       </div>
-
-      {/* 결제금액 표기 */}
-      <div className="price-summary-row">
-        <span className="price-summary-label">총 결제금액</span>
-        <span className="price-summary-value">
-          {totalPrice.toLocaleString()}원
-        </span>
-      </div>
-
-      {/* 최종 결제하기 버튼 */}
-      <Link
-        to="/CompleteOrder"
-        disabled={!paymentMethod || cartLength === 0}
-        className={`submit-payment-btn ${
-          paymentMethod && cartLength > 0 ? 'clickable' : 'disabled'
-        } cursor-pointer`}
-      >
-        {totalPrice === 0 ? '0' : totalPrice.toLocaleString()}원 결제하기
-      </Link>
     </div>
   );
 };
