@@ -4,7 +4,7 @@ import { useState } from 'react';
 import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
 
-const FoodBoard = ({ addToCart }) => {
+const FoodBoard = ({ addToCart, cart }) => {
   const [category, setCategory] = useState('전체');
   const categories = ['전체', '중식', '한식', '기타'];
 

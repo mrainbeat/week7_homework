@@ -55,12 +55,9 @@ function App() {
         <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/CompleteOrder" element={<CompleteOrder />} />
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout cart={cart} addToCart={addToCart} />}>
           <Route index element={<Navigate to="/Menu" replace />} />
-          <Route
-            path="Menu"
-            element={<Menu addToCart={addToCart} pageType="main" />}
-          ></Route>
+          <Route path="Menu" element={<Menu />}></Route>
           <Route
             path="Order"
             element={

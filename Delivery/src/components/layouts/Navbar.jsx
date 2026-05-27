@@ -13,9 +13,11 @@ const Navbar = ({ left, right }) => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full text-white">
-      <div className="h-[83px] flex items-center justify-between px-[40px] bg-[#F0485F]">
+      <div className="h-[83px] flex items-center justify-between px-[40px] bg-[#F0485F] ">
         <div>{left}</div>
-        <div className="dt:flex gap-[38px] items-center hidden ">{right}</div>
+        <div className="dt:flex gap-[38px] items-center hidden relative">
+          {right}
+        </div>
         {isPayCardPage ? (
           //결제 페이지일 때
           <Link to="/Order" className="dt:hidden cursor-pointer">

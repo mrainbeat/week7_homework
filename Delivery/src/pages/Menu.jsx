@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/layouts/Navbar';
-import cart from '../assets/cart.svg';
+import cartIcon from '../assets/cart.svg';
 import FoodBoard from '../components/main/FoodBoard';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from 'react-router-dom';
 
-const Menu = ({ addToCart }) => {
+const Menu = () => {
   const navigate = useNavigate();
+
+  const { cart, addToCart } = useOutletContext();
 
   // 로그인 상태를 리액트 state로 관리
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -20,14 +27,25 @@ const Menu = ({ addToCart }) => {
     setIsLoggedIn(false); // 리액트 상태를 false로 변경하여 화면 갱신
   };
 
+  const quantityArray = cart.map((item) => Number(item.quantity || 0)); // quantity만 추출
+
+  // 추출한 수량 배열을 다 더하기
+  const totalQuantity = quantityArray.reduce((sum, qty) => sum + qty, 0);
+
   return (
     <div>
       <Navbar
         left={<span className="text-[36px] font-bold">주문하기 </span>}
         right={
           <div className="flex flex-col dt:flex-row dt:gap-[38px] dt:items-center font-bold">
-            <Link to="/Order" className="hidden dt:block cursor-pointer">
-              <img src={cart} alt="장바구니" />
+            <Link
+              to="/Order"
+              className="hidden dt:block cursor-pointer relative"
+            >
+              <img src={cartIcon} alt="장바구니 " />
+              <div className="absolute -top-2 -right-2 bg-[#FDF7C3] text-black text-[8px] font-bold px-[8px] h-[14px] rounded-[20px] flex items-center justify-center w-[11px] ">
+                {totalQuantity}
+              </div>
             </Link>
             <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
               장바구니
@@ -49,7 +67,7 @@ const Menu = ({ addToCart }) => {
           </div>
         }
       />
-      <FoodBoard addToCart={addToCart} />
+      <FoodBoard addToCart={addToCart} cart={cart} />
     </div>
   );
 };
