@@ -8,6 +8,7 @@ import Layout from './components/layouts/Layout';
 import NotFound from './pages/NotFound';
 import PayCard from './components/Cart/PayCard';
 import CompleteOrder from './pages/CompleteOrder';
+import CreditCharge from './pages/CreditCharge';
 
 function App() {
   //모든 음식을 담을 리스트 만들기
@@ -55,6 +56,7 @@ function App() {
         <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/CompleteOrder" element={<CompleteOrder />} />
+        <Route path="/CreditCharge" element={<CreditCharge />} />
         <Route path="/" element={<Layout cart={cart} addToCart={addToCart} />}>
           <Route index element={<Navigate to="/Menu" replace />} />
           <Route path="Menu" element={<Menu />}></Route>
