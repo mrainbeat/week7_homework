@@ -45,9 +45,14 @@ const CreditCharge = () => {
       <Navbar
         left={
           <div className="flex gap-[48px] items-center">
-            <Link to="/Order" className="cursor-pointer">
-              <img src={Leftarrow} alt="왼쪽화살표" />
-            </Link>
+            {/* 고정 링크 대신 히스토리 백(-1)을 적용하여 직전 페이지로 동적 이동 */}
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="cursor-pointer bg-transparent border-none p-0 flex items-center justify-center"
+            >
+              <img src={Leftarrow} alt="뒤로가기" />
+            </button>
             <span className="text-[36px] font-bold">크레딧 충전</span>
           </div>
         }

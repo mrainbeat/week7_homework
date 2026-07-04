@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../components/layouts/Navbar';
 import cartIcon from '../assets/cart.svg';
+import cardIcon from '../assets/card.svg'; // 카드 아이콘 임포트 추가
 import FoodBoard from '../components/main/FoodBoard';
 import {
   Link,
@@ -11,56 +12,90 @@ import {
 
 const Menu = () => {
   const navigate = useNavigate();
-
   const { cart, addToCart } = useOutletContext();
 
-  // 로그인 상태를 리액트 state로 관리
+  // 로그인 상태 관리
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem('isLoggedIn') === 'true'
   );
 
+  // 로컬스토리지에서 현재 보유 크레딧 불러오기 (기본값 5000C)
+  const [myCredit, setMyCredit] = useState(() => {
+    const savedCredit = localStorage.getItem('myCredit');
+    return savedCredit ? Number(savedCredit) : 5000;
+  });
+
   // 로그아웃 버튼 동작 함수
   const handleLogout = (e) => {
-    e.preventDefault(); // 링크 이동 동작 차단
-
-    localStorage.removeItem('isLoggedIn'); // 로컬스토리지 비우기
-    setIsLoggedIn(false); // 리액트 상태를 false로 변경하여 화면 갱신
+    e.preventDefault();
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
   };
 
-  const quantityArray = cart.map((item) => Number(item.quantity || 0)); // quantity만 추출
-
-  // 추출한 수량 배열을 다 더하기
+  const quantityArray = cart.map((item) => Number(item.quantity || 0));
   const totalQuantity = quantityArray.reduce((sum, qty) => sum + qty, 0);
 
   return (
     <div>
       <Navbar
-        left={<span className="text-[36px] font-bold">주문하기 </span>}
+        left={<span className="text-[36px] font-bold">주문하기</span>}
         right={
           <div className="flex flex-col dt:flex-row dt:gap-[38px] dt:items-center font-bold">
+            {/* 1. 크레딧 잔액 표시 및 충전 페이지 이동 링크 */}
+            <Link
+              to="/CreditCharge"
+              className="hidden dt:flex flex-col items-center justify-center cursor-pointer gap-[4px] hover:opacity-80 transition-opacity"
+            >
+              <img
+                src={cardIcon}
+                alt="크레딧 충전"
+                className="w-[24px] h-[24px]"
+              />
+              <span className="text-[12px] font-bold">
+                {myCredit.toLocaleString()}C
+              </span>
+            </Link>
+            {/* 모바일 뷰용 크레딧 링크 */}
+            <Link
+              to="/CreditCharge"
+              className="dt:hidden cursor-pointer text-[20px]"
+            >
+              잔액: {myCredit.toLocaleString()}C
+            </Link>
+
+            {/* 2. 기존 장바구니 링크 */}
             <Link
               to="/Order"
-              className="hidden dt:block cursor-pointer relative"
+              className="hidden dt:block cursor-pointer relative hover:opacity-80 transition-opacity"
             >
-              <img src={cartIcon} alt="장바구니 " />
-              <div className="absolute -top-2 -right-2 bg-[#FDF7C3] text-black text-[8px] font-bold px-[8px] h-[14px] rounded-[20px] flex items-center justify-center w-[11px] ">
+              <img
+                src={cartIcon}
+                alt="장바구니"
+                className="w-[24px] h-[24px]"
+              />
+              <div className="absolute -top-2 -right-2 bg-[#FDF7C3] text-black text-[8px] font-bold px-[8px] h-[14px] rounded-[20px] flex items-center justify-center min-w-[11px]">
                 {totalQuantity}
               </div>
             </Link>
+            {/* 모바일 뷰용 장바구니 링크 */}
             <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
               장바구니
             </Link>
 
+            {/* 3. 로그인/로그아웃 링크 */}
             {isLoggedIn ? (
               <Link
                 to="/Login"
-                className="hover:text-black text-[20px]"
+                className="hover:text-black text-[20px] transition-colors"
                 onClick={handleLogout}
               >
                 로그아웃
               </Link>
             ) : (
-              <Link to="/Login" className="hover:text-black text-[20px] ">
+              <Link
+                to="/Login"
+                className="hover:text-black text-[20px] transition-colors"
+              >
                 로그인
               </Link>
             )}
