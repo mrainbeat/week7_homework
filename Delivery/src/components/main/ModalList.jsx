@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
+import SideList from './SideList';
 
-const ModalList = ({ id, name, detail, price, storeName, addToCart }) => {
+const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
   const [selectedFood, setSelectedFood] = useState(false);
   const [count, setCount] = useState(1);
 
@@ -16,7 +17,11 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart }) => {
         <p className="text-[12px] mt-[7px] mb-[13px] text-[#858585]">
           {detail}
         </p>
-        <p className="font-bold text-[20px]">{price.toLocaleString()}원</p>
+        <div className="flex gap-4">
+          {side.map((show) => (
+            <SideList key={show.name} name={show.name} price={show.price} />
+          ))}
+        </div>
       </div>
       <div>
         {!selectedFood ? (

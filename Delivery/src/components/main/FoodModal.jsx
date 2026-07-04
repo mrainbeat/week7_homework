@@ -38,6 +38,7 @@ const FoodModal = ({ item, onClose, addToCart }) => {
               price={show.price}
               storeName={item.name}
               addToCart={addToCart}
+              side={show.side}
             />
           ))}
         </div>
