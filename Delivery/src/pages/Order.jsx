@@ -92,7 +92,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
                     key={storeName}
                     className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#F1F3F5]"
                   >
-                    <div className="bg-[#FDF7C3] text-[20px] py-[12px] px-[24px]">
+                    <div className="bg-red-assistive text-[20px] py-[12px] px-[24px]">
                       <h4 className="font-bold">{storeName}</h4>
                     </div>
                     <div>
@@ -140,7 +140,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
             <div className="flex justify-between text-[18px] font-bold">
               <span>차감 후 잔액</span>
               <span
-                className={isShortage ? 'text-[#F0485F]' : 'text-[#00BA88]'}
+                className={isShortage ? 'text-red-primary' : 'text-[#00BA88]'}
               >
                 {afterCredit.toLocaleString()}C
               </span>
@@ -165,7 +165,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
             disabled={cart.length === 0 || isShortage}
             className={`w-full py-[20px] text-[20px] font-bold rounded-[16px] text-center border-none shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition-all duration-200 ${
               cart.length > 0 && !isShortage
-                ? 'bg-[#F0485F] text-white cursor-pointer hover:bg-[#D63F54]'
+                ? 'bg-red-primary text-white cursor-pointer hover:bg-[#D63F54]'
                 : 'bg-[#F1F3F5] text-[#AAAAAA] cursor-not-allowed'
             }`}
           >

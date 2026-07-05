@@ -28,7 +28,7 @@ const PayCard = ({ cart = [] }) => {
       <div className="flex flex-col items-center h-full w-full py-[83px] px-[24px] justify-center bg-white gap-4">
         <h2 className="text-[36px] font-blod">결제하기</h2>
         <div className="flex flex-col items-center justify-center gap-4">
-          <span className="w-full text-left text-[#F0485F]">결제 방법</span>
+          <span className="w-full text-left text-red-primary">결제 방법</span>
 
           {/* 결제 수단 버튼 구조 */}
           <div className="grid grid-cols-1 dt:grid-cols-2 gap-4 ">
@@ -60,7 +60,7 @@ const PayCard = ({ cart = [] }) => {
                 e.preventDefault();
               }
             }}
-            className={`flex items-center justify-center text-center cursor-pointer mt-[92px] dt:mt-[28px] rounded-[16px] text-white text-[20px] px-[35px] py-[12px] dt:px-[55px] dt:py-[15px] h-[78px] w-[177px] dt:h-[54px] dt:w-[303px] ${!paymentMethod || cart.length === 0 ? 'bg-[#CCCCCC]' : 'bg-[#F0485F]'}`}
+            className={`flex items-center justify-center text-center cursor-pointer mt-[92px] dt:mt-[28px] rounded-[16px] text-white text-[20px] px-[35px] py-[12px] dt:px-[55px] dt:py-[15px] h-[78px] w-[177px] dt:h-[54px] dt:w-[303px] ${!paymentMethod || cart.length === 0 ? 'bg-[#CCCCCC]' : 'bg-red-primary'}`}
           >
             {totalPrice === 0 ? '0' : totalPrice.toLocaleString()}원 결제하기
           </Link>

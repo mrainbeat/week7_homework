@@ -24,7 +24,10 @@ export const StoreMockData = [
           { name: '1단계', price: 0 },
           { name: '2단계', price: 0 },
           { name: '3단계', price: 0 },
-          { name: '아주 맵게', price: 0 },
+          {
+            name: '아주 맵게',
+            price: 0,
+          },
         ],
       },
       {

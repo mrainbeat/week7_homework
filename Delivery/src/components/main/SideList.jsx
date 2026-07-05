@@ -1,15 +1,10 @@
 import { useState } from 'react';
 
-const SideList = ({ name, price }) => {
-  const [isSelected, setIsSelected] = useState(false);
-  const handleSelect = () => {
-    setIsSelected(!isSelected);
-  };
-
+const SideList = ({ name, price, isSelected, onClick }) => {
   return (
     <div>
       <button
-        onClick={handleSelect}
+        onClick={onClick}
         className={`w-full rounded px-[8px] pt-[4px] pb-[3px] cursor-pointer
         ${
           isSelected

@@ -14,11 +14,23 @@
   --font-sans: 'GmarketSansMedium', sans-serif;
   /* 반응형 브레이크포인트 설정 (크기순 정렬) */
   --breakpoint-ph: 402px;
-  --breakpoint-xs: 480px;
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1536px;
   --breakpoint-dt: 1725px;
+
+  /* Gray 스케일 */
+  --color-gray-0: #ffffff;
+  --color-gray-1: #f7f7f7;
+  --color-gray-2: #cac8c8;
+  --color-gray-3: #858585;
+  --color-gray-4: #363636;
+  --color-gray-5: #000000;
+
+  /* Red 그룹 */
+  --color-red-primary: #f0485f;
+  --color-red-secondary: #f9a0ad;
+  --color-red-assistive: #ffdfe3;
+
+  /* Green 그룹 */
+  --color-green-primary: #0b8d6f;
+  --color-green-secondary: #98d2b8;
+  --color-green-assistive: #dff1e9;
 }

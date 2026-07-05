@@ -13,7 +13,7 @@ const Navbar = ({ left, right }) => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 w-full text-white">
-      <div className="h-[83px] flex items-center justify-between px-[40px] bg-[#F0485F] ">
+      <div className="h-[83px] flex items-center justify-between px-[40px] bg-red-primary ">
         <div>{left}</div>
         <div className="dt:flex gap-[38px] items-center hidden relative">
           {right}
@@ -40,11 +40,11 @@ const Navbar = ({ left, right }) => {
       </div>
       {!isOrderPage && !isPayCardPage && isOpen && (
         <div
-          className="dt:hidden w-full flex flex-col bg-[#FDF7C3] dt:pt-[83px] pt-[19px] h-[calc(100vh-83px)] ml-[139px]"
+          className="dt:hidden w-full flex flex-col bg-gray-1 dt:pt-[83px] pt-[19px] h-[calc(100vh-83px)] ml-[139px]"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div
-            className="flex flex-col items-center gap-4 text-[#F0485F]"
+            className="flex flex-col items-center gap-4 text-red-primary"
             onClick={(e) => e.stopPropagation()}
           >
             {right}
