@@ -36,7 +36,7 @@ const FoodBoard = ({ addToCart, cart }) => {
   };
 
   return (
-    <div className="max-w-[280px] min-h-[794px] pt-[135px]  dt:max-w-[1200px] dt:min-h-[775px] dt:pt-[201px] mx-auto">
+    <div className="w-full max-w-[280px] min-h-[590px] pt-[135px] dt:max-w-[1200px] dt:w-[90%] dt:pb-[300px] dt:pt-[170px] mx-auto">
       <div className="flex gap-[24px] mb-[72px] text-white items-center overflow-x-auto">
         {categories.map((item) => (
           <FilterButton

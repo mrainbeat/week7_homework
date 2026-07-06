@@ -40,7 +40,7 @@ const Menu = () => {
       <Navbar
         left={<span className="text-[36px] font-bold">주문하기</span>}
         right={
-          <div className="flex flex-col dt:flex-row dt:gap-[38px] dt:items-center font-bold">
+          <div className="flex flex-col dt:flex-row dt:gap-[38px] dt:items-center font-bold ">
             {/* 1. 크레딧 잔액 표시 및 충전 페이지 이동 링크 */}
             <Link
               to="/CreditCharge"
@@ -54,13 +54,6 @@ const Menu = () => {
               <span className="text-[12px] font-bold">
                 {myCredit.toLocaleString()}C
               </span>
-            </Link>
-            {/* 모바일 뷰용 크레딧 링크 */}
-            <Link
-              to="/CreditCharge"
-              className="dt:hidden cursor-pointer text-[20px]"
-            >
-              잔액: {myCredit.toLocaleString()}C
             </Link>
 
             {/* 2. 기존 장바구니 링크 */}
@@ -77,16 +70,12 @@ const Menu = () => {
                 {totalQuantity}
               </div>
             </Link>
-            {/* 모바일 뷰용 장바구니 링크 */}
-            <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
-              장바구니
-            </Link>
 
             {/* 3. 로그인/로그아웃 링크 */}
             {isLoggedIn ? (
               <Link
                 to="/Login"
-                className="hover:text-black text-[20px] transition-colors"
+                className="hidden dt:block hover:text-black text-[20px] transition-colors"
                 onClick={handleLogout}
               >
                 로그아웃
@@ -94,11 +83,44 @@ const Menu = () => {
             ) : (
               <Link
                 to="/Login"
-                className="hover:text-black text-[20px] transition-colors"
+                className="hidden dt:block hover:text-black text-[20px] transition-colors"
               >
                 로그인
               </Link>
             )}
+            <div className="text-black flex flex-col pr-5 items-end">
+              {/* 모바일 뷰용 장바구니 링크 */}
+              <Link
+                to="/Order"
+                className="dt:hidden cursor-pointer text-[20px]"
+              >
+                장바구니
+              </Link>
+              {/* 모바일 뷰용 크레딧 링크 */}
+              <Link
+                to="/CreditCharge"
+                className="dt:hidden cursor-pointer text-[20px]"
+              >
+                크레딧 충전
+              </Link>
+              {/* 모바일 뷰용 로그인 로그아웃 링크 */}
+              {isLoggedIn ? (
+                <Link
+                  to="/Login"
+                  className="dt:hidden hover:text-black text-[20px] transition-colors"
+                  onClick={handleLogout}
+                >
+                  로그아웃
+                </Link>
+              ) : (
+                <Link
+                  to="/Login"
+                  className="dt:hidden hover:text-black text-[20px] transition-colors"
+                >
+                  로그인
+                </Link>
+              )}
+            </div>
           </div>
         }
       />
