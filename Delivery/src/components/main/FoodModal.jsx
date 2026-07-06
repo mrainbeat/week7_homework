@@ -18,11 +18,13 @@ const FoodModal = ({ item, onClose, addToCart }) => {
   }, []);
 
   return (
-    <div className="fixed bg-black/50 z-50 flex top-[83px] left-0 right-0 bottom-0 justify-center dt:items-center dt:inset-0">
+    <div className="fixed bg-black/50 z-50 flex top-[83px] left-0 right-0 bottom-0 dt:justify-center dt:items-center dt:inset-0">
       <div className="bg-white w-full h-full dt:h-[667px] dt:w-[738px] flex flex-col p-[40px] dt:rounded-xl">
-        <div className="flex justify-center relative items-center w-full">
+        <div className="flex dt:justify-center relative items-center w-full pb-10 dt:pb-0">
           <div>
-            <h3 className="font-bold text-[36px] text-center">{item.name}</h3>
+            <h3 className="font-bold text-[36px] text-left dt:text-center">
+              {item.name}
+            </h3>
           </div>
           <img
             src={Close}
@@ -31,7 +33,7 @@ const FoodModal = ({ item, onClose, addToCart }) => {
             className="absolute right-0 cursor-pointer"
           />
         </div>
-        <hr className="border-gray-2 my-[40px]" />
+        <hr className="hidden dt:block border-gray-2 my-[40px]" />
         <div className="flex flex-col gap-[60px] dt:gap-[88px] overflow-y-auto pr-2 min-h-0 flex-1 pb-[40px]">
           {item.menus.map((show) => (
             <ModalList

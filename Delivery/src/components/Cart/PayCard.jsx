@@ -7,6 +7,16 @@ import Payment from './Payment';
 
 // 부모로부터 마스터 데이터를 다이렉트로 상속받습니다.
 const PayCard = ({ cart = [] }) => {
+  const loginStatus = localStorage.getItem('isLoggedIn');
+
+  //로그인 여부 체크하기
+  const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('IsLoggedIn');
+    setIsLoggedIn(false);
+  };
+
   const [paymentMethod, setPaymentMethod] = useState('');
   // 총 결제 금액 실시간 계산
   const totalPrice = cart.reduce(
@@ -18,10 +28,42 @@ const PayCard = ({ cart = [] }) => {
       <Navbar
         left={
           <div className="flex gap-[48px] items-center">
-            <Link to="/Menu" className="cursor-pointer">
+            <Link to="/Order" className="cursor-pointer">
               <img src={Leftarrow} alt="왼쪽화살표" />
             </Link>
             <span className="text-[36px] font-bold">장바구니</span>
+          </div>
+        }
+        right={
+          <div className="text-black flex flex-col pr-5 items-end">
+            {/* 모바일 뷰용 장바구니 링크 */}
+            <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
+              장바구니
+            </Link>
+            {/* 모바일 뷰용 크레딧 링크 */}
+            <Link
+              to="/CreditCharge"
+              className="dt:hidden cursor-pointer text-[20px]"
+            >
+              크레딧 충전
+            </Link>
+            {/* 모바일 뷰용 로그인 로그아웃 링크 */}
+            {isLoggedIn ? (
+              <Link
+                to="/Login"
+                className="dt:hidden hover:text-black text-[20px] transition-colors"
+                onClick={handleLogout}
+              >
+                로그아웃
+              </Link>
+            ) : (
+              <Link
+                to="/Login"
+                className="dt:hidden hover:text-black text-[20px] transition-colors"
+              >
+                로그인
+              </Link>
+            )}
           </div>
         }
       />

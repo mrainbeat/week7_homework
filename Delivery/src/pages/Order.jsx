@@ -3,10 +3,19 @@ import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import CartList from '../components/Cart/CartList';
+import Payment from '../components/Cart/Payment';
 
 const Order = ({ cart = [], addToCart, removeCartItem }) => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
+
+  //로그인 여부 체크하기
+  const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('IsLoggedIn');
+    setIsLoggedIn(false);
+  };
 
   // 로컬스토리지에서 유저의 보유 크레딧 읽기 (기본값 5000C)
   const [myCredit, setMyCredit] = useState(() => {
@@ -67,6 +76,38 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
             <span className="text-[36px] font-bold">장바구니</span>
           </div>
         }
+        right={
+          <div className="text-black flex flex-col pr-5 items-end">
+            {/* 모바일 뷰용 장바구니 링크 */}
+            <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
+              장바구니
+            </Link>
+            {/* 모바일 뷰용 크레딧 링크 */}
+            <Link
+              to="/CreditCharge"
+              className="dt:hidden cursor-pointer text-[20px]"
+            >
+              크레딧 충전
+            </Link>
+            {/* 모바일 뷰용 로그인 로그아웃 링크 */}
+            {isLoggedIn ? (
+              <Link
+                to="/Login"
+                className="dt:hidden hover:text-black text-[20px] transition-colors"
+                onClick={handleLogout}
+              >
+                로그아웃
+              </Link>
+            ) : (
+              <Link
+                to="/Login"
+                className="dt:hidden hover:text-black text-[20px] transition-colors"
+              >
+                로그인
+              </Link>
+            )}
+          </div>
+        }
       />
 
       {/* 왼쪽 섹션: 장바구니 영역 */}
@@ -85,8 +126,8 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
       ) : (
         <div className="flex-1 flex flex-row items-center justify-center gap-[69px] w-[1200px] h-[604px] mx-auto box-border max-xl:w-full max-xl:h-auto max-xl:flex-col max-xl:p-[20px] max-xl:my-[40px]">
           <div className="w-[563px] h-[604px] flex flex-col box-border max-xl:w-full max-xl:max-w-[568px] max-xl:h-auto">
-            <div className="w-full h-full bg-transparent flex flex-col p-[40px] box-border overflow-y-auto pr-[8px]">
-              <div className="flex flex-col gap-[51px]">
+            <div className="w-full h-full bg-transparent dt:p-0 p-13 flex flex-col box-border overflow-y-auto">
+              <div className="flex flex-col gap-[34px] dt:gap-[51px]">
                 {Object.keys(groupedCart).map((storeName) => (
                   <div
                     key={storeName}
@@ -112,7 +153,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
           </div>
 
           {/* 오른쪽 섹션: 결제하기 카드 상자 */}
-          <div className="w-[568px] h-[604px] bg-white rounded-[32px] p-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-[#F8F9FA] flex flex-col box-border max-xl:w-full max-xl:max-w-[568px] max-xl:h-auto">
+          <div className="hidden dt:block w-[568px] h-[604px] bg-white rounded-[32px] p-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-[#F8F9FA] flex flex-col box-border max-xl:w-full max-xl:max-w-[568px] max-xl:h-auto">
             <h2 className="text-[36px] font-black text-center text-[#111111] mb-[54px]">
               결제하기
             </h2>
@@ -171,6 +212,12 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
               결제하기
             </button>
           </div>
+          <Link
+            to="/Paycard"
+            className="dt:hidden w-[250px] py-[20px] text-[20px] bg-red-primary font-bold rounded-[16px] text-gray-0 text-center border-none shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition-all duration-200 cursor-pointer"
+          >
+            결제하기
+          </Link>
         </div>
       )}
     </div>

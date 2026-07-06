@@ -10,7 +10,7 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
     <div>
       <div
         key={item.id}
-        className="py-[12px] px-[24px] flex flex-col w-full items-center dt:flex-row justify-between"
+        className="py-[12px] px-[24px] flex flex-col w-full dt:items-center dt:flex-row justify-between"
       >
         <div className="flex flex-col flex-1 gap-1">
           <span className="text-[24px]">{item.menuName}</span>

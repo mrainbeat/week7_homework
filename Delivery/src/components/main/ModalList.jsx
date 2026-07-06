@@ -18,11 +18,11 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
 
   const totalPrice = price + (SelectedOption ? SelectedOption.price : 0);
   return (
-    <div className="flex flex-col gap-10 dt:flex-row dt:justify-between">
+    <div className="flex flex-col gap-5 dt:gap-10 dt:flex-row dt:justify-between">
       <div className="flex flex-col flex-1 min-w-0">
         <h6 className="text-[20px]">{name}</h6>
         <p className="text-[12px] mt-[7px] mb-[13px] text-gray-3">{detail}</p>
-        <div className="flex gap-2 overflow-x-auto w-full pb-2 scrollbar">
+        <div className="flex gap-2 flex-wrap max-w-[200px] pb-2 scrollbar dt:overflow-x-auto dt:w-full dt:flex-nowrap dt:max-w-none">
           {side.map((show) => (
             <div className="shrink-0">
               <SideList
@@ -36,7 +36,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
           ))}
         </div>
       </div>
-      <div className="flex items-center gap-[24px] shrink-0">
+      <div className="dt:flex-row dt:items-center dt:gap-[24px] flex flex-col items-end gap-2 shrink-0">
         <p className="font-bold text-[20px]">{price.toLocaleString()}원</p>
         <div>
           {!selectedFood ? (
@@ -55,7 +55,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
                   SelectedOption: SelectedOption,
                 });
               }}
-              className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg mt-[12px] dt:my-[13px] bg-[#FDF7C3] cursor-pointer"
+              className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg mt-[12px] dt:my-[13px] bg-red-assistive cursor-pointer"
             >
               담기
             </button>

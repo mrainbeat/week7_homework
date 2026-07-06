@@ -23,13 +23,8 @@ const Navbar = ({ left, right }) => {
           <Link to="/Order" className="dt:hidden cursor-pointer">
             <img src={cart} alt="장바구니" className="w-[32px] h-[32px]" />
           </Link>
-        ) : isOrderPage ? (
-          /* 2) 장바구니 페이지일 때: 햄버거 대신 '카드 아이콘' 띄우기 */
-          <Link to="/PayCard" className="dt:hidden cursor-pointer">
-            <img src={card} alt="결제하기" className="w-[32px] h-[32px]" />
-          </Link>
         ) : (
-          /* 3) 그 외 페이지(메뉴)일 때: 원래대로 '햄버거 버튼' 띄우기 */
+          /* 2) 그 외 페이지(메뉴)일 때: 원래대로 '햄버거 버튼' 띄우기 */
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="dt:hidden text-2xl cursor-pointer"
@@ -38,7 +33,7 @@ const Navbar = ({ left, right }) => {
           </button>
         )}
       </div>
-      {!isOrderPage && !isPayCardPage && isOpen && (
+      {!isPayCardPage && isOpen && (
         <div
           className="dt:hidden w-full flex flex-col bg-gray-1 dt:pt-[83px] pt-[19px] h-[calc(100vh-83px)] ml-[139px]"
           onClick={() => setIsOpen(!isOpen)}

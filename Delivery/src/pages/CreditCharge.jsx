@@ -5,6 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const CreditCharge = () => {
   const navigate = useNavigate();
+  const loginStatus = localStorage.getItem('isLoggedIn');
+
+  //로그인 여부 체크하기
+  const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem('IsLoggedIn');
+    setIsLoggedIn(false);
+  };
 
   // 현재 보유 크레딧 불러오기
   const [myCredit, setMyCredit] = useState(() => {
@@ -54,6 +63,38 @@ const CreditCharge = () => {
               <img src={Leftarrow} alt="뒤로가기" />
             </button>
             <span className="text-[36px] font-bold">크레딧 충전</span>
+          </div>
+        }
+        right={
+          <div className="text-black flex flex-col pr-5 items-end">
+            {/* 모바일 뷰용 장바구니 링크 */}
+            <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
+              장바구니
+            </Link>
+            {/* 모바일 뷰용 크레딧 링크 */}
+            <Link
+              to="/CreditCharge"
+              className="dt:hidden cursor-pointer text-[20px]"
+            >
+              크레딧 충전
+            </Link>
+            {/* 모바일 뷰용 로그인 로그아웃 링크 */}
+            {isLoggedIn ? (
+              <Link
+                to="/Login"
+                className="dt:hidden hover:text-black text-[20px] transition-colors"
+                onClick={handleLogout}
+              >
+                로그아웃
+              </Link>
+            ) : (
+              <Link
+                to="/Login"
+                className="dt:hidden hover:text-black text-[20px] transition-colors"
+              >
+                로그인
+              </Link>
+            )}
           </div>
         }
       />
