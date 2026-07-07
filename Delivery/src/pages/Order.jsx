@@ -3,17 +3,19 @@ import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import CartList from '../components/Cart/CartList';
-import Payment from '../components/Cart/Payment';
 
 const Order = ({ cart = [], addToCart, removeCartItem }) => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
 
-  //로그인 여부 체크하기
+  // 모바일 화면에서 장바구니(false)와 결제창(true)을 스위칭하는 상태
+  const [isPayView, setIsPayView] = useState(false);
+
+  // 로그인 여부 체크
   const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem('IsLoggedIn');
+    localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
   };
 
@@ -40,7 +42,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
   const afterCredit = myCredit - totalPrice;
   const isShortage = afterCredit < 0;
 
-  // 장바구니 데이터를 가게이름 기준으로 정렬
+  // 장바구니 데이터를 가게 이름 기준으로 그룹화
   const groupedCart = cart.reduce((groups, item) => {
     if (!groups[item.storeName]) {
       groups[item.storeName] = [];
@@ -59,37 +61,47 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
     // 2. 브라우저 장바구니 데이터 삭제
     localStorage.removeItem('myCart');
 
-    // 3. App.jsx의 리액트 상태를 비우기 위해, 창을 새로고침하며 완료 페이지로 강제 리다이렉트
+    // 3. 완료 페이지로 이동
     window.location.href = '/CompleteOrder';
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
+    <div className="min-h-screen bg-[#F8F9FA] flex flex-col pt-[83px] dt:pt-0">
       <Navbar
         totalPrice={totalPrice}
         cartLength={cart.length}
         left={
           <div className="flex gap-[48px] items-center">
-            <Link to="/Menu" className="cursor-pointer">
-              <img src={Leftarrow} alt="왼쪽화살표" />
-            </Link>
-            <span className="text-[36px] font-bold">장바구니</span>
+            {/* 모바일 결제 화면 상태일 때는 뒤로가기 클릭 시 장바구니 리스트로 복귀 */}
+            {isPayView ? (
+              <button
+                type="button"
+                onClick={() => setIsPayView(false)}
+                className="cursor-pointer bg-transparent border-none p-0 flex items-center justify-center"
+              >
+                <img src={Leftarrow} alt="뒤로가기" />
+              </button>
+            ) : (
+              <Link to="/Menu" className="cursor-pointer">
+                <img src={Leftarrow} alt="메뉴로 돌아가기" />
+              </Link>
+            )}
+            <span className="text-[36px] font-bold">
+              {isPayView ? '결제하기' : '장바구니'}
+            </span>
           </div>
         }
         right={
           <div className="text-black flex flex-col pr-5 items-end">
-            {/* 모바일 뷰용 장바구니 링크 */}
             <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
               장바구니
             </Link>
-            {/* 모바일 뷰용 크레딧 링크 */}
             <Link
               to="/CreditCharge"
               className="dt:hidden cursor-pointer text-[20px]"
             >
               크레딧 충전
             </Link>
-            {/* 모바일 뷰용 로그인 로그아웃 링크 */}
             {isLoggedIn ? (
               <Link
                 to="/Login"
@@ -110,7 +122,6 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
         }
       />
 
-      {/* 왼쪽 섹션: 장바구니 영역 */}
       {cart.length === 0 ? (
         <div className="w-full h-[100vh] flex flex-col items-center justify-center">
           <p className="text-[24px] font-semibold text-[#333333] mb-[32px]">
@@ -124,9 +135,13 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
           </Link>
         </div>
       ) : (
-        <div className="flex-1 flex flex-row items-center justify-center gap-[69px] w-[1200px] h-[604px] mx-auto box-border max-xl:w-full max-xl:h-auto max-xl:flex-col max-xl:p-[20px] max-xl:my-[40px]">
-          <div className="w-[563px] h-[604px] flex flex-col box-border max-xl:w-full max-xl:max-w-[568px] max-xl:h-auto">
-            <div className="w-full h-full bg-transparent dt:p-0 p-13 flex flex-col box-border overflow-y-auto">
+        /* max-dt:h-auto를 주어 모바일에서 높이가 콘텐츠 크기에 맞춰 조절되게 함 */
+        <div className="flex-1 flex flex-col dt:flex-row items-center justify-center gap-[69px] w-full dt:w-[1200px] h-auto dt:h-[604px] mx-auto box-border p-[20px] dt:p-0 my-[40px] dt:my-0">
+          {/* 왼쪽 섹션: 장바구니 영역 (모바일 결제 단계일 때는 숨김) */}
+          <div
+            className={`w-full dt:w-[563px] h-auto dt:h-[604px] flex flex-col box-border ${isPayView ? 'max-dt:hidden' : ''}`}
+          >
+            <div className="w-full h-auto dt:h-full bg-transparent flex flex-col box-border dt:overflow-y-auto">
               <div className="flex flex-col gap-[34px] dt:gap-[51px]">
                 {Object.keys(groupedCart).map((storeName) => (
                   <div
@@ -152,8 +167,10 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
             </div>
           </div>
 
-          {/* 오른쪽 섹션: 결제하기 카드 상자 */}
-          <div className="hidden dt:block w-[568px] h-[604px] bg-white rounded-[32px] p-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-[#F8F9FA] flex flex-col box-border max-xl:w-full max-xl:max-w-[568px] max-xl:h-auto">
+          {/* 오른쪽 섹션: 결제하기 카드 상자 (데스크톱 상시 노출, 모바일은 결제 단계일 때만 노출) */}
+          <div
+            className={`w-full dt:w-[568px] h-auto dt:h-[604px] bg-white rounded-[32px] p-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-[#F8F9FA] flex-col box-border ${isPayView ? 'flex' : 'hidden dt:flex'}`}
+          >
             <h2 className="text-[36px] font-black text-center text-[#111111] mb-[54px]">
               결제하기
             </h2>
@@ -180,14 +197,16 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
               <div className="flex justify-between text-[18px] font-bold">
                 <span>차감 후 잔액</span>
                 <span
-                  className={isShortage ? 'text-red-primary' : 'text-[#00BA88]'}
+                  className={
+                    isShortage ? 'text-red-primary' : 'text-green-primary'
+                  }
                 >
                   {afterCredit.toLocaleString()}C
                 </span>
               </div>
             </div>
 
-            <div className="flex justify-end items-center gap-[12px] mt-[24px] mb-auto">
+            <div className="flex justify-end items-center gap-[12px] mt-[24px] mb-auto max-dt:mb-[40px]">
               <span className="text-[13px] text-[#AAAAAA]">
                 크레딧이 부족한가요?
               </span>
@@ -212,12 +231,16 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
               결제하기
             </button>
           </div>
-          <Link
-            to="/Paycard"
-            className="dt:hidden w-[250px] py-[20px] text-[20px] bg-red-primary font-bold rounded-[16px] text-gray-0 text-center border-none shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition-all duration-200 cursor-pointer"
-          >
-            결제하기
-          </Link>
+
+          {!isPayView && (
+            <button
+              type="button"
+              onClick={() => setIsPayView(true)}
+              className="dt:hidden w-[250px] py-[20px] text-[20px] bg-red-primary font-bold rounded-[16px] text-gray-0 text-center border-none shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition-all duration-200 cursor-pointer mt-[24px]"
+            >
+              결제하러 가기
+            </button>
+          )}
         </div>
       )}
     </div>

@@ -12,7 +12,8 @@ const Navbar = ({ left, right }) => {
   const isPayCardPage = location.pathname.includes('/PayCard');
 
   return (
-    <nav className="fixed top-0 left-0 right-0 w-full text-white">
+    /* 🌟 네비바 대장 태그 (999층 유지) */
+    <nav className="fixed top-0 left-0 right-0 w-full text-white z-[999]">
       <div className="h-[83px] flex items-center justify-between px-[40px] bg-red-primary ">
         <div>{left}</div>
         <div className="dt:flex gap-[38px] items-center hidden relative">
@@ -33,13 +34,14 @@ const Navbar = ({ left, right }) => {
           </button>
         )}
       </div>
+
       {!isPayCardPage && isOpen && (
         <div
-          className="dt:hidden w-full flex flex-col bg-gray-1 dt:pt-[83px] pt-[19px] h-[calc(100vh-83px)] ml-[139px]"
+          className="dt:hidden w-screen flex flex-col bg-gray-1 pt-[19px] h-[calc(100vh-83px)] fixed top-[83px] left-0 z-50"
           onClick={() => setIsOpen(!isOpen)}
         >
           <div
-            className="flex flex-col items-center gap-4 text-red-primary"
+            className="flex flex-col items-end gap-4 text-red-primary pr-[40px]"
             onClick={(e) => e.stopPropagation()}
           >
             {right}
