@@ -119,7 +119,7 @@ const CreditCharge = () => {
           </div>
 
           {/* 1. 상단 가로 일렬 충전 금액 선택 버튼 배열 */}
-          <div className="flex gap-[12px] justify-between mb-[36px]">
+          <div className="grid grid-cols-2 dt:flex dt:flex-row gap-[12px] dt:justify-between mb-[36px]">
             {[1000, 3000, 5000, 10000].map((amount) => (
               <button
                 key={amount}
@@ -139,7 +139,7 @@ const CreditCharge = () => {
               <span>{myCredit.toLocaleString()}C</span>
             </div>
 
-            <div className="flex justify-between text-[16px] font-bold text-[#F0485F]">
+            <div className="flex justify-between text-[20px] font-bold text-[#F0485F]">
               <span>충전 후 크레딧</span>
               <span>{(myCredit + chargeAmount).toLocaleString()}C</span>
             </div>
