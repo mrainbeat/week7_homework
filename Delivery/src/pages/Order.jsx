@@ -186,15 +186,11 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
 
             {/* 회색 크레딧 현황 요약 박스 */}
             <div className="w-full bg-[#F8F9FA] rounded-[12px] p-[24px] flex flex-col gap-[16px] box-border">
-              <div className="flex justify-between text-[18px] font-bold text-[#111111]">
+              <div className="flex justify-between text-[20px] font-bold text-[#111111]">
                 <span>보유 크레딧</span>
                 <span>{myCredit.toLocaleString()}C</span>
               </div>
-              <div className="flex justify-between text-[18px] text-[#666666]">
-                <span>차감 예정 크레딧</span>
-                <span>-{totalPrice.toLocaleString()}C</span>
-              </div>
-              <div className="flex justify-between text-[18px] font-bold">
+              <div className="flex justify-between text-[18px] font-bold text-green-primary">
                 <span>차감 후 잔액</span>
                 <span
                   className={
@@ -204,6 +200,10 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
                   {afterCredit.toLocaleString()}C
                 </span>
               </div>
+              <div className="flex justify-between text-[18px] text-[#666666]">
+                <span>차감 예정 크레딧</span>
+                <span>-{totalPrice.toLocaleString()}C</span>
+              </div>
             </div>
 
             <div className="flex justify-end items-center gap-[12px] mt-[24px] mb-auto max-dt:mb-[40px]">
@@ -212,7 +212,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
               </span>
               <Link
                 to="/CreditCharge"
-                className="bg-[#0099FF] text-white px-[14px] py-[6px] text-[13px] font-bold rounded-[6px] no-underline hover:bg-[#0077CC] transition-colors duration-200"
+                className="bg-green-primary text-white px-[14px] py-[6px] text-[13px] font-bold rounded-[6px] no-underline hover:bg-[#0077CC] transition-colors duration-200"
               >
                 크레딧 충전
               </Link>
