@@ -3,7 +3,7 @@ import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
 import { useState } from 'react';
 import remove from '../../assets/ion_close-outline.svg';
-import SideList from '../main/SideList';
+import OptionList from '../main/OptionList';
 
 const CartList = ({ item, addToCart, removeCartItem }) => {
   return (
@@ -15,13 +15,17 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
         <div className="flex flex-col flex-1 gap-1">
           <span className="text-[24px]">{item.menuName}</span>
           {item.side && item.side.length > 0 && (
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap gap-2">
               {item.side
                 //필터링하기
-                .filter((show) => item.SelectedOption?.name === show.name)
+                .filter((show) =>
+                  item.SelectedOptions.some(
+                    (option) => option.name === show.name
+                  )
+                )
                 //true 인 애만 보이도록
                 .map((show) => (
-                  <SideList
+                  <OptionList
                     key={show.name}
                     name={show.name}
                     price={show.price}
