@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,9 +11,15 @@ const CreditCharge = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem('IsLoggedIn');
+    localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
   };
+
+  useEffect(() => {
+    if (loginStatus !== 'true') {
+      navigate('/Login', { replace: true });
+    }
+  }, [loginStatus, navigate]);
 
   // 현재 보유 크레딧 불러오기
   const [myCredit, setMyCredit] = useState(() => {

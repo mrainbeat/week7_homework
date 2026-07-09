@@ -19,6 +19,13 @@ function App() {
   });
 
   const addToCart = (newItem) => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (!isLoggedIn) {
+      alert('로그인 후 이용해주세요.');
+      //해당 페이지에서 navigate는 사용불가
+      window.location.href = '/Login';
+      return;
+    }
     setCart((prev) => {
       const isExist = prev.find((item) => item.id === newItem.id);
       let updatedCart = [];
