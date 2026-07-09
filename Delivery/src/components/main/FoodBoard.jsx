@@ -3,6 +3,7 @@ import { StoreMockData } from '../../mocks/mock';
 import { useState } from 'react';
 import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
+import Background from '../../assets/Background/background.png';
 
 const FoodBoard = ({ addToCart, cart }) => {
   const [category, setCategory] = useState('전체');
@@ -62,12 +63,19 @@ const FoodBoard = ({ addToCart, cart }) => {
         ))}
       </div>
       {isModalOpen && (
-        <FoodModal
-          item={selectedMenu}
-          onClose={handleMenuClose}
-          //모달에 App함수 넘겨줌
-          addToCart={addToCart}
-        />
+        <div
+          style={{
+            background: `white url(${Background}) center/cover no-repeat`,
+          }}
+          className="fixed inset-0 z-40 flex items-center justify-center"
+        >
+          <FoodModal
+            item={selectedMenu}
+            onClose={handleMenuClose}
+            //모달에 App함수 넘겨줌
+            addToCart={addToCart}
+          />
+        </div>
       )}
     </div>
   );

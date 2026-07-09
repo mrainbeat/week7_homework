@@ -18,8 +18,8 @@ const FoodModal = ({ item, onClose, addToCart }) => {
   }, []);
 
   return (
-    <div className="fixed bg-black/50 z-50 flex top-[83px] left-0 right-0 bottom-0 dt:justify-center dt:items-center dt:inset-0">
-      <div className="bg-white w-full h-full dt:h-[667px] dt:w-[738px] flex flex-col p-[40px] dt:rounded-xl">
+    <div className="fixed z-50 flex top-[83px] left-0 right-0 bottom-0 dt:justify-center dt:items-center dt:inset-0">
+      <div className="bg-white w-full h-full dt:h-[750px] dt:w-[1000px] flex flex-col p-[40px] dt:rounded-xl dt:border dt:border-gray-2 dt:border-[1px]">
         <div className="flex dt:justify-center relative items-center w-full pb-10 dt:pb-0">
           <div>
             <h3 className="font-bold text-[36px] text-left dt:text-center">

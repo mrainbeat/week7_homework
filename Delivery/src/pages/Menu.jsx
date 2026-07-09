@@ -3,6 +3,7 @@ import Navbar from '../components/layouts/Navbar';
 import cartIcon from '../assets/cart.svg';
 import cardIcon from '../assets/card.svg'; // 카드 아이콘 임포트 추가
 import FoodBoard from '../components/main/FoodBoard';
+import Background from '../assets/Background/background.png';
 import {
   Link,
   useLocation,
@@ -12,7 +13,7 @@ import {
 
 const Menu = () => {
   const navigate = useNavigate();
-  const { cart, addToCart } = useOutletContext();
+  const { cart, addToCart, clearCart } = useOutletContext();
 
   // 로그인 상태 관리
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -28,6 +29,7 @@ const Menu = () => {
   // 로그아웃 버튼 동작 함수
   const handleLogout = (e) => {
     e.preventDefault();
+    clearCart();
     localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
   };

@@ -16,14 +16,10 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('myCart');
     setIsLoggedIn(false);
+    navigate('/Login', { replace: true });
   };
-
-  // 로컬스토리지에서 유저의 보유 크레딧 읽기 (기본값 5000C)
-  const [myCredit, setMyCredit] = useState(() => {
-    const savedCredit = localStorage.getItem('myCredit');
-    return savedCredit ? Number(savedCredit) : 5000;
-  });
 
   // 로그인 제한 가드
   useEffect(() => {
@@ -31,6 +27,12 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
       navigate('/Login', { replace: true });
     }
   }, [loginStatus, navigate]);
+
+  // 로컬스토리지에서 유저의 보유 크레딧 읽기 (기본값 5000C)
+  const [myCredit, setMyCredit] = useState(() => {
+    const savedCredit = localStorage.getItem('myCredit');
+    return savedCredit ? Number(savedCredit) : 5000;
+  });
 
   // 총 결제 금액 실시간 계산
   const totalPrice = cart.reduce(

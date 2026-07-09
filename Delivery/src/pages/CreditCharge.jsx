@@ -11,6 +11,7 @@ const CreditCharge = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
   const handleLogout = (e) => {
     e.preventDefault();
+    localStorage.removeItem('myCart');
     localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
   };
