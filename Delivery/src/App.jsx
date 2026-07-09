@@ -57,6 +57,12 @@ function App() {
     });
   };
 
+  //카트에 있었던 모든 아이템을 삭제(로그아웃시 사용)
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem('myCart');
+  };
+
   return (
     <BrowserRouter>
       <Routes>
@@ -64,7 +70,12 @@ function App() {
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/CompleteOrder" element={<CompleteOrder />} />
         <Route path="/CreditCharge" element={<CreditCharge />} />
-        <Route path="/" element={<Layout cart={cart} addToCart={addToCart} />}>
+        <Route
+          path="/"
+          element={
+            <Layout cart={cart} addToCart={addToCart} clearCart={clearCart} />
+          }
+        >
           <Route index element={<Navigate to="/Menu" replace />} />
           <Route path="Menu" element={<Menu />}></Route>
           <Route
