@@ -20,6 +20,9 @@ const ModalList = ({
   const [SelectedOptions, setSelectedOptions] = useState([]);
 
   const handleFoodClick = (option) => {
+    setCount(1);
+    setSelectedFood(false);
+
     //단일선택만 가능하다면( 예 : 대 중 소 중에 하나 고르기 등 )
     if (!isMultiple) {
       setSelectedOptions((prev) => {
