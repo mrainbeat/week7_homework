@@ -45,6 +45,7 @@ const FoodModal = ({ item, onClose, addToCart }) => {
               storeName={item.name}
               addToCart={addToCart}
               side={show.side}
+              isMultiple={show.isMultiple}
             />
           ))}
         </div>

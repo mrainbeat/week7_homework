@@ -1,22 +1,65 @@
 import { useState } from 'react';
 import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
-import SideList from './SideList';
+import OptionList from './OptionList';
 
-const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
+const ModalList = ({
+  id,
+  name,
+  detail,
+  price,
+  storeName,
+  addToCart,
+  side,
+  isMultiple,
+}) => {
   const [selectedFood, setSelectedFood] = useState(false);
   const [count, setCount] = useState(1);
 
-  const [SelectedOption, setOptionSelected] = useState(false);
+  //옵션 선택을 배열로 받기
+  const [SelectedOptions, setSelectedOptions] = useState([]);
 
-  const handleFoodClick = (item) => {
-    setSelectedFood(item); //클릭한 데이터 저장
+  const handleFoodClick = (option) => {
+    setCount(1);
+    setSelectedFood(false);
+
+    //단일선택만 가능하다면( 예 : 대 중 소 중에 하나 고르기 등 )
+    if (!isMultiple) {
+      setSelectedOptions((prev) => {
+        //이미 선택된거라면 취소하고, 아니라면 다른 옵션 키기
+        const isExist = prev.find((item) => item.name === option.name);
+        return isExist ? [] : [option];
+      });
+      return;
+    }
+    //복수 선택이 가능하다면(isMutiple === true 라면)
+    setSelectedOptions((prev) => {
+      //이미 배열이 들어있다면 -> isExist === ture
+      const isExist = prev.find((item) => item.name === option.name);
+
+      //이미 배열에 있다면 뺴고, 아니라면 추가
+      if (isExist) {
+        return prev.filter((item) => item.name !== option.name);
+      } else {
+        return [...prev, option];
+      }
+    });
   };
+  //옵션 이름을 하나하나 정렬하여 - 로 연결하기
+  const optionsString = SelectedOptions.map((option) => option.name)
+    .sort()
+    .join('-');
 
   //어떤 옵션을 선택했는지에 따라 돌려주는 ID를 달리한다
-  const uniqueId = SelectedOption ? `${id}-${SelectedOption.name}` : id;
+  const uniqueId = SelectedOptions.length > 0 ? `${id}-${optionsString}` : id;
 
-  const totalPrice = price + (SelectedOption ? SelectedOption.price : 0);
+  //reduce 함수로 전체 가격 더하기
+  const optionTotalPrice = SelectedOptions.reduce(
+    (sum, opt) => sum + opt.price,
+    0
+  );
+  const totalPrice = price + optionTotalPrice;
+
   return (
     <div className="flex flex-col gap-5 dt:gap-10 dt:flex-row dt:justify-between">
       <div className="flex flex-col flex-1 min-w-0">
@@ -25,12 +68,14 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
         <div className="flex gap-2 flex-wrap max-w-[200px] pb-2 scrollbar dt:overflow-x-auto dt:w-full dt:flex-nowrap dt:max-w-none">
           {side.map((show) => (
             <div className="shrink-0">
-              <SideList
+              <OptionList
                 key={show.name}
                 name={show.name}
                 price={show.price}
-                isSelected={SelectedOption?.name === show.name}
-                onClick={() => setOptionSelected(show)}
+                isSelected={SelectedOptions.some(
+                  (option) => option.name === show.name
+                )}
+                onClick={() => handleFoodClick(show)}
               />
             </div>
           ))}
@@ -52,7 +97,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
                   storeName,
                   quantity: 1,
                   side: side,
-                  SelectedOption: SelectedOption,
+                  SelectedOptions: SelectedOptions,
                 });
               }}
               className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg mt-[12px] dt:my-[13px] bg-red-assistive cursor-pointer"
@@ -75,7 +120,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
                       storeName,
                       quantity: -1,
                       side: side,
-                      SelectedOption: SelectedOption,
+                      SelectedOptions: SelectedOptions,
                     });
                   } else {
                     setSelectedFood(false);
@@ -88,7 +133,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
                       storeName,
                       quantity: -1,
                       side: side,
-                      SelectedOption: SelectedOption,
+                      SelectedOptions: SelectedOptions,
                     });
                   }
                 }}
@@ -110,7 +155,7 @@ const ModalList = ({ id, name, detail, price, storeName, addToCart, side }) => {
                     storeName,
                     quantity: 1,
                     side: side,
-                    SelectedOption: SelectedOption,
+                    SelectedOptions: SelectedOptions,
                   });
                 }}
               >
