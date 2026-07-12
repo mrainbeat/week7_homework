@@ -4,13 +4,13 @@ import plus from '../../assets/plus.svg';
 import OptionList from './OptionList';
 
 const ModalList = ({
-  id,
+  menuId,
   name,
-  detail,
+  description,
   price,
   storeName,
   addToCart,
-  side,
+  options,
   isMultiple,
 }) => {
   const [selectedFood, setSelectedFood] = useState(false);
@@ -51,7 +51,8 @@ const ModalList = ({
     .join('-');
 
   //어떤 옵션을 선택했는지에 따라 돌려주는 ID를 달리한다
-  const uniqueId = SelectedOptions.length > 0 ? `${id}-${optionsString}` : id;
+  const uniqueId =
+    SelectedOptions.length > 0 ? `${menuId}-${optionsString}` : menuId;
 
   //reduce 함수로 전체 가격 더하기
   const optionTotalPrice = SelectedOptions.reduce(
@@ -64,12 +65,13 @@ const ModalList = ({
     <div className="flex flex-col gap-5 dt:gap-10 dt:flex-row dt:justify-between">
       <div className="flex flex-col flex-1 min-w-0">
         <h6 className="text-[20px]">{name}</h6>
-        <p className="text-[12px] mt-[7px] mb-[13px] text-gray-3">{detail}</p>
+        <p className="text-[12px] mt-[7px] mb-[13px] text-gray-3">
+          {description}
+        </p>
         <div className="flex gap-2 flex-wrap max-w-[200px] pb-2 scrollbar dt:overflow-x-auto dt:w-full dt:flex-nowrap dt:max-w-none">
-          {side.map((show) => (
-            <div className="shrink-0">
+          {options.map((show) => (
+            <div key={show.menuOptionId} className="shrink-0">
               <OptionList
-                key={show.name}
                 name={show.name}
                 price={show.price}
                 isSelected={SelectedOptions.some(
@@ -91,12 +93,12 @@ const ModalList = ({
                 setCount(1);
                 addToCart({
                   id: uniqueId,
-                  originalID: id,
+                  originalID: menuId,
                   menuName: name,
                   price: totalPrice,
                   storeName,
                   quantity: 1,
-                  side: side,
+                  options: options,
                   SelectedOptions: SelectedOptions,
                 });
               }}
@@ -114,12 +116,12 @@ const ModalList = ({
                     setCount(count - 1);
                     addToCart({
                       id: uniqueId,
-                      originalID: id,
+                      originalID: menuId,
                       menuName: name,
                       price: totalPrice,
                       storeName,
                       quantity: -1,
-                      side: side,
+                      options: options,
                       SelectedOptions: SelectedOptions,
                     });
                   } else {
@@ -127,12 +129,12 @@ const ModalList = ({
                     //1-1 해서 아예 0으로 만들기
                     addToCart({
                       id: uniqueId,
-                      originalID: id,
+                      originalID: menuId,
                       menuName: name,
                       price: totalPrice,
                       storeName,
                       quantity: -1,
-                      side: side,
+                      options: options,
                       SelectedOptions: SelectedOptions,
                     });
                   }
@@ -149,12 +151,12 @@ const ModalList = ({
                   //수량 하나 더하기
                   addToCart({
                     id: uniqueId,
-                    originalID: id,
+                    originalID: menuId,
                     menuName: name,
                     price: totalPrice,
                     storeName,
                     quantity: 1,
-                    side: side,
+                    options: options,
                     SelectedOptions: SelectedOptions,
                   });
                 }}

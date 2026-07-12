@@ -14,9 +14,9 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
       >
         <div className="flex flex-col flex-1 gap-1">
           <span className="text-[24px]">{item.menuName}</span>
-          {item.side && item.side.length > 0 && (
+          {item.options && item.options.length > 0 && (
             <div className="flex flex-wrap gap-2">
-              {item.side
+              {item.options
                 //필터링하기
                 .filter((show) =>
                   item.SelectedOptions.some(

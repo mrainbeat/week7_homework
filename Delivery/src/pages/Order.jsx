@@ -156,7 +156,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
                     <div>
                       {groupedCart[storeName].map((item) => (
                         <CartList
-                          key={item.id || item.name}
+                          key={item.StoreId || item.name}
                           item={item}
                           addToCart={addToCart}
                           removeCartItem={removeCartItem}
