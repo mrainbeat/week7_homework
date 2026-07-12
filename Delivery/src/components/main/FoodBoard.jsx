@@ -52,11 +52,11 @@ const FoodBoard = ({ addToCart, cart }) => {
       <div className="grid grid-cols-1 dt:grid-cols-4 gap-x-[24px] gap-y-8 pb-10">
         {filteredFoods().map((item) => (
           <FoodCard
-            key={item.id}
+            key={item.storeId}
             name={item.name}
-            star={item.star}
-            type={item.type}
-            image={item.image}
+            rating={item.rating}
+            category={item.category}
+            imageUrl={item.imageUrl}
             //누르면 열리도록 ture로 만듦
             onClick={() => handleMenuClick(item)}
           />

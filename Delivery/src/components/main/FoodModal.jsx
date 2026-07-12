@@ -37,14 +37,14 @@ const FoodModal = ({ item, onClose, addToCart }) => {
         <div className="flex flex-col gap-[60px] dt:gap-[88px] overflow-y-auto pr-2 min-h-0 flex-1 pb-[40px]">
           {item.menus.map((show) => (
             <ModalList
-              key={show.id}
-              id={show.id}
+              key={show.menuId}
+              menuId={show.menuId}
               name={show.name}
-              detail={show.detail}
+              description={show.description}
               price={show.price}
               storeName={item.name}
               addToCart={addToCart}
-              side={show.side}
+              options={show.options}
               isMultiple={show.isMultiple}
             />
           ))}
