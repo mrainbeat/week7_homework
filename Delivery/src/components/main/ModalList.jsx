@@ -56,7 +56,7 @@ const ModalList = ({
 
   //reduce 함수로 전체 가격 더하기
   const optionTotalPrice = SelectedOptions.reduce(
-    (sum, opt) => sum + opt.price,
+    (sum, opt) => sum + opt.additionalPrice,
     0
   );
   const totalPrice = price + optionTotalPrice;
@@ -73,7 +73,7 @@ const ModalList = ({
             <div key={show.menuOptionId} className="shrink-0">
               <OptionList
                 name={show.name}
-                price={show.price}
+                price={show.additionalPrice}
                 isSelected={SelectedOptions.some(
                   (option) => option.name === show.name
                 )}

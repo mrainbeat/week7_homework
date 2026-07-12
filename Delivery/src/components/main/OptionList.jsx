@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const OptionList = ({ name, price, isSelected, onClick }) => {
+const OptionList = ({ name, additionalPrice, isSelected, onClick }) => {
   return (
     <div>
       <button

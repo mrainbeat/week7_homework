@@ -22,10 +22,10 @@ export const StoreMockData = [
         price: 10000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's1_m1_o1', name: '1단계', price: 0 },
-          { menuOptionId: 's1_m1_o2', name: '2단계', price: 0 },
-          { menuOptionId: 's1_m1_o3', name: '3단계', price: 0 },
-          { menuOptionId: 's1_m1_o4', name: '아주 맵게', price: 0 },
+          { menuOptionId: 's1_m1_o1', name: '1단계', additionalPrice: 0 },
+          { menuOptionId: 's1_m1_o2', name: '2단계', additionalPrice: 0 },
+          { menuOptionId: 's1_m1_o3', name: '3단계', additionalPrice: 0 },
+          { menuOptionId: 's1_m1_o4', name: '아주 맵게', additionalPrice: 0 },
         ],
       },
       {
@@ -35,9 +35,17 @@ export const StoreMockData = [
         price: 12000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's1_m2_o1', name: '소', price: 0 },
-          { menuOptionId: 's1_m2_o2', name: '중(+4000)', price: 4000 },
-          { menuOptionId: 's1_m2_o3', name: '대(+10000)', price: 10000 },
+          { menuOptionId: 's1_m2_o1', name: '소', additionalPrice: 0 },
+          {
+            menuOptionId: 's1_m2_o2',
+            name: '중(+4000)',
+            additionalPrice: 4000,
+          },
+          {
+            menuOptionId: 's1_m2_o3',
+            name: '대(+10000)',
+            additionalPrice: 10000,
+          },
         ],
       },
       {
@@ -47,9 +55,17 @@ export const StoreMockData = [
         price: 20000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's1_m3_o1', name: '소', price: 0 },
-          { menuOptionId: 's1_m3_o2', name: '중(+6000)', price: 6000 },
-          { menuOptionId: 's1_m3_o3', name: '대(+15000)', price: 15000 },
+          { menuOptionId: 's1_m3_o1', name: '소', additionalPrice: 0 },
+          {
+            menuOptionId: 's1_m3_o2',
+            name: '중(+6000)',
+            additionalPrice: 6000,
+          },
+          {
+            menuOptionId: 's1_m3_o3',
+            name: '대(+15000)',
+            additionalPrice: 15000,
+          },
         ],
       },
     ],
@@ -68,8 +84,12 @@ export const StoreMockData = [
         price: 27800,
         isMultiple: false,
         options: [
-          { menuOptionId: 's2_m4_o1', name: '뼈', price: 0 },
-          { menuOptionId: 's2_m4_o2', name: '순살 변경(+2000)', price: 2000 },
+          { menuOptionId: 's2_m4_o1', name: '뼈', additionalPrice: 0 },
+          {
+            menuOptionId: 's2_m4_o2',
+            name: '순살 변경(+2000)',
+            additionalPrice: 2000,
+          },
         ],
       },
       {
@@ -79,9 +99,9 @@ export const StoreMockData = [
         price: 34800,
         isMultiple: false,
         options: [
-          { menuOptionId: 's2_m5_o1', name: '보통맛', price: 0 },
-          { menuOptionId: 's2_m5_o2', name: '매운맛', price: 0 },
-          { menuOptionId: 's2_m5_o3', name: '아주 매운맛', price: 0 },
+          { menuOptionId: 's2_m5_o1', name: '보통맛', additionalPrice: 0 },
+          { menuOptionId: 's2_m5_o2', name: '매운맛', additionalPrice: 0 },
+          { menuOptionId: 's2_m5_o3', name: '아주 매운맛', additionalPrice: 0 },
         ],
       },
       {
@@ -91,8 +111,12 @@ export const StoreMockData = [
         price: 30800,
         isMultiple: false,
         options: [
-          { menuOptionId: 's2_m6_o1', name: '뼈', price: 0 },
-          { menuOptionId: 's2_m6_o2', name: '순살 변경(+2000)', price: 2000 },
+          { menuOptionId: 's2_m6_o1', name: '뼈', additionalPrice: 0 },
+          {
+            menuOptionId: 's2_m6_o2',
+            name: '순살 변경(+2000)',
+            additionalPrice: 2000,
+          },
         ],
       },
     ],
@@ -111,8 +135,12 @@ export const StoreMockData = [
         price: 24900,
         isMultiple: false,
         options: [
-          { menuOptionId: 's3_m7_o1', name: '뼈', price: 0 },
-          { menuOptionId: 's3_m7_o2', name: '순살 변경(+2000)', price: 2000 },
+          { menuOptionId: 's3_m7_o1', name: '뼈', additionalPrice: 0 },
+          {
+            menuOptionId: 's3_m7_o2',
+            name: '순살 변경(+2000)',
+            additionalPrice: 2000,
+          },
         ],
       },
       {
@@ -122,8 +150,12 @@ export const StoreMockData = [
         price: 22900,
         isMultiple: false,
         options: [
-          { menuOptionId: 's3_m8_o1', name: '뼈', price: 0 },
-          { menuOptionId: 's3_m8_o2', name: '순살 변경(+2000)', price: 2000 },
+          { menuOptionId: 's3_m8_o1', name: '뼈', additionalPrice: 0 },
+          {
+            menuOptionId: 's3_m8_o2',
+            name: '순살 변경(+2000)',
+            additionalPrice: 2000,
+          },
         ],
       },
       {
@@ -133,8 +165,12 @@ export const StoreMockData = [
         price: 24900,
         isMultiple: false,
         options: [
-          { menuOptionId: 's3_m9_o1', name: '뼈', price: 0 },
-          { menuOptionId: 's3_m9_o2', name: '순살 변경(+2000)', price: 2000 },
+          { menuOptionId: 's3_m9_o1', name: '뼈', additionalPrice: 0 },
+          {
+            menuOptionId: 's3_m9_o2',
+            name: '순살 변경(+2000)',
+            additionalPrice: 2000,
+          },
         ],
       },
     ],
@@ -153,10 +189,10 @@ export const StoreMockData = [
         price: 12000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's4_m10_o1', name: '안 맵게', price: 0 },
-          { menuOptionId: 's4_m10_o2', name: '덜 맵게', price: 0 },
-          { menuOptionId: 's4_m10_o3', name: '맵게', price: 0 },
-          { menuOptionId: 's4_m10_o4', name: '아주 맵게', price: 0 },
+          { menuOptionId: 's4_m10_o1', name: '안 맵게', additionalPrice: 0 },
+          { menuOptionId: 's4_m10_o2', name: '덜 맵게', additionalPrice: 0 },
+          { menuOptionId: 's4_m10_o3', name: '맵게', additionalPrice: 0 },
+          { menuOptionId: 's4_m10_o4', name: '아주 맵게', additionalPrice: 0 },
         ],
       },
       {
@@ -166,9 +202,21 @@ export const StoreMockData = [
         price: 12000,
         isMultiple: true,
         options: [
-          { menuOptionId: 's4_m11_o1', name: '새우 튀김(+300)', price: 300 },
-          { menuOptionId: 's4_m11_o2', name: '고구마 튀김(+400)', price: 400 },
-          { menuOptionId: 's4_m11_o3', name: '고추 튀김(+500)', price: 500 },
+          {
+            menuOptionId: 's4_m11_o1',
+            name: '새우 튀김(+300)',
+            additionalPrice: 300,
+          },
+          {
+            menuOptionId: 's4_m11_o2',
+            name: '고구마 튀김(+400)',
+            additionalPrice: 400,
+          },
+          {
+            menuOptionId: 's4_m11_o3',
+            name: '고추 튀김(+500)',
+            additionalPrice: 500,
+          },
         ],
       },
       {
@@ -178,8 +226,16 @@ export const StoreMockData = [
         price: 12000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's4_m12_o1', name: '어묵 추가(+100)', price: 100 },
-          { menuOptionId: 's4_m12_o2', name: '어묵 추가 X', price: 0 },
+          {
+            menuOptionId: 's4_m12_o1',
+            name: '어묵 추가(+100)',
+            additionalPrice: 100,
+          },
+          {
+            menuOptionId: 's4_m12_o2',
+            name: '어묵 추가 X',
+            additionalPrice: 0,
+          },
         ],
       },
     ],
@@ -198,9 +254,21 @@ export const StoreMockData = [
         price: 18000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's5_m13_o1', name: '와사비 포함', price: 0 },
-          { menuOptionId: 's5_m13_o2', name: '와사비 따로', price: 0 },
-          { menuOptionId: 's5_m13_o3', name: '와사비 빼기', price: 0 },
+          {
+            menuOptionId: 's5_m13_o1',
+            name: '와사비 포함',
+            additionalPrice: 0,
+          },
+          {
+            menuOptionId: 's5_m13_o2',
+            name: '와사비 따로',
+            additionalPrice: 0,
+          },
+          {
+            menuOptionId: 's5_m13_o3',
+            name: '와사비 빼기',
+            additionalPrice: 0,
+          },
         ],
       },
       {
@@ -210,9 +278,21 @@ export const StoreMockData = [
         price: 19500,
         isMultiple: false,
         options: [
-          { menuOptionId: 's5_m14_o1', name: '와사비 포함', price: 0 },
-          { menuOptionId: 's5_m14_o2', name: '와사비 따로', price: 0 },
-          { menuOptionId: 's5_m14_o3', name: '와사비 빼기', price: 0 },
+          {
+            menuOptionId: 's5_m14_o1',
+            name: '와사비 포함',
+            additionalPrice: 0,
+          },
+          {
+            menuOptionId: 's5_m14_o2',
+            name: '와사비 따로',
+            additionalPrice: 0,
+          },
+          {
+            menuOptionId: 's5_m14_o3',
+            name: '와사비 빼기',
+            additionalPrice: 0,
+          },
         ],
       },
       {
@@ -222,11 +302,11 @@ export const StoreMockData = [
         price: 8000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's5_m15_o1', name: '기본', price: 0 },
+          { menuOptionId: 's5_m15_o1', name: '기본', additionalPrice: 0 },
           {
             menuOptionId: 's5_m15_o2',
             name: '새우튀김 2p 추가(+3000)',
-            price: 3000,
+            additionalPrice: 3000,
           },
         ],
       },
@@ -246,8 +326,12 @@ export const StoreMockData = [
         price: 13500,
         isMultiple: false,
         options: [
-          { menuOptionId: 's6_m16_o1', name: '기본', price: 0 },
-          { menuOptionId: 's6_m16_o2', name: '면 추가(+1500)', price: 1500 },
+          { menuOptionId: 's6_m16_o1', name: '기본', additionalPrice: 0 },
+          {
+            menuOptionId: 's6_m16_o2',
+            name: '면 추가(+1500)',
+            additionalPrice: 1500,
+          },
         ],
       },
       {
@@ -257,8 +341,12 @@ export const StoreMockData = [
         price: 14000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's6_m17_o1', name: '기본', price: 0 },
-          { menuOptionId: 's6_m17_o2', name: '면 추가(+1500)', price: 1500 },
+          { menuOptionId: 's6_m17_o1', name: '기본', additionalPrice: 0 },
+          {
+            menuOptionId: 's6_m17_o2',
+            name: '면 추가(+1500)',
+            additionalPrice: 1500,
+          },
         ],
       },
       {
@@ -268,8 +356,12 @@ export const StoreMockData = [
         price: 15000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's6_m18_o1', name: 'M 사이즈', price: 0 },
-          { menuOptionId: 's6_m18_o2', name: 'L 사이즈(+3000)', price: 3000 },
+          { menuOptionId: 's6_m18_o1', name: 'M 사이즈', additionalPrice: 0 },
+          {
+            menuOptionId: 's6_m18_o2',
+            name: 'L 사이즈(+3000)',
+            additionalPrice: 3000,
+          },
         ],
       },
     ],
@@ -289,9 +381,17 @@ export const StoreMockData = [
         price: 29000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's7_m19_o1', name: '소', price: 0 },
-          { menuOptionId: 's7_m19_o2', name: '중(+5000)', price: 5000 },
-          { menuOptionId: 's7_m19_o3', name: '대(+10000)', price: 10000 },
+          { menuOptionId: 's7_m19_o1', name: '소', additionalPrice: 0 },
+          {
+            menuOptionId: 's7_m19_o2',
+            name: '중(+5000)',
+            additionalPrice: 5000,
+          },
+          {
+            menuOptionId: 's7_m19_o3',
+            name: '대(+10000)',
+            additionalPrice: 10000,
+          },
         ],
       },
       {
@@ -301,9 +401,9 @@ export const StoreMockData = [
         price: 32000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's7_m20_o1', name: '덜 맵게', price: 0 },
-          { menuOptionId: 's7_m20_o2', name: '기본 맵게', price: 0 },
-          { menuOptionId: 's7_m20_o3', name: '아주 맵게', price: 0 },
+          { menuOptionId: 's7_m20_o1', name: '덜 맵게', additionalPrice: 0 },
+          { menuOptionId: 's7_m20_o2', name: '기본 맵게', additionalPrice: 0 },
+          { menuOptionId: 's7_m20_o3', name: '아주 맵게', additionalPrice: 0 },
         ],
       },
       {
@@ -314,8 +414,12 @@ export const StoreMockData = [
         price: 8000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's7_m21_o1', name: '기본', price: 0 },
-          { menuOptionId: 's7_m21_o2', name: '곱빼기(+2000)', price: 2000 },
+          { menuOptionId: 's7_m21_o1', name: '기본', additionalPrice: 0 },
+          {
+            menuOptionId: 's7_m21_o2',
+            name: '곱빼기(+2000)',
+            additionalPrice: 2000,
+          },
         ],
       },
     ],
@@ -335,9 +439,17 @@ export const StoreMockData = [
         price: 10500,
         isMultiple: false,
         options: [
-          { menuOptionId: 's8_m22_o1', name: '고수 X', price: 0 },
-          { menuOptionId: 's8_m22_o2', name: '고수 O (따로 제공)', price: 0 },
-          { menuOptionId: 's8_m22_o3', name: '고기 추가(+3000)', price: 3000 },
+          { menuOptionId: 's8_m22_o1', name: '고수 X', additionalPrice: 0 },
+          {
+            menuOptionId: 's8_m22_o2',
+            name: '고수 O (따로 제공)',
+            additionalPrice: 0,
+          },
+          {
+            menuOptionId: 's8_m22_o3',
+            name: '고기 추가(+3000)',
+            additionalPrice: 3000,
+          },
         ],
       },
       {
@@ -348,8 +460,12 @@ export const StoreMockData = [
         price: 12000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's8_m23_o1', name: '기본', price: 0 },
-          { menuOptionId: 's8_m23_o2', name: '면 추가(+2000)', price: 2000 },
+          { menuOptionId: 's8_m23_o1', name: '기본', additionalPrice: 0 },
+          {
+            menuOptionId: 's8_m23_o2',
+            name: '면 추가(+2000)',
+            additionalPrice: 2000,
+          },
         ],
       },
       {
@@ -360,9 +476,17 @@ export const StoreMockData = [
         price: 24000,
         isMultiple: false,
         options: [
-          { menuOptionId: 's8_m24_o1', name: '소', price: 0 },
-          { menuOptionId: 's8_m24_o2', name: '중(+8000)', price: 8000 },
-          { menuOptionId: 's8_m24_o3', name: '대(+15000)', price: 15000 },
+          { menuOptionId: 's8_m24_o1', name: '소', additionalPrice: 0 },
+          {
+            menuOptionId: 's8_m24_o2',
+            name: '중(+8000)',
+            additionalPrice: 8000,
+          },
+          {
+            menuOptionId: 's8_m24_o3',
+            name: '대(+15000)',
+            additionalPrice: 15000,
+          },
         ],
       },
     ],
