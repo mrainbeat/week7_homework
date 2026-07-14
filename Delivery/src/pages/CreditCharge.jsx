@@ -13,7 +13,7 @@ const CreditCharge = () => {
     e.preventDefault();
     localStorage.removeItem('myCart');
     localStorage.removeItem('isLoggedIn');
-    setIsLoggedIn(false);
+    localStorage.removeItem('accessToken');
   };
 
   useEffect(() => {

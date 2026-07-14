@@ -22,6 +22,7 @@ const ModalList = ({
   const handleFoodClick = (option) => {
     setCount(1);
     setSelectedFood(false);
+    console.log('상세 메뉴 데이터:', response.data);
 
     //단일선택만 가능하다면( 예 : 대 중 소 중에 하나 고르기 등 )
     if (!isMultiple) {
@@ -75,7 +76,7 @@ const ModalList = ({
           {description}
         </p>
         <div className="flex gap-2 flex-wrap max-w-[200px] pb-2 scrollbar dt:overflow-x-auto dt:w-full dt:flex-nowrap dt:max-w-none">
-          {options.map((show) => (
+          {options?.map((show) => (
             <div key={show.menuOptionId} className="shrink-0">
               <OptionList
                 name={show.name}
