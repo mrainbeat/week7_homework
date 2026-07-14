@@ -34,7 +34,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
     return savedCredit ? Number(savedCredit) : 5000;
   });
 
-  // 총 결제 금액 실시간 계산
+  // 총 결제 금액 실시간 계산 (수량은 quantity 필드로 정상 연동 중)
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
@@ -74,7 +74,6 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
         cartLength={cart.length}
         left={
           <div className="flex gap-[48px] items-center">
-            {/* 모바일 결제 화면 상태일 때는 뒤로가기 클릭 시 장바구니 리스트로 복귀 */}
             {isPayView ? (
               <button
                 type="button"
@@ -137,9 +136,8 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
           </Link>
         </div>
       ) : (
-        /* max-dt:h-auto를 주어 모바일에서 높이가 콘텐츠 크기에 맞춰 조절되게 함 */
         <div className="flex-1 flex flex-col dt:flex-row items-center justify-center gap-[69px] w-full dt:w-[1200px] h-auto dt:h-[604px] mx-auto box-border p-[20px] dt:p-0 my-[40px] dt:my-0">
-          {/* 왼쪽 섹션: 장바구니 영역 (모바일 결제 단계일 때는 숨김) */}
+          {/* 왼쪽 섹션: 장바구니 영역 */}
           <div
             className={`w-full dt:w-[563px] h-auto dt:h-[604px] flex flex-col box-border ${isPayView ? 'max-dt:hidden' : ''}`}
           >
@@ -156,7 +154,8 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
                     <div>
                       {groupedCart[storeName].map((item) => (
                         <CartList
-                          key={item.StoreId || item.name}
+                          // key 값을 item.id 대신 item.cartItemId로 변경
+                          key={item.cartItemId}
                           item={item}
                           addToCart={addToCart}
                           removeCartItem={removeCartItem}
@@ -169,7 +168,7 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
             </div>
           </div>
 
-          {/* 오른쪽 섹션: 결제하기 카드 상자 (데스크톱 상시 노출, 모바일은 결제 단계일 때만 노출) */}
+          {/* 오른쪽 섹션: 결제하기 카드 상자 */}
           <div
             className={`w-full dt:w-[568px] h-auto dt:h-[604px] bg-white rounded-[32px] p-[40px] shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-[#F8F9FA] flex-col box-border ${isPayView ? 'flex' : 'hidden dt:flex'}`}
           >
@@ -186,7 +185,6 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
               </span>
             </div>
 
-            {/* 회색 크레딧 현황 요약 박스 */}
             <div className="w-full bg-[#F8F9FA] rounded-[12px] p-[24px] flex flex-col gap-[16px] box-border">
               <div className="flex justify-between text-[20px] font-bold text-[#111111]">
                 <span>보유 크레딧</span>

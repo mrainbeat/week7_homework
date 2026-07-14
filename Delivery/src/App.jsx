@@ -27,12 +27,16 @@ function App() {
       return;
     }
     setCart((prev) => {
-      const isExist = prev.find((item) => item.id === newItem.id);
+      // item.id 대신 item.cartitem으로 교체
+      const isExist = prev.find(
+        (item) => item.cartItemId === newItem.cartItemId
+      );
       let updatedCart = [];
       //만약에 장바구니에 이미 해당 item 이 있다면, map으로 돌아보면서 그 아이템의 선택량을 바꿈
       if (isExist) {
         updatedCart = prev.map((item) =>
-          item.id === newItem.id
+          // item.id 대신 item.cartitem으로 교체
+          item.cartItemId === newItem.cartItemId
             ? { ...item, quantity: item.quantity + newItem.quantity }
             : item
         );
@@ -48,9 +52,10 @@ function App() {
   };
 
   //아예 삭제하는 함수
-  const removeCartItem = (id) => {
+  const removeCartItem = (cartItemId) => {
     setCart((prev) => {
-      const updatedCart = prev.filter((item) => item.id !== id);
+      // item.id 대신 item.cartitem으로 교체
+      const updatedCart = prev.filter((item) => item.cartItemId !== cartItemId);
 
       localStorage.setItem('myCart', JSON.stringify(updatedCart));
       return updatedCart;
