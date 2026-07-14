@@ -28,7 +28,7 @@ const FoodBoard = ({ addToCart, cart }) => {
 
         const response = await api.get(url);
 
-        console.log('🎁 백엔드가 보낸 진짜 데이터:', response.data);
+        console.log('백엔드가 보낸 데이터:', response.data);
         //받아온 데이터를 StoreList 에 넣음
         setStoreList(response.data.data);
       } catch (error) {

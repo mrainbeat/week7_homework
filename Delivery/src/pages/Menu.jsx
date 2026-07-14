@@ -31,7 +31,10 @@ const Menu = () => {
     e.preventDefault();
     clearCart();
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('accessToken');
     setIsLoggedIn(false);
+    alert('로그아웃 완료');
+    window.location.href = '/';
   };
 
   const quantityArray = cart.map((item) => Number(item.quantity || 0));

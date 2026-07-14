@@ -110,7 +110,7 @@ export default function Signup() {
         //변수명 달라질 수 있음
         email: id,
         password: password,
-        name: '윤서영',
+        name: name,
       });
 
       console.log('회원가입 성공 :', resposne.data);
@@ -173,10 +173,10 @@ export default function Signup() {
               닉네임
             </label>
             <input
-              id="id-input"
+              id="name-input"
               type="text"
               placeholder="닉네임을 입력하세요"
-              value={id}
+              value={name}
               required
               onChange={handleNameChange}
               className="w-full h-[63px] px-[16px] border border-[#e0e0e0] rounded-[4px] text-[20px] outline-none box-border focus:border-gray-4 transition-colors"

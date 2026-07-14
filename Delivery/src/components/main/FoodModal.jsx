@@ -17,6 +17,14 @@ const FoodModal = ({ item, onClose, addToCart }) => {
     };
   }, []);
 
+  //안전장치 -> 백엔드 데이터가 비어있을 때를 대비한 방어막
+  //클릭한 가게 이름이랑 똑같은 가게를 내 목 데이터에서 찾음
+  const mockStore =
+    StoreMockData.find((mock) => mock.name === item?.name) || StoreMockData[0];
+
+  const displayMenus =
+    item?.menus?.length > 0 ? item.menus : mockStore?.menus || [];
+
   return (
     <div className="fixed z-50 flex top-[83px] left-0 right-0 bottom-0 dt:justify-center dt:items-center dt:inset-0">
       <div className="bg-white w-full h-full dt:h-[750px] dt:w-[1000px] flex flex-col p-[40px] dt:rounded-xl dt:border dt:border-gray-2 dt:border-[1px]">
@@ -35,7 +43,7 @@ const FoodModal = ({ item, onClose, addToCart }) => {
         </div>
         <hr className="hidden dt:block border-gray-2 my-[40px]" />
         <div className="flex flex-col gap-[60px] dt:gap-[88px] overflow-y-auto pr-2 min-h-0 flex-1 pb-[40px]">
-          {item.menus.map((show) => (
+          {displayMenus.map((show) => (
             <ModalList
               key={show.menuId}
               menuId={show.menuId}
