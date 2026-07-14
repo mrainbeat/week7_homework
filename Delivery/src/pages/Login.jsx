@@ -35,7 +35,6 @@ export default function Login() {
       if (token) {
         // api.js가 알아서 꺼내 쓸 수 있도록 로컬 스토리지에 'accessToken'이라는 이름으로 저장
         localStorage.setItem('accessToken', token);
-
         localStorage.setItem('isLoggedIn', 'true');
       }
 

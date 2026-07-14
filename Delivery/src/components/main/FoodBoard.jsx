@@ -42,6 +42,7 @@ const FoodBoard = ({ addToCart, cart }) => {
   const handleMenuClick = async (store) => {
     try {
       const response = await api.get(`/api/stores/${store.storeId}`);
+      console.log('상세 메뉴 데이터:', response.data);
 
       setSelectedMenu(response.data.data);
       setIsModalOpen(true);

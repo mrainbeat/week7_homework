@@ -9,8 +9,7 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
   return (
     <div>
       <div
-        // key 값을 cartItemId로 변경
-        key={item.cartItemId}
+        key={item.id}
         className="py-[12px] px-[24px] flex flex-col w-full dt:items-center dt:flex-row justify-between"
       >
         <div className="flex flex-col flex-1 gap-1">
@@ -29,7 +28,7 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
                   <OptionList
                     key={show.name}
                     name={show.name}
-                    price={show.price}
+                    price={show.additionalPrice}
                     isSelected={true}
                     onClick={() => {}}
                   />
@@ -47,16 +46,14 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
               //수량 하나 빼기
               if (item.quantity > 1) {
                 addToCart({
-                  // cartItemId로 변경
-                  cartItemId: item.cartItemId,
+                  id: item.id,
                   menuName: item.menuName,
                   price: item.price,
                   storeName: item.storeName,
                   quantity: -1,
                 });
               } else {
-                // cartItemId로 변경
-                removeCartItem(item.cartItemId);
+                removeCartItem(item.id);
               }
             }}
           >
@@ -68,8 +65,7 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
             //수량 하나 더하기
             onClick={() => {
               addToCart({
-                // cartItemId로 변경
-                cartItemId: item.cartItemId,
+                id: item.id,
                 menuName: item.menuName,
                 price: item.price,
                 storeName: item.storeName,
@@ -82,8 +78,7 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
           <button
             className="cursor-pointer"
             onClick={() => {
-              // 💡 cartItemId로 변경
-              removeCartItem(item.cartItemId);
+              removeCartItem(item.id);
             }}
           >
             <img src={remove} alt="remove" />
