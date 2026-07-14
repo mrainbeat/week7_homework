@@ -1,7 +1,7 @@
 import FoodCard from './FoodCard';
 import { StoreMockData } from '../../mocks/mock';
 import { useState, useEffect } from 'react';
-import axios from 'axios'; //axios 추가
+import api from '../../api/axios'; //axios 추가
 import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
 import Background from '../../assets/Background/background.png';
@@ -26,9 +26,9 @@ const FoodBoard = ({ addToCart, cart }) => {
             ? '/api/stores'
             : `/api/stores?category=${category}`;
 
-        const response = await axios.get(url, {
+        const response = await api.get(url, {
           //요청시 필요한 번호
-          headers: { MemberId: 1 },
+          headers: { 'Member-Id': 1 },
         });
         //받아온 데이터를 StoreList 에 넣음
         setStoreList(response.data.data);
@@ -42,13 +42,13 @@ const FoodBoard = ({ addToCart, cart }) => {
   //FoodCard 클릭시 상세 메뉴 API를 호출한다
   const handleMenuClick = async (store) => {
     try {
-      const response = await axios.get(`/api/stores/${store.storeId}`, {
+      const response = await api.get(`/api/stores/${store.storeId}`, {
         //요청시 필요한 번호
         headers: { 'Member-Id': 1 },
       });
 
       setSelectedMenu(response.data.data);
-      setIsModalOpen(ture);
+      setIsModalOpen(true);
     } catch (error) {
       console.error('가게 상세 정보 불러오기 실패:', error);
     }
