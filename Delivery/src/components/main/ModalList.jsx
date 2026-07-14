@@ -61,6 +61,11 @@ const ModalList = ({
   );
   const totalPrice = price + optionTotalPrice;
 
+  const formattedOptionsForCart = SelectedOptions.map((opt) => ({
+    name = opt.name,
+    price = opt.additionalPrice
+  }))
+
   return (
     <div className="flex flex-col gap-5 dt:gap-10 dt:flex-row dt:justify-between">
       <div className="flex flex-col flex-1 min-w-0">
