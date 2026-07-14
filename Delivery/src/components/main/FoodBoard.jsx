@@ -26,10 +26,9 @@ const FoodBoard = ({ addToCart, cart }) => {
             ? '/api/stores'
             : `/api/stores?category=${category}`;
 
-        const response = await api.get(url, {
-          //요청시 필요한 번호
-          headers: { 'Member-Id': 1 },
-        });
+        const response = await api.get(url);
+
+        console.log('🎁 백엔드가 보낸 진짜 데이터:', response.data);
         //받아온 데이터를 StoreList 에 넣음
         setStoreList(response.data.data);
       } catch (error) {
@@ -42,10 +41,7 @@ const FoodBoard = ({ addToCart, cart }) => {
   //FoodCard 클릭시 상세 메뉴 API를 호출한다
   const handleMenuClick = async (store) => {
     try {
-      const response = await api.get(`/api/stores/${store.storeId}`, {
-        //요청시 필요한 번호
-        headers: { 'Member-Id': 1 },
-      });
+      const response = await api.get(`/api/stores/${store.storeId}`);
 
       setSelectedMenu(response.data.data);
       setIsModalOpen(true);
