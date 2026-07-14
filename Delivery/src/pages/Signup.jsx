@@ -9,12 +9,23 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   //조건 체크 후 오류 점검
+  const [nameError, setNameError] = useState('');
   const [idError, setIdError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
   //페이지 이동
   const navigate = useNavigate();
+
+  //이름 입력창에 타이핑 시 실행되는 함수
+  const handleNameChange = (e) => {
+    const currentName = e.target.value;
+    setName(currentName);
+
+    if (!currentName) {
+      setNameError('닉네임을 입력해주세요');
+    } else setNameError('');
+  };
 
   //아이디 입력창에 타이핑 시 실행되는 함수
   const handleIdChange = (e) => {
@@ -79,6 +90,7 @@ export default function Signup() {
       alert('비밀번호를 입력해주세요');
       return;
     }
+
     //에러메시지 무시하고 제출버튼 눌렀을 때 강제 차단
     const passwordRegex =
       /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
@@ -153,6 +165,29 @@ export default function Signup() {
           noValidate
           className="w-full flex flex-col items-center gap-[24px]"
         >
+          <div className="flex flex-col w-full max-w-[553px]">
+            <label
+              htmlFor="name-input"
+              className="text-[20px] font-bold text-[#333333] mb-[8px] text-left"
+            >
+              닉네임
+            </label>
+            <input
+              id="id-input"
+              type="text"
+              placeholder="닉네임을 입력하세요"
+              value={id}
+              required
+              onChange={handleNameChange}
+              className="w-full h-[63px] px-[16px] border border-[#e0e0e0] rounded-[4px] text-[20px] outline-none box-border focus:border-gray-4 transition-colors"
+            />
+            {nameError && (
+              <span className="text-red-primary text-[12px] mt-[4px] block">
+                {nameError}
+              </span>
+            )}
+          </div>
+
           {/* 아이디 입력 영역 */}
           <div className="flex flex-col w-full max-w-[553px]">
             <label
