@@ -18,6 +18,11 @@ export default function Login() {
     }
 
     try {
+      // 💡 로그인 시도 시, 이전에 브라우저에 남아있던 오래된 토큰과 계정 정보를 깔끔히 제거 (안전망)
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('memberId');
+
       // 🌟 3. 진짜 백엔드 서버로 로그인 요청 쏘기
       const response = await api.post('/api/auth/login', {
         email: id, // 회원가입 때처럼 email로 맞춰서 전송
@@ -27,15 +32,23 @@ export default function Login() {
       console.log('로그인 성공:', response.data);
 
       // 🌟 4. 백엔드가 준 진짜 출입증(토큰) 저장하기!
-      // (백엔드 명세에 따라 토큰이 response.data.data.accessToken 등에 있을 수 있습니다.
-      // 보통 아래와 같은 경로로 들어오므로 가장 흔한 패턴으로 작성해 두었습니다.)
       const token =
         response.data.accessToken || response.data.data?.accessToken;
+
+      // 🌟 계정 격리를 위한 유저 고유 ID 추출
+      const dataContainer = response.data?.data || response.data;
+      const memberId =
+        dataContainer?.memberId ?? dataContainer?.id ?? dataContainer?.userId;
 
       if (token) {
         // api.js가 알아서 꺼내 쓸 수 있도록 로컬 스토리지에 'accessToken'이라는 이름으로 저장
         localStorage.setItem('accessToken', token);
         localStorage.setItem('isLoggedIn', 'true');
+
+        // 회원 ID가 응답에 들어있다면 로컬 스토리지에 확실하게 박아주기
+        if (memberId) {
+          localStorage.setItem('memberId', String(memberId));
+        }
       }
 
       alert('로그인 성공');
