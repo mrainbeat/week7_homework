@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // 1. useNavigate 추가
+import api from '../api/axios'; //axios 추가
 
 export default function Signup() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   //조건 체크 후 오류 점검
@@ -43,7 +45,7 @@ export default function Signup() {
     }
 
     if (confirmPassword.length > 0 && currentPassword !== confirmPassword) {
-      setConrimPasswordError('비밀번호가 일치하지 않습니다.');
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
     } else {
       setConfirmPasswordError('');
     }
@@ -65,7 +67,7 @@ export default function Signup() {
   };
 
   //회원가입하기 버튼을 눌렀을 때 실행되는 함수
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     //폼 내부의 버튼을 눌렀을 때 브라우저 새로고침 현상 방지(기본으로 넣어야됨!!)
     e.preventDefault();
 
@@ -91,12 +93,26 @@ export default function Signup() {
       return;
     }
 
-    console.log('회원가입 시도:', { id, password });
-    //백엔드 코드
+    try {
+      const resposne = await api.post('api/auth/signup', {
+        //변수명 달라질 수 있음
+        email: id,
+        password: password,
+        name: '윤서영',
+      });
 
-    // 3. 회원가입 성공 시 알림을 띄우고 로그인 페이지로 이동
-    alert('회원가입이 완료되었습니다!');
-    navigate('/Login');
+      console.log('회원가입 성공 :', resposne.data);
+      // 3. 회원가입 성공 시 알림을 띄우고 로그인 페이지로 이동
+      alert('회원가입이 완료되었습니다!');
+      navigate('/Login');
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      // 백엔드에서 보내준 에러 메시지가 있다면 띄워주고, 없으면 기본 메시지
+      alert(
+        error.response?.data?.message ||
+          '회원가입에 실패했습니다. 다시 시도해주세요.'
+      );
+    }
   };
 
   return (
