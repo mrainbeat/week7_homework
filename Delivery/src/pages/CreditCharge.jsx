@@ -2,18 +2,25 @@ import React, { useEffect, useState } from 'react';
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../api/axios'; // 💡 공통 axios 인스턴스 경로
 
 const CreditCharge = () => {
   const navigate = useNavigate();
   const loginStatus = localStorage.getItem('isLoggedIn');
 
-  //로그인 여부 체크하기
+  // 로그인할 때 저장된 진짜 회원 고유 ID 가져오기
+  const memberId = localStorage.getItem('memberId') || '1';
+
+  // 로그인 여부 체크하기
   const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem('myCart');
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('memberId');
+    localStorage.removeItem('myCredit'); // 로그아웃 시 크레딧 초기화
+    setIsLoggedIn(false);
   };
 
   useEffect(() => {
@@ -22,14 +29,45 @@ const CreditCharge = () => {
     }
   }, [loginStatus, navigate]);
 
-  // 현재 보유 크레딧 불러오기
+  // 💡 최초 진입 시 브라우저 로컬스토리지에 저장된 누적 잔액이 있으면 읽고, 없으면 기본값 5000C 세팅
   const [myCredit, setMyCredit] = useState(() => {
-    const savedCredit = localStorage.getItem('myCredit');
-    return savedCredit ? Number(savedCredit) : 5000;
+    const saved = localStorage.getItem('myCredit');
+    return saved ? Number(saved) : 5000;
   });
 
   // 사용자가 선택한 충전 금액 상태
   const [chargeAmount, setChargeAmount] = useState(0);
+
+  // [GET] 내 정보 조회 API (/api/users/me)
+  useEffect(() => {
+    const fetchUserCredit = async () => {
+      try {
+        const token = localStorage.getItem('accessToken');
+        const response = await api.get('/api/users/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log('📥 [내 정보 API 응답 전체 데이터]:', response.data);
+
+        // 내 정보 API에서 크레딧 정보를 주지 않으므로, 에러를 내지 않고
+        // 기존에 로컬스토리지에 보관해 두었던 안전한 보유 크레딧을 그대로 유지합니다.
+        const saved = localStorage.getItem('myCredit');
+        if (saved) {
+          setMyCredit(Number(saved));
+        }
+      } catch (error) {
+        console.error('❌ 보유 크레딧 조회 완전히 실패:', error);
+        const saved = localStorage.getItem('myCredit');
+        setMyCredit(saved ? Number(saved) : 5000);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchUserCredit();
+    }
+  }, [isLoggedIn]);
 
   // 금액 누적 함수
   const handleAddAmount = (amount) => {
@@ -41,19 +79,64 @@ const CreditCharge = () => {
     setChargeAmount(0);
   };
 
-  // 충전하기 버튼 클릭 핸들러
-  const handleChargeSubmit = () => {
+  // 💡 [POST] 7번 크레딧 충전 요청 (/api/credits/charge)
+  const handleChargeSubmit = async () => {
     if (chargeAmount <= 0) {
       alert('충전할 금액을 선택해 주세요.');
       return;
     }
 
-    const updatedCredit = myCredit + chargeAmount;
-    localStorage.setItem('myCredit', String(updatedCredit));
-    setMyCredit(updatedCredit);
+    try {
+      const token = localStorage.getItem('accessToken');
 
-    alert(`${chargeAmount.toLocaleString()} 크레딧이 충전되었습니다.`);
-    navigate('/Order');
+      // 명세서 규격에 맞춰 전송! (예: 3000)
+      const response = await api.post(
+        '/api/credits/charge',
+        {
+          amount: chargeAmount, // Request Body
+        },
+        {
+          headers: {
+            'Member-Id': memberId, // Header 1
+            Authorization: `Bearer ${token}`, // Header 2 (보안 통과용)
+          },
+        }
+      );
+
+      // 충전 API 호출 성공 (200 OK)
+      if (
+        response.status === 200 ||
+        response.status === 201 ||
+        response.data?.status === 200
+      ) {
+        // 1. 우선 백엔드 응답에서 진짜 최신 잔액(currentCredit)이 들어오는지 체크
+        const serverCurrentCredit = response.data?.data?.currentCredit;
+        console.log(
+          '🔥 [서버가 돌려준 충전 후 최종 잔액]:',
+          serverCurrentCredit
+        );
+
+        let nextCredit = myCredit + chargeAmount; // 기본값은 프론트에서 계산한 합산값
+
+        if (serverCurrentCredit !== undefined && serverCurrentCredit !== null) {
+          // 서버 데이터가 정상적으로 들어오면 서버 데이터로 덮어쓰기!
+          nextCredit = Number(serverCurrentCredit);
+        }
+
+        // 2. 화면 상태 및 로컬스토리지에 안전하게 실시간 보존
+        setMyCredit(nextCredit);
+        localStorage.setItem('myCredit', String(nextCredit));
+
+        alert(
+          `${chargeAmount.toLocaleString()} 크레딧이 성공적으로 충전되었습니다!`
+        );
+        setChargeAmount(0); // 선택금액 초기화
+        navigate('/Order'); // 주문 페이지로 이동
+      }
+    } catch (error) {
+      console.error('크레딧 충전 연동 실패:', error);
+      alert('크레딧 충전 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -61,7 +144,6 @@ const CreditCharge = () => {
       <Navbar
         left={
           <div className="flex gap-[48px] items-center">
-            {/* 고정 링크 대신 히스토리 백(-1)을 적용하여 직전 페이지로 동적 이동 */}
             <button
               type="button"
               onClick={() => navigate(-1)}
@@ -74,18 +156,15 @@ const CreditCharge = () => {
         }
         right={
           <div className="text-black flex flex-col pr-5 items-end">
-            {/* 모바일 뷰용 장바구니 링크 */}
             <Link to="/Order" className="dt:hidden cursor-pointer text-[20px]">
               장바구니
             </Link>
-            {/* 모바일 뷰용 크레딧 링크 */}
             <Link
               to="/CreditCharge"
               className="dt:hidden cursor-pointer text-[20px]"
             >
               크레딧 충전
             </Link>
-            {/* 모바일 뷰용 로그인 로그아웃 링크 */}
             {isLoggedIn ? (
               <Link
                 to="/Login"
@@ -112,7 +191,6 @@ const CreditCharge = () => {
             크레딧 충전하기
           </h2>
 
-          {/* 버튼들 윗공간: 멘트는 지우고 초기화 버튼만 우측 정렬로 자연스럽게 배치 */}
           <div className="flex justify-end h-[24px] mb-[12px]">
             {chargeAmount > 0 && (
               <button
@@ -125,7 +203,7 @@ const CreditCharge = () => {
             )}
           </div>
 
-          {/* 1. 상단 가로 일렬 충전 금액 선택 버튼 배열 */}
+          {/* 1. 금액 선택 버튼 */}
           <div className="grid grid-cols-2 dt:flex dt:flex-row gap-[12px] dt:justify-between mb-[36px]">
             {[1000, 3000, 5000, 10000].map((amount) => (
               <button
@@ -139,7 +217,7 @@ const CreditCharge = () => {
             ))}
           </div>
 
-          {/* 2. 연회색 요약 정보 상자 영역 */}
+          {/* 2. 요약 정보 상자 */}
           <div className="w-full bg-[#F8F9FA] rounded-[12px] p-[24px] flex flex-col gap-[16px] box-border mb-[40px]">
             <div className="flex justify-between text-[16px] font-bold text-[#111111]">
               <span>보유 크레딧</span>
@@ -152,7 +230,7 @@ const CreditCharge = () => {
             </div>
           </div>
 
-          {/* 3. 하단 실시간 결제 금액 표시 구역 */}
+          {/* 3. 실시간 결제 금액 */}
           <div className="flex justify-between items-center mb-[40px]">
             <span className="text-[18px] font-bold text-[#111111]">
               결제금액
@@ -162,7 +240,7 @@ const CreditCharge = () => {
             </span>
           </div>
 
-          {/* 4. 최종 하단 충전하기 버튼 */}
+          {/* 4. 충전 버튼 */}
           <button
             type="button"
             onClick={handleChargeSubmit}
