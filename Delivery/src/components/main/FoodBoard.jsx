@@ -87,7 +87,7 @@ const FoodBoard = ({ addToCart, cart }) => {
         ))}
       </div>
       <div className="grid grid-cols-1 dt:grid-cols-4 gap-x-[24px] gap-y-8 pb-10">
-        {storeList.map((item) => (
+        {storeList?.map((item) => (
           <FoodCard
             key={item.storeId}
             name={item.name}
