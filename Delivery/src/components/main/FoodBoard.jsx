@@ -1,6 +1,7 @@
 import FoodCard from './FoodCard';
 import { StoreMockData } from '../../mocks/mock';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios'; //axios 추가
 import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
 import Background from '../../assets/Background/background.png';
@@ -12,12 +13,48 @@ const FoodBoard = ({ addToCart, cart }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
 
-  const handleMenuClick = (item) => {
-    setSelectedMenu(item); //클릭한 데이터 저장
-    setIsModalOpen(true); //모달 열기
+  //서버에서 받아온 전체 가게 목록을 저장하는 State
+  const [storeList, setStoreList] = useState([]);
+
+  //화면이 켜지거나 카테고리가 바뀔때마다 실행됨
+  useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        //카테고리가 전체라면 기본, 아니라면 각 카테고리가 붙은 주소로 요청을 보낸다
+        const url =
+          category === '전체'
+            ? '/api/stores'
+            : `/api/stores?category=${category}`;
+
+        const response = await axios.get(url, {
+          //요청시 필요한 번호
+          headers: { MemberId: 1 },
+        });
+        //받아온 데이터를 StoreList 에 넣음
+        setStoreList(response.data.data);
+      } catch (error) {
+        console.error('가게 목록 불러오기 실패:', error);
+      }
+    };
+    fetchStores();
+  }, [category]); //카테고리가 마운트 될 때 마다 실행됨
+
+  //FoodCard 클릭시 상세 메뉴 API를 호출한다
+  const handleMenuClick = async (store) => {
+    try {
+      const response = await axios.get(`/api/stores/${store.storeId}`, {
+        //요청시 필요한 번호
+        headers: { 'Member-Id': 1 },
+      });
+
+      setSelectedMenu(response.data.data);
+      setIsModalOpen(ture);
+    } catch (error) {
+      console.error('가게 상세 정보 불러오기 실패:', error);
+    }
   };
 
-  const handleMenuClose = (item) => {
+  const handleMenuClose = () => {
     setSelectedMenu(null);
     setIsModalOpen(false);
   };
@@ -50,7 +87,7 @@ const FoodBoard = ({ addToCart, cart }) => {
         ))}
       </div>
       <div className="grid grid-cols-1 dt:grid-cols-4 gap-x-[24px] gap-y-8 pb-10">
-        {filteredFoods().map((item) => (
+        {storeList?.map((item) => (
           <FoodCard
             key={item.storeId}
             name={item.name}
