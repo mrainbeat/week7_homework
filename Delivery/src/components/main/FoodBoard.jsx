@@ -1,7 +1,7 @@
+import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
 import { StoreMockData } from '../../mocks/mock';
-import { useState, useEffect } from 'react';
-import api from '../../api/axios'; //axios 추가
+import api from '../../api/axios';
 import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
 import Background from '../../assets/Background/background.png';
@@ -12,42 +12,31 @@ const FoodBoard = ({ addToCart, cart }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState(null);
-
-  //서버에서 받아온 전체 가게 목록을 저장하는 State
   const [storeList, setStoreList] = useState([]);
 
-  //화면이 켜지거나 카테고리가 바뀔때마다 실행됨
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        //카테고리가 전체라면 기본, 아니라면 각 카테고리가 붙은 주소로 요청을 보낸다
         const url =
           category === '전체'
             ? '/api/stores'
             : `/api/stores?category=${category}`;
-
         const response = await api.get(url);
-
-        console.log('백엔드가 보낸 데이터:', response.data);
-        //받아온 데이터를 StoreList 에 넣음
         setStoreList(response.data.data);
       } catch (error) {
-        console.error('가게 목록 불러오기 실패:', error);
+        console.error('❌ 가게 목록 불러오기 실패:', error);
       }
     };
     fetchStores();
-  }, [category]); //카테고리가 마운트 될 때 마다 실행됨
+  }, [category]);
 
-  //FoodCard 클릭시 상세 메뉴 API를 호출한다
   const handleMenuClick = async (store) => {
     try {
       const response = await api.get(`/api/stores/${store.storeId}`);
-      console.log('상세 메뉴 데이터:', response.data);
-
       setSelectedMenu(response.data.data);
       setIsModalOpen(true);
     } catch (error) {
-      console.error('가게 상세 정보 불러오기 실패:', error);
+      console.error('❌ 가게 상세 정보 불러오기 실패:', error);
     }
   };
 
@@ -56,18 +45,85 @@ const FoodBoard = ({ addToCart, cart }) => {
     setIsModalOpen(false);
   };
 
-  // 각 아이템의 타입과 현재 카테고리 타입을 비교후 열치하는 타입만 필터링하기
-  // 기타 선택 시 한/중식 외의 음식만 필터링하도록 만들기
-  const filteredFoods = () => {
-    if (category === '전체') {
-      return StoreMockData;
-    }
-    if (category === '기타') {
-      return StoreMockData.filter(
-        (item) => item.type !== '한식' && item.type !== '중식'
+  const handleServerAddToCart = async (menuItemInfo) => {
+    const token = localStorage.getItem('accessToken');
+    const memberId = localStorage.getItem('memberId') || '1';
+
+    console.log('📥 [장바구니 담기 요청 원본 데이터]:', menuItemInfo);
+
+    try {
+      // 1. 메뉴 ID 추출
+      const extractedMenuId =
+        menuItemInfo.menuId ??
+        menuItemInfo.originalID ??
+        menuItemInfo.originalId ??
+        menuItemInfo.cartItemId ??
+        menuItemInfo.id;
+
+      const menuId = Number(extractedMenuId);
+      const quantity = Number(menuItemInfo.quantity || 1);
+
+      // 2. 옵션 ID 배열 아주 강력하게 추출 (모달 데이터가 어떤 형태든 다 잡아냄)
+      let menuOptionIds = [];
+      const rawOptions =
+        menuItemInfo.selectedOptions ??
+        menuItemInfo.options ??
+        menuItemInfo.selectedOption ??
+        [];
+
+      if (Array.isArray(rawOptions)) {
+        menuOptionIds = rawOptions
+          .map((opt) => {
+            // 옵션 객체 안에 들어있을 법한 모든 ID 변수명 스캔
+            const opId =
+              opt.menuOptionId ??
+              opt.optionId ??
+              opt.id ??
+              opt.originalID ??
+              opt;
+            return opId !== undefined && opId !== null ? Number(opId) : null;
+          })
+          .filter((id) => id !== null && !isNaN(id));
+      }
+
+      console.log('🚀 [백엔드 전송 데이터]:', {
+        menuId,
+        quantity,
+        menuOptionIds,
+      });
+
+      if (!extractedMenuId || isNaN(menuId)) {
+        alert('메뉴 ID 정보를 찾을 수 없습니다.');
+        return;
+      }
+
+      const response = await api.post(
+        '/api/carts/items',
+        {
+          menuId: menuId,
+          quantity: quantity,
+          menuOptionIds: menuOptionIds,
+        },
+        {
+          headers: {
+            'Member-Id': String(memberId),
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
+
+      if (
+        response.status === 201 ||
+        response.data?.status === 201 ||
+        response.status === 200
+      ) {
+        // 🌟 요청하신 부분: 모달 닫기(handleMenuClose)를 없애서 화면을 계속 유지합니다!
+        alert('장바구니에 메뉴가 성공적으로 담겼습니다!');
+      }
+    } catch (error) {
+      console.error('❌ 장바구니 추가 실패:', error);
+      alert(error.response?.data?.message || '장바구니 담기에 실패했습니다.');
     }
-    return StoreMockData.filter((item) => item.type === category);
   };
 
   return (
@@ -78,7 +134,6 @@ const FoodBoard = ({ addToCart, cart }) => {
             key={item}
             category={item}
             active={category === item}
-            // 현재 선택된 버튼인지 여부를 감지함, onclick시 category변수가 변경됨
             onClick={() => setCategory(item)}
           />
         ))}
@@ -91,7 +146,6 @@ const FoodBoard = ({ addToCart, cart }) => {
             rating={item.rating}
             category={item.category}
             imageUrl={item.imageUrl}
-            //누르면 열리도록 ture로 만듦
             onClick={() => handleMenuClick(item)}
           />
         ))}
@@ -106,8 +160,7 @@ const FoodBoard = ({ addToCart, cart }) => {
           <FoodModal
             item={selectedMenu}
             onClose={handleMenuClose}
-            //모달에 App함수 넘겨줌
-            addToCart={addToCart}
+            addToCart={handleServerAddToCart}
           />
         </div>
       )}
