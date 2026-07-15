@@ -29,12 +29,12 @@ const Menu = () => {
   // 로그아웃 버튼 동작 함수
   const handleLogout = (e) => {
     e.preventDefault();
-    clearCart();
+    localStorage.removeItem('myCart');
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('memberId');
+    localStorage.removeItem('myCredit'); // 로그아웃 시 크레딧 초기화
     setIsLoggedIn(false);
-    alert('로그아웃 완료');
-    window.location.href = '/';
   };
 
   const quantityArray = cart.map((item) => Number(item.quantity || 0));

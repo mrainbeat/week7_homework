@@ -34,10 +34,26 @@ export default function Login() {
         // 로컬에 accessToken 및 로그인 여부 저장
         localStorage.setItem('accessToken', token);
         localStorage.setItem('isLoggedIn', 'true');
+
+        //내 정보 조회하는 응답 받기
+        try {
+          const meResponse = await api.get('/api/users/me', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          console.log('로그인 직후 내 정보 응답 :', meResponse.data);
+
+          //응답 데이터속 크레딧 정보 저장
+          const userCredit = meResponse.data.credit ?? 0;
+          localStorage.setItem('myCredit', String(userCredit));
+        } catch (meError) {
+          console.error('내 정보 가져오기 실패:', meError);
+        }
       }
 
       alert('로그인 성공');
-      window.location.href = '/Menu';
+      navigate('/Menu');
     } catch (error) {
       console.error('로그인 실패:', error);
       // 백엔드가 틀렸다고 알려주면 에러 메시지 띄우기
