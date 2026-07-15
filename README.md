@@ -87,7 +87,7 @@ HTTP 클라이언트: Axios (공통 인스턴스 및 인터셉터 아키텍처)
 
 CartList 컴포넌트 내에서도 상호 연동되어 동일한 방식으로 장바구니 화면 내부에서의 추가 및 삭제 조작이 가능합니다.
 
-### 장바구니 결제 및 주문 처리 (POST)
+### 📌 장바구니 결제 및 주문 처리 (POST)
 URL: /api/orders
 
 Headers: Member-Id: {id}, Authorization: Bearer {token}
