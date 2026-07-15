@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import CartList from '../components/Cart/CartList';
 import api from '../api/axios'; // 💡 공통 axios 인스턴스 임포트
 
-const Order = () => {
+const Order = ({ clearCart }) => {
   const navigate = useNavigate();
 
   const loginStatus = localStorage.getItem('isLoggedIn');
@@ -165,7 +165,7 @@ const Order = () => {
 
         // 장바구니 흔적 삭제
         localStorage.removeItem('myCart');
-
+        clearCart();
         alert(response.data.message);
 
         // 완료 페이지로 이동
