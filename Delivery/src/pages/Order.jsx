@@ -15,10 +15,12 @@ const Order = ({ cart = [], addToCart, removeCartItem }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('myCart');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('memberId');
+    localStorage.removeItem('myCredit'); // 로그아웃 시 크레딧 초기화
     setIsLoggedIn(false);
-    navigate('/Login', { replace: true });
   };
 
   // 로그인 제한 가드
