@@ -32,7 +32,7 @@ const CreditCharge = () => {
   // 💡 최초 진입 시 브라우저 로컬스토리지에 저장된 누적 잔액이 있으면 읽고, 없으면 기본값 5000C 세팅
   const [myCredit, setMyCredit] = useState(() => {
     const saved = localStorage.getItem('myCredit');
-    return saved ? Number(saved) : 5000;
+    return saved ? Number(saved) : 0;
   });
 
   // 사용자가 선택한 충전 금액 상태
