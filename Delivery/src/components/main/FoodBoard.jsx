@@ -45,7 +45,7 @@ const FoodBoard = ({ addToCart, cart }) => {
     setIsModalOpen(false);
   };
 
-  const handleServerAddToCart = async (menuItemInfo) => {
+  /*const handleServerAddToCart = async (menuItemInfo) => {
     const token = localStorage.getItem('accessToken');
     const memberId = localStorage.getItem('memberId') || '1';
 
@@ -124,7 +124,7 @@ const FoodBoard = ({ addToCart, cart }) => {
       console.error('❌ 장바구니 추가 실패:', error);
       alert(error.response?.data?.message || '장바구니 담기에 실패했습니다.');
     }
-  };
+  };*/
 
   return (
     <div className="w-full max-w-[280px] min-h-[590px] pt-[135px] dt:max-w-[1200px] dt:w-[90%] dt:pb-[300px] dt:pt-[170px] mx-auto">
@@ -160,7 +160,7 @@ const FoodBoard = ({ addToCart, cart }) => {
           <FoodModal
             item={selectedMenu}
             onClose={handleMenuClose}
-            addToCart={handleServerAddToCart}
+            addToCart={addToCart}
           />
         </div>
       )}
