@@ -8,6 +8,7 @@ import Layout from './components/layouts/Layout';
 import NotFound from './pages/NotFound';
 import CompleteOrder from './pages/CompleteOrder';
 import CreditCharge from './pages/CreditCharge';
+import api from './api/axios';
 
 function App() {
   //모든 음식을 담을 리스트 만들기
@@ -17,37 +18,59 @@ function App() {
     return saveCart ? JSON.parse(saveCart) : [];
   });
 
-  const addToCart = (newItem) => {
+  const addToCart = async (newItem) => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    if (!isLoggedIn) {
+    const token = localStorage.getItem('accessToken');
+
+    if (!isLoggedIn || !token) {
       alert('로그인 후 이용해주세요.');
       //해당 페이지에서 navigate는 사용불가
       window.location.href = '/Login';
       return;
     }
-    setCart((prev) => {
-      // item.id 대신 item.cartitem으로 교체
-      const isExist = prev.find(
-        (item) => item.cartItemId === newItem.cartItemId
-      );
-      let updatedCart = [];
-      //만약에 장바구니에 이미 해당 item 이 있다면, map으로 돌아보면서 그 아이템의 선택량을 바꿈
-      if (isExist) {
-        updatedCart = prev.map((item) =>
-          // item.id 대신 item.cartitem으로 교체
-          item.cartItemId === newItem.cartItemId
-            ? { ...item, quantity: item.quantity + newItem.quantity }
-            : item
-        );
-      }
-      //장바구니에 없는 아이템이었다면 그냥 그대로 배열에 새로 추가
-      else {
-        updatedCart = [...prev, newItem];
-      }
 
-      localStorage.setItem('myCart', JSON.stringify(updatedCart));
-      return updatedCart;
-    });
+    try {
+      console.log('📡 서버로 POST 통신 시도 중...');
+      //백엔드 서버에 POST 통신 보내기
+      const requestBody = {
+        menuId: newItem.originalID,
+        quantity: newItem.quantity,
+        menuOptionIds: newItem.selectedOptions.map((opt) => opt.menuOptionId),
+      };
+
+      const response = await api.post('/api/carts/items', requestBody, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('서버 장바구니에 담기 성공 : ', response.data);
+
+      setCart((prev) => {
+        // item.id 대신 item.cartitem으로 교체
+        const isExist = prev.find(
+          (item) => item.cartItemId === newItem.cartItemId
+        );
+        let updatedCart = [];
+        //만약에 장바구니에 이미 해당 item 이 있다면, map으로 돌아보면서 그 아이템의 선택량을 바꿈
+        if (isExist) {
+          updatedCart = prev.map((item) =>
+            // item.id 대신 item.cartitem으로 교체
+            item.cartItemId === newItem.cartItemId
+              ? { ...item, quantity: item.quantity + newItem.quantity }
+              : item
+          );
+        }
+        //장바구니에 없는 아이템이었다면 그냥 그대로 배열에 새로 추가
+        else {
+          updatedCart = [...prev, newItem];
+        }
+
+        localStorage.setItem('myCart', JSON.stringify(updatedCart));
+        return updatedCart;
+      });
+    } catch (error) {
+      console.error('장바구니 담기 API 실패', error);
+    }
   };
 
   //아예 삭제하는 함수

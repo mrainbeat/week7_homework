@@ -1,13 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
-
 import Navbar from '../components/layouts/Navbar';
-
 import { Link, useNavigate } from 'react-router-dom';
-
 import CartList from '../components/Cart/CartList';
-
 import api from '../api/axios'; // 💡 공통 axios 인스턴스 임포트
 
 const Order = () => {
@@ -35,19 +30,12 @@ const Order = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-
     localStorage.removeItem('isLoggedIn');
-
     localStorage.removeItem('myCart');
-
     localStorage.removeItem('accessToken');
-
     localStorage.removeItem('memberId');
-
     localStorage.removeItem('myCredit');
-
     setIsLoggedIn(false);
-
     navigate('/Login', { replace: true });
   };
 
@@ -63,12 +51,10 @@ const Order = () => {
 
   const [myCredit, setMyCredit] = useState(() => {
     const savedCredit = localStorage.getItem('myCredit');
-
     return savedCredit ? Number(savedCredit) : 0;
   });
 
   // 💡 [GET] 4. 내 장바구니 전체 목록 조회 API 연동 함수
-
   const fetchCartList = useCallback(async () => {
     if (loginStatus !== 'true') return;
 
@@ -76,7 +62,6 @@ const Order = () => {
       const response = await api.get('/api/carts', {
         headers: {
           'Member-Id': String(memberId),
-
           Authorization: `Bearer ${token}`,
         },
       });
