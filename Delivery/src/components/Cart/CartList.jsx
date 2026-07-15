@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../pages/Order.css';
 import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
 import remove from '../../assets/ion_close-outline.svg';
