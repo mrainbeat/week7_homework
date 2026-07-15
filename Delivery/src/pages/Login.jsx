@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api/axios'; //axios 추가
 
 export default function Login() {
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
@@ -12,28 +12,26 @@ export default function Login() {
     e.preventDefault();
 
     // 빈칸 방지
-    if (!id || !password) {
-      alert('아이디(이메일)와 비밀번호를 모두 입력해주세요.');
+    if (!email || !password) {
+      alert('이메일 비밀번호를 모두 입력해주세요.');
       return;
     }
 
     try {
-      // 🌟 3. 진짜 백엔드 서버로 로그인 요청 쏘기
+      // 백엔드 쪽으로 형식 맞춰서 보냄
       const response = await api.post('/api/auth/login', {
-        email: id, // 회원가입 때처럼 email로 맞춰서 전송
+        email: email, // 회원가입 때처럼 email로 맞춰서 전송
         password: password,
       });
 
       console.log('로그인 성공:', response.data);
 
-      // 🌟 4. 백엔드가 준 진짜 출입증(토큰) 저장하기!
-      // (백엔드 명세에 따라 토큰이 response.data.data.accessToken 등에 있을 수 있습니다.
-      // 보통 아래와 같은 경로로 들어오므로 가장 흔한 패턴으로 작성해 두었습니다.)
+      //accessToken 저장하기
       const token =
         response.data.accessToken || response.data.data?.accessToken;
 
       if (token) {
-        // api.js가 알아서 꺼내 쓸 수 있도록 로컬 스토리지에 'accessToken'이라는 이름으로 저장
+        // 로컬에 accessToken 및 로그인 여부 저장
         localStorage.setItem('accessToken', token);
         localStorage.setItem('isLoggedIn', 'true');
       }
@@ -45,7 +43,7 @@ export default function Login() {
       // 백엔드가 틀렸다고 알려주면 에러 메시지 띄우기
       alert(
         error.response?.data?.message ||
-          '아이디 또는 비밀번호가 올바르지 않습니다.'
+          '이메일 또는 비밀번호가 올바르지 않습니다.'
       );
       setPassword(''); // 틀렸을 때 비밀번호 칸만 깔끔하게 비워주기
     }
@@ -65,20 +63,20 @@ export default function Login() {
           noValidate
           className="w-full flex flex-col items-center gap-[24px]"
         >
-          {/* 아이디 입력 영역 */}
+          {/* 이메일 입력 영역 */}
           <div className="flex flex-col w-full max-w-[553px]">
             <label
-              htmlFor="id-input"
+              htmlFor="email-input"
               className="text-[20px] font-bold text-[#333333] mb-[8px] text-left"
             >
-              아이디
+              이메일
             </label>
             <input
-              id="id-input"
+              id="email-input"
               type="text"
-              placeholder="아이디를 입력하세요"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
+              placeholder="이메일을 입력하세요"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full h-[63px] px-[16px] border border-[#e0e0e0] rounded-[4px] text-[20px] outline-none box-border focus:border-[#0099ff] transition-colors"
             />

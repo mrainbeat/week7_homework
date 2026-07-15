@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom'; // 1. useNavigate 추가
 import api from '../api/axios'; //axios 추가
 
 export default function Signup() {
-  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   //조건 체크 후 오류 점검
   const [nameError, setNameError] = useState('');
-  const [idError, setIdError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
@@ -23,18 +23,18 @@ export default function Signup() {
     setName(currentName);
 
     if (!currentName) {
-      setNameError('닉네임을 입력해주세요');
+      setNameError('닉네임을 입력해주세요.');
     } else setNameError('');
   };
 
   //아이디 입력창에 타이핑 시 실행되는 함수
-  const handleIdChange = (e) => {
-    const currentId = e.target.value;
-    setId(currentId);
+  const handleemailChange = (e) => {
+    const currentemail = e.target.value;
+    setEmail(currentemail);
 
-    if (!currentId) {
-      setIdError('아이디를 입력해주세요');
-    } else setIdError('');
+    if (!currentemail) {
+      setEmailError('아이디를 입력해주세요.');
+    } else setEmailError('');
   };
 
   //비밀번호 입력창에 타이핑 시 실행되는 함수
@@ -50,7 +50,7 @@ export default function Signup() {
       /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
 
     if (!passwordRegex.test(currentPassword) && currentPassword.length > 0) {
-      setPasswordError('영문, 숫자, 특수문자 포함 8~16자리로 입력해주세요.');
+      setPasswordError('영문, 숫자, 특수문자 포함 8~16자리로 입력해주세요..');
     } else {
       setPasswordError('');
     }
@@ -82,12 +82,12 @@ export default function Signup() {
     //폼 내부의 버튼을 눌렀을 때 브라우저 새로고침 현상 방지(기본으로 넣어야됨!!)
     e.preventDefault();
 
-    if (!id) {
-      alert('아이디를 입력해주세요');
+    if (!email) {
+      alert('아이디를 입력해주세요.');
       return;
     }
     if (!password) {
-      alert('비밀번호를 입력해주세요');
+      alert('비밀번호를 입력해주세요.');
       return;
     }
 
@@ -95,8 +95,8 @@ export default function Signup() {
     const passwordRegex =
       /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$/;
     if (!passwordRegex.test(password)) {
-      alert('비밀번호 조건을 충족해주세요.');
-      return; //함수 강제 종료하여 서버로 요청이 가는것을 막아줌
+      alert('비밀번호 조건을 충족해주세요..');
+      return; //함수 강제 종료하여 서버로 요.청이 가는것을 막아줌
     }
 
     //확인용 비밀번호와 비교하여 다른경우 강제 차단
@@ -108,7 +108,7 @@ export default function Signup() {
     try {
       const resposne = await api.post('api/auth/signup', {
         //변수명 달라질 수 있음
-        email: id,
+        email: email,
         password: password,
         name: name,
       });
@@ -122,7 +122,7 @@ export default function Signup() {
       // 백엔드에서 보내준 에러 메시지가 있다면 띄워주고, 없으면 기본 메시지
       alert(
         error.response?.data?.message ||
-          '회원가입에 실패했습니다. 다시 시도해주세요.'
+          '회원가입에 실패했습니다. 다시 시도해주세요..'
       );
     }
   };
@@ -138,7 +138,7 @@ export default function Signup() {
           aria-label="뒤로가기"
         >
           <svg
-            width="24"
+            wemailth="24"
             height="24"
             viewBox="0 0 24 24"
             fill="none"
@@ -147,7 +147,7 @@ export default function Signup() {
             <path
               d="M15 19L8 12L15 5"
               stroke="#333333"
-              strokeWidth="2.5"
+              strokeWemailth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="transition-colors duration-200 ease-in-out group-hover:stroke-[#0099ff]"
@@ -162,7 +162,7 @@ export default function Signup() {
 
         <form
           onSubmit={handleSubmit}
-          noValidate
+          noValemailate
           className="w-full flex flex-col items-center gap-[24px]"
         >
           <div className="flex flex-col w-full max-w-[553px]">
@@ -175,7 +175,7 @@ export default function Signup() {
             <input
               id="name-input"
               type="text"
-              placeholder="닉네임을 입력하세요"
+              placeholder="닉네임을 입력하세요."
               value={name}
               required
               onChange={handleNameChange}
@@ -188,26 +188,26 @@ export default function Signup() {
             )}
           </div>
 
-          {/* 아이디 입력 영역 */}
+          {/*이메일 입력 영역 */}
           <div className="flex flex-col w-full max-w-[553px]">
             <label
-              htmlFor="id-input"
+              htmlFor="email-input"
               className="text-[20px] font-bold text-[#333333] mb-[8px] text-left"
             >
-              아이디
+              이메일
             </label>
             <input
-              id="id-input"
-              type="text"
-              placeholder="아이디를 입력하세요"
-              value={id}
+              id="email-input"
+              type="email"
+              placeholder="이메일을 입력하세요."
+              value={email}
               required
-              onChange={handleIdChange}
+              onChange={handleemailChange}
               className="w-full h-[63px] px-[16px] border border-[#e0e0e0] rounded-[4px] text-[20px] outline-none box-border focus:border-gray-4 transition-colors"
             />
-            {idError && (
+            {emailError && (
               <span className="text-red-primary text-[12px] mt-[4px] block">
-                {idError}
+                {emailError}
               </span>
             )}
           </div>
@@ -223,7 +223,7 @@ export default function Signup() {
             <input
               id="password-input"
               type="password"
-              placeholder="비밀번호를 입력하세요"
+              placeholder="비밀번호를 입력하세요."
               value={password}
               onChange={handlePasswordChange}
               required
@@ -247,7 +247,7 @@ export default function Signup() {
             <input
               id="confirm-password-input"
               type="password"
-              placeholder="비밀번호를 입력하세요"
+              placeholder="비밀번호를 입력하세요."
               value={confirmPassword}
               onChange={handleConfirmPasswordChange}
               required

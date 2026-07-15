@@ -10,6 +10,7 @@ const api = axios.create({
   },
 });
 
+//필요없는코드
 //요청 : 백엔드로 출발하기 직전에 가로채기
 api.interceptors.request.use(
   (config) => {

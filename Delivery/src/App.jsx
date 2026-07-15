@@ -6,7 +6,6 @@ import Menu from './pages/Menu';
 import Order from './pages/Order';
 import Layout from './components/layouts/Layout';
 import NotFound from './pages/NotFound';
-import PayCard from './components/Cart/PayCard';
 import CompleteOrder from './pages/CompleteOrder';
 import CreditCharge from './pages/CreditCharge';
 
@@ -93,7 +92,6 @@ function App() {
               />
             }
           />
-          <Route path="PayCard" element={<PayCard cart={cart} />} />
         </Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

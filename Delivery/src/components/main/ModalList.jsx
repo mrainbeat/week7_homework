@@ -17,12 +17,11 @@ const ModalList = ({
   const [count, setCount] = useState(1);
 
   //옵션 선택을 배열로 받기
-  const [SelectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   const handleFoodClick = (option) => {
     setCount(1);
     setSelectedFood(false);
-    console.log('상세 메뉴 데이터:', response.data);
 
     //단일선택만 가능하다면( 예 : 대 중 소 중에 하나 고르기 등 )
     if (!isMultiple) {
@@ -47,23 +46,24 @@ const ModalList = ({
     });
   };
   //옵션 이름을 하나하나 정렬하여 - 로 연결하기
-  const optionsString = SelectedOptions.map((option) => option.name)
+  const optionsString = selectedOptions
+    .map((option) => option.name)
     .sort()
     .join('-');
 
   //어떤 옵션을 선택했는지에 따라 돌려주는 ID를 달리한다
   const uniqueId =
-    SelectedOptions.length > 0 ? `${menuId}-${optionsString}` : menuId;
+    selectedOptions.length > 0 ? `${menuId}-${optionsString}` : menuId;
 
   //reduce 함수로 전체 가격 더하기
-  const optionTotalPrice = SelectedOptions.reduce(
+  const optionTotalPrice = selectedOptions.reduce(
     (sum, opt) => sum + opt.additionalPrice,
     0
   );
   const totalPrice = price + optionTotalPrice;
 
   //받아올때랑 보낼때 필드명이 달라서 교체
-  const formattedOptionsForCart = SelectedOptions.map((opt) => ({
+  const formattedOptionsForCart = selectedOptions.map((opt) => ({
     name: opt.name,
     price: opt.additionalPrice,
   }));
@@ -81,7 +81,7 @@ const ModalList = ({
               <OptionList
                 name={show.name}
                 price={show.additionalPrice}
-                isSelected={SelectedOptions.some(
+                isSelected={selectedOptions.some(
                   (option) => option.name === show.name
                 )}
                 onClick={() => handleFoodClick(show)}
@@ -99,14 +99,14 @@ const ModalList = ({
                 setSelectedFood(true);
                 setCount(1);
                 addToCart({
-                  id: uniqueId,
+                  cartItemId: uniqueId,
                   originalID: menuId,
                   menuName: name,
                   price: totalPrice,
                   storeName,
                   quantity: 1,
                   options: options,
-                  SelectedOptions: SelectedOptions,
+                  selectedOptions: selectedOptions,
                 });
               }}
               className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg mt-[12px] dt:my-[13px] bg-red-assistive cursor-pointer"
@@ -122,27 +122,27 @@ const ModalList = ({
                   if (count > 1) {
                     setCount(count - 1);
                     addToCart({
-                      id: uniqueId,
+                      cartItemId: uniqueId,
                       originalID: menuId,
                       menuName: name,
                       price: totalPrice,
                       storeName,
                       quantity: -1,
                       options: options,
-                      SelectedOptions: SelectedOptions,
+                      selectedOptions: selectedOptions,
                     });
                   } else {
                     setSelectedFood(false);
                     //1-1 해서 아예 0으로 만들기
                     addToCart({
-                      id: uniqueId,
+                      cartItemId: uniqueId,
                       originalID: menuId,
                       menuName: name,
                       price: totalPrice,
                       storeName,
                       quantity: -1,
                       options: options,
-                      SelectedOptions: SelectedOptions,
+                      selectedOptions: selectedOptions,
                     });
                   }
                 }}
@@ -157,14 +157,14 @@ const ModalList = ({
                   setCount(count + 1);
                   //수량 하나 더하기
                   addToCart({
-                    id: uniqueId,
+                    cartItemId: uniqueId,
                     originalID: menuId,
                     menuName: name,
                     price: totalPrice,
                     storeName,
                     quantity: 1,
                     options: options,
-                    SelectedOptions: SelectedOptions,
+                    selectedOptions: selectedOptions,
                   });
                 }}
               >
