@@ -1,81 +1,124 @@
+import React from 'react';
 import '../../pages/Order.css';
 import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
-import { useState } from 'react';
 import remove from '../../assets/ion_close-outline.svg';
 import OptionList from '../main/OptionList';
+import api from '../../api/axios';
 
-const CartList = ({ item, addToCart, removeCartItem }) => {
+const CartList = ({ item, onCartUpdate }) => {
+  const memberId = localStorage.getItem('memberId') || '1';
+  const token = localStorage.getItem('accessToken');
+
+  // [PATCH] 수량 변경
+  const handleUpdateQuantity = async (newQuantity) => {
+    if (newQuantity < 1) {
+      handleDelete();
+      return;
+    }
+
+    try {
+      const targetItemId = Number(item.cartItemId || item.id);
+      const qty = Number(newQuantity);
+
+      await api.patch(
+        `/api/carts/items/${targetItemId}`,
+        { quantity: qty },
+        {
+          headers: {
+            'Member-Id': String(memberId),
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (onCartUpdate) onCartUpdate();
+    } catch (error) {
+      console.error('❌ 수량 변경 API 실패:', error);
+      alert(error.response?.data?.message || '수량 변경에 실패했습니다.');
+    }
+  };
+
+  // [DELETE] 항목 삭제
+  const handleDelete = async () => {
+    if (!window.confirm('이 메뉴를 장바구니에서 삭제하시겠습니까?')) return;
+
+    try {
+      const targetItemId = Number(item.cartItemId || item.id);
+
+      await api.delete(`/api/carts/items/${targetItemId}`, {
+        headers: {
+          'Member-Id': String(memberId),
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (onCartUpdate) onCartUpdate();
+    } catch (error) {
+      console.error('❌ 장바구니 상품 삭제 실패:', error);
+      alert(error.response?.data?.message || '상품 삭제에 실패했습니다.');
+    }
+  };
+
+  // 🌟 백엔드가 주는 가격 이름이 다를 수 있으므로 안전하게 모두 탐색
+  const displayPrice =
+    item.itemTotalPrice ?? item.totalPrice ?? item.price ?? item.basePrice ?? 0;
+
+  // 🌟 백엔드가 주는 옵션 배열 이름 탐색
+  const itemOptions = item.options ?? item.menuOptions ?? [];
+
   return (
     <div>
-      <div
-        key={item.id}
-        className="py-[12px] px-[24px] flex flex-col w-full dt:items-center dt:flex-row justify-between"
-      >
+      <div className="py-[12px] px-[24px] flex flex-col w-full dt:items-center dt:flex-row justify-between">
         <div className="flex flex-col flex-1 gap-1">
           <span className="text-[24px]">{item.menuName}</span>
-          {item.options && item.options.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {item.options
-                //필터링하기
-                .filter((show) =>
-                  (item.selectedOptions || []).some(
-                    (option) => option.name === show.name
-                  )
-                )
-                //true 인 애만 보이도록
-                .map((show) => (
-                  <OptionList
-                    key={show.menuOptionId}
-                    name={show.name}
-                    price={show.additionalPrice}
-                    isSelected={true}
-                    onClick={() => {}}
-                  />
-                ))}
+
+          {/* 옵션이 배열 형태로 존재하면 모두 그려줍니다 */}
+          {itemOptions.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2 mb-2">
+              {itemOptions.map((option, index) => (
+                <OptionList
+                  key={index}
+                  name={option.name ?? option.optionName}
+                  price={option.price ?? option.additionalPrice ?? 0}
+                  isSelected={true}
+                  onClick={() => {}}
+                />
+              ))}
             </div>
           )}
-          <span className="text-[24px] text-black">
-            {item.price.toLocaleString()}원
+
+          {/* 가격 표시 */}
+          <span className="text-[24px] text-black font-bold">
+            {displayPrice.toLocaleString()}원
           </span>
         </div>
+
         <div className="flex gap-[32px] w-[199px] h-[56px] items-center">
           <button
-            className="cursor-pointer"
-            onClick={() => {
-              //수량 하나 빼기
-              if (item.quantity > 1) {
-                addToCart({
-                  ...item,
-                  quantity: -1,
-                });
-              } else {
-                removeCartItem(item.id);
-              }
-            }}
+            type="button"
+            className="cursor-pointer bg-transparent border-none p-0"
+            onClick={() => handleUpdateQuantity(item.quantity - 1)}
           >
-            <img src={minus} alt="minus" />
+            <img src={minus} alt="수량 감소" />
           </button>
-          <div className="text-[24px]">{item.quantity}</div>
+
+          <div className="text-[24px] font-bold">{item.quantity}</div>
+
           <button
-            className="cursor-pointer"
-            //수량 하나 더하기
-            onClick={() => {
-              addToCart({
-                ...item,
-                quantity: 1,
-              });
-            }}
+            type="button"
+            className="cursor-pointer bg-transparent border-none p-0"
+            onClick={() => handleUpdateQuantity(item.quantity + 1)}
           >
-            <img src={plus} alt="plus" />
+            <img src={plus} alt="수량 증가" />
           </button>
+
           <button
-            className="cursor-pointer"
-            onClick={() => {
-              removeCartItem(item.id);
-            }}
+            type="button"
+            className="cursor-pointer bg-transparent border-none p-0 ml-2"
+            onClick={handleDelete}
           >
-            <img src={remove} alt="remove" />
+            <img src={remove} alt="장바구니에서 삭제" />
           </button>
         </div>
       </div>
