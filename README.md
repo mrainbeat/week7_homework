@@ -28,8 +28,10 @@
 
 각 메뉴별로 세부 옵션 리스트(SideList) 선택 기능이 지원되며, 사용자가 선택한 사이드 옵션의 추가 금액에 따라 최종 가격이 실시간으로 합산 및 반영됩니다.
 
-6. 장바구니 및 결제
-   메뉴 페이지에서 선택했던 음식을 장바구니 페이지에서 바로 확인할 수 있습니다.
+6.장바구니 및 결제 (API 연동 완료)
+   메뉴 페이지에서 선택했던 음식을 장바구니 페이지에서 바로 확인할 수 있으며, 가게 이름 및 동일 메뉴 기준으로 수량이 자동 합산되어 렌더링됩니다.
+   부모 상자의 고정 레이아웃 규격을 유지하면서, 모바일 뷰 스위칭 조건에 맞춰 화면 가려짐 및 목록 하단 배치 밸런스를 구축했습니다.
+   결제 수단 선택 및 보유 크레딧 잔액 현황 요약 기능을 제공하며, 결제 완료 시 서버 API를 통해 실제 데이터 차감, 전역 상태(clearCart) 및 로컬스토리지 동기화와 완료 리다이렉션을 지원합니다.
 
 부모 상자의 고정 레이아웃 규격을 유지하면서, 모바일 뷰 스위칭 조건에 맞춰 화면 가려짐 및 목록 하단 배치 밸런스를 구축했습니다.
 
@@ -42,58 +44,43 @@
 
 라우팅: React Router DOM
 
-## 💾 핵심 로직 및 데이터 연동
-### 📌 메뉴 컴포넌트 및 로컬스토리지 연동
-메뉴 페이지와 결제 페이지 간의 데이터 연동은 브라우저 공용 저장소인 localStorage를 매개체로 작동합니다.
+HTTP 클라이언트: Axios (공통 인스턴스 및 인터셉터 아키텍처)
 
-### 📌 목데이터 구성 (실제 반영 데이터 구조)
-```
-JSON
-[
+## 💾 핵심 로직 및 데이터 연동
+### 📌 백엔드 서버 데이터 연동 및 처리 아키텍처
+기존 로컬스토리지 중심의 연동 방식에서 완전히 탈피하여, 모든 장바구니 데이터의 추가, 조회, 삭제 및 결제는 실제 백엔드 개발 서버(`https://mutsa-food.shop`)의 비동기 API 엔드포인트와 통신하여 제어합니다.
+
+### 📌 서버 반환 데이터 구조 (실제 연동 API 명세)
+```json
 {
-"id": 1,
-"name": "왕사부 마라탕",
-"star": 4.5,
-"type": "중식",
-"image": "FoodImg1",
-"menus": [
-{
-"id": "m1",
-"name": "마라탕 1인분",
-"detail": "마라탕 500g 기본 재료",
-"price": 10000,
-"side": [
-{ "name": "1단계", "price": 0 },
-{ "name": "2단계", "price": 0 },
-{ "name": "3단계", "price": 0 },
-{ "name": "아주 맵게", "price": 0 }
-]
-},
-{
-"id": "m2",
-"name": "꿔바로우",
-"detail": "바삭 쫄깃 꿔바로우",
-"price": 12000,
-"side": [
-{ "name": "소", "price": 0 },
-{ "name": "중(+4000)", "price": 4000 },
-{ "name": "대(+10000)", "price": 10000 }
-]
-},
-{
-"id": "m3",
-"name": "마라샹궈",
-"detail": "떡볶이보단 마라샹궈",
-"price": 20000,
-"side": [
-{ "name": "소", "price": 0 },
-{ "name": "중(+6000)", "price": 6000 },
-{ "name": "대(+15000)", "price": 15000 }
-]
+  "status": 200,
+  "message": "장바구니 목록 조회 성공",
+  "data": {
+    "totalPrice": 12100,
+    "storeGroups": [
+      {
+        "storeId": 1,
+        "storeName": "왕사부 마라탕",
+        "items": [
+          {
+            "cartItemId": 101,
+            "menuId": 1,
+            "menuName": "마라탕 1인분",
+            "price": 10000,
+            "quantity": 1,
+            "selectedOptions": [
+              {
+                "menuOptionId": 501,
+                "name": "2단계",
+                "price": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
-]
-}
-]
 ```
 ### 📌 addToCart 및 옵션별 데이터 처리 제어 (ModalList 핵심 로직)
 옵션별 고유 ID 분기 (uniqueId): 소비자가 메인 음식에 딸린 사이드 옵션(side)을 선택하면 SelectedOption 상태에 반영됩니다. 기본 메뉴 id에 선택된 사이드 옵션명을 조합하여 고유한 키값(id-optionName)을 동적으로 획득하므로, 장바구니 안에서 옵션이 다른 동일 메뉴들이 서로 덮어씌워지지 않고 독립된 품목으로 쌓이게 됩니다.
@@ -104,43 +91,70 @@ JSON
 
 CartList 컴포넌트 내에서도 상호 연동되어 동일한 방식으로 장바구니 화면 내부에서의 추가 및 삭제 조작이 가능합니다.
 
+### 장바구니 결제 및 주문 처리 (POST)
+URL: /api/orders
+
+Headers: Member-Id: {id}, Authorization: Bearer {token}
+
+Response (201 Created): 결제 정상 처리 완료 시 실제 서버가 차감 후 뱉어내는 잔액(remainCredit)을 수신하여 로컬스토리지 myCredit에 즉시 동기화 처리 후 /CompleteOrder로 안전하게 리다이렉션합니다.
+
+Response (400 Bad Request): 보유 크레딧이 부족할 경우 서버 예외 메시지("보유 크레딧이 부족합니다.")를 수신하여 Alert로 유저에게 명확하게 피드백합니다.
+
 ## 📁 프로젝트 구조
 본 프로젝트의 소스코드는 루트 경로의 Delivery 폴더 내에서 관리됩니다.
 ```   
 Delivery/
-└── src/
-├── 📂 assets/
-├── 📂 components/
-│ ├── 📂 Cart/
-│ │ ├── ⚛️ CartList.jsx
-│ │ └── ⚛️ Payment.jsx
-│ ├── 📂 layouts/
-│ │ ├── ⚛️ Layout.jsx
-│ │ └── ⚛️ Navbar.jsx
-│ └── 📂 main/
-│ ├── ⚛️ FilterButton.jsx
-│ ├── ⚛️ FoodBoard.jsx
-│ ├── ⚛️ FoodCard.jsx
-│ ├── ⚛️ FoodModal.jsx
-│ ├── ⚛️ ModalList.jsx
-│ └── ⚛️ SideList.jsx
-├── 📂 mocks/
-│ └── 📜 mock.js
-├── 📂 pages/
-│ ├── ⚛️ CompleteOrder.jsx
-│ ├── ⚛️ CreditCharge.jsx
-│ ├── 🎨 Login.css
-│ ├── ⚛️ Login.jsx
-│ ├── ⚛️ Menu.jsx
-│ ├── ⚛️ NotFound.jsx
-│ ├── 🎨 Order.css
-│ ├── ⚛️ Order.jsx
-│ ├── 🎨 Signup.css
-│ └── ⚛️ Signup.jsx
-├── 🎨 App.css
-├── ⚛️ App.jsx
-├── 🎨 index.css
-└── ⚛️ main.jsx
+├── 📂 src/
+│   ├── 📂 api/
+│   │   └── ⚛️ axios.js
+│   ├── 📂 assets/
+│   │   ├── 📂 Background/
+│   │   │   └── 📜 background.png
+│   │   ├── 📜 card.svg
+│   │   ├── 📜 cart.svg
+│   │   ├── 📜 close.svg
+│   │   ├── 📜 fa-solid_arrow-left.svg
+│   │   ├── 📜 hamburger.svg
+│   │   ├── 📜 ion_close-outline.svg
+│   │   ├── 📜 minus.svg
+│   │   └── 📜 plus.svg
+│   ├── 📂 components/
+│   │   ├── 📂 Cart/
+│   │   │   ├── ⚛️ CartList.jsx
+│   │   │   └── ⚛️ Payment.jsx
+│   │   ├── 📂 layouts/
+│   │   │   ├── ⚛️ Layout.jsx
+│   │   │   └── ⚛️ Navbar.jsx
+│   │   └── 📂 main/
+│   │       ├── ⚛️ FilterButton.jsx
+│   │       ├── ⚛️ FoodBoard.jsx
+│   │       ├── ⚛️ FoodCard.jsx
+│   │       ├── ⚛️ FoodModal.jsx
+│   │       ├── ⚛️ ModalList.jsx
+│   │       └── ⚛️ OptionList.jsx
+│   ├── 📂 pages/
+│   │   ├── ⚛️ CompleteOrder.jsx
+│   │   ├── ⚛️ CreditCharge.jsx
+│   │   ├── ⚛️ Login.jsx
+│   │   ├── ⚛️ Menu.jsx
+│   │   ├── ⚛️ NotFound.jsx
+│   │   ├── 🎨 Order.css
+│   │   ├── ⚛️ Order.jsx
+│   │   └── ⚛️ Signup.jsx
+│   ├── 🎨 App.css
+│   ├── ⚛️ App.jsx
+│   ├── 🎨 index.css
+│   └── ⚛️ main.jsx
+├── 📜 .env
+├── 📜 .gitignore
+├── 📜 .prettierrc
+├── 📜 eslint.config.js
+├── 📜 index.html
+├── 📜 package-lock.json
+├── 📜 package.json
+├── 📜 README.md
+├── 📜 vercel.json
+└── 📜 vite.config.js
 ```
 ## 🌿 브랜치 및 작업 분담
 ### 🔹 main
@@ -161,6 +175,8 @@ Order 페이지 파트: 장바구니 리스트(CartList) 렌더링 데이터 연
 Order 페이지 파트: 데스크톱(dt) 기준 해상도 파편화 제어를 위한 피그마 기반의 기본 고정 픽셀 그리드 레이아웃(가로 폭 및 세로 높이) 구조 기획 및 구축
 
 UI 컴포넌트 구성: 최초 진입 시의 장바구니 목록과 우측 결제창 카드 레이아웃 정렬 배치, 로컬스토리지를 경유하는 유저별 보유 크레딧 잔액 현황 및 실시간 대조 요약 정보 컴포넌트 마크업 설계
+
+
 
 ## 📋커밋컨벤션
 commit message는 [Type] 작성 내용 으로 통일합니다
