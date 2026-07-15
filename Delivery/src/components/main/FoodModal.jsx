@@ -1,6 +1,5 @@
 import Close from '../../assets/ion_close-outline.svg';
 import ModalList from './ModalList';
-import { StoreMockData } from '../../mocks/mock';
 import { useEffect } from 'react';
 
 const FoodModal = ({ item, onClose, addToCart }) => {
@@ -19,8 +18,8 @@ const FoodModal = ({ item, onClose, addToCart }) => {
 
   //안전장치 -> 백엔드 데이터가 비어있을 때를 대비한 방어막
   //클릭한 가게 이름이랑 똑같은 가게를 내 목 데이터에서 찾음
-  const mockStore =
-    StoreMockData.find((mock) => mock.name === item?.name) || StoreMockData[0];
+  // const mockStore =
+  //   StoreMockData.find((mock) => mock.name === item?.name) || StoreMockData[0];
 
   const displayMenus =
     item?.menus?.length > 0 ? item.menus : mockStore?.menus || [];

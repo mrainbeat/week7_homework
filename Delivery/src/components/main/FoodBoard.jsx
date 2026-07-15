@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import FoodCard from './FoodCard';
-import { StoreMockData } from '../../mocks/mock';
 import api from '../../api/axios';
 import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
