@@ -22,7 +22,6 @@ const ModalList = ({
   const handleFoodClick = (option) => {
     setCount(1);
     setSelectedFood(false);
-    console.log('상세 메뉴 데이터:', response.data);
 
     //단일선택만 가능하다면( 예 : 대 중 소 중에 하나 고르기 등 )
     if (!isMultiple) {
