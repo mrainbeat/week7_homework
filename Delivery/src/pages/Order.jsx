@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import CartList from '../components/Cart/CartList';
 import api from '../api/axios'; // 💡 공통 axios 인스턴스 임포트
 
-const Order = () => {
+const Order = ({ clearCart }) => {
   const navigate = useNavigate();
 
   const loginStatus = localStorage.getItem('isLoggedIn');
@@ -131,62 +131,52 @@ const Order = () => {
   }, {});
 
   // 💡 [POST] 8. 장바구니 결제 및 주문 완료 API 연동
-
   const handlePaymentSubmit = async () => {
-    if (serverCart.length === 0 || isShortage) return;
+    // 1. 방어 코드
+    if (serverCart.length === 0) {
+      alert('장바구니가 비어있습니다.');
+      return;
+    }
+    if (isShortage) {
+      alert('보유 크레딧이 부족합니다. 충전 후 다시 시도해주세요.');
+      return;
+    }
 
     if (!window.confirm('정말로 결제하시겠습니까?')) return;
 
     try {
       const response = await api.post(
         '/api/orders',
-
-        {}, // Request Body는 빈 상태
-
+        {}, // Request Body는 명세대로 비워둠
         {
           headers: {
-            'Member-Id': String(memberId),
-
+            'Member-Id': String(memberId), // 여기서 사용자 ID 전달
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      if (
-        response.status === 201 ||
-        response.data?.status === 201 ||
-        response.status === 200
-      ) {
-        const remainCredit = response.data?.data?.remainCredit;
+      // 2. 201 Created 응답 처리
+      if (response.status === 201 || response.data?.status === 201) {
+        const { remainCredit } = response.data.data;
 
-        console.log('🔥 [결제 성공 후 남은 크레딧]:', remainCredit);
+        // 남은 크레딧 로컬스토리지 업데이트
+        localStorage.setItem('myCredit', String(remainCredit));
 
-        if (remainCredit !== undefined && remainCredit !== null) {
-          localStorage.setItem('myCredit', String(remainCredit));
-        } else {
-          localStorage.setItem('myCredit', String(afterCredit));
-        }
-
-        // 로컬 장바구니 흔적 삭제
-
+        // 장바구니 흔적 삭제
         localStorage.removeItem('myCart');
-
-        alert(response.data?.message || '주문 및 결제가 완료되었습니다!');
+        clearCart();
+        alert(response.data.message);
 
         // 완료 페이지로 이동
-
         navigate('/CompleteOrder', { replace: true });
       }
     } catch (error) {
-      console.error('❌ 결제 통신 오류:', error);
-
-      alert(
-        error.response?.data?.message ||
-          '보유 크레딧이 부족합니다. 충전 후 다시 시도해주세요.'
-      );
+      // 💡 아래 콘솔을 찍어서 서버가 보내주는 진짜 메시지를 봐라
+      console.log('서버가 뱉은 에러 응답:', error.response?.data);
+      alert(error.response?.data?.message || '결제 실패');
     }
   };
-
   return (
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col pt-[83px] dt:pt-0">
       <Navbar

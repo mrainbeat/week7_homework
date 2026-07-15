@@ -112,6 +112,7 @@ function App() {
                 cart={cart}
                 addToCart={addToCart}
                 removeCartItem={removeCartItem}
+                clearCart={clearCart}
               />
             }
           />
