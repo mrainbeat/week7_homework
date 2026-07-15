@@ -19,14 +19,14 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
               {item.options
                 //필터링하기
                 .filter((show) =>
-                  item.SelectedOptions.some(
+                  (item.selectedOptions || []).some(
                     (option) => option.name === show.name
                   )
                 )
                 //true 인 애만 보이도록
                 .map((show) => (
                   <OptionList
-                    key={show.name}
+                    key={show.menuOptionId}
                     name={show.name}
                     price={show.additionalPrice}
                     isSelected={true}
@@ -46,10 +46,7 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
               //수량 하나 빼기
               if (item.quantity > 1) {
                 addToCart({
-                  id: item.id,
-                  menuName: item.menuName,
-                  price: item.price,
-                  storeName: item.storeName,
+                  ...item,
                   quantity: -1,
                 });
               } else {
@@ -65,10 +62,7 @@ const CartList = ({ item, addToCart, removeCartItem }) => {
             //수량 하나 더하기
             onClick={() => {
               addToCart({
-                id: item.id,
-                menuName: item.menuName,
-                price: item.price,
-                storeName: item.storeName,
+                ...item,
                 quantity: 1,
               });
             }}

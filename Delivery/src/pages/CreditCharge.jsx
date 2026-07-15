@@ -1,29 +1,13 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axios'; // 💡 공통 axios 인스턴스 경로
-
-export default function Login() {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-=======
 import React, { useEffect, useState } from 'react';
 import Leftarrow from '../assets/fa-solid_arrow-left.svg';
 import Navbar from '../components/layouts/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios'; // 💡 공통 axios 인스턴스 경로
->>>>>>> 66d85f10d6d6a513845947078e6484d134e9d02e
 
+const CreditCharge = () => {
   const navigate = useNavigate();
+  const loginStatus = localStorage.getItem('isLoggedIn');
 
-<<<<<<< HEAD
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // 빈칸 방지
-    if (!id || !password) {
-      alert('아이디(이메일)와 비밀번호를 모두 입력해주세요.');
-=======
   // 로그인할 때 저장된 진짜 회원 고유 ID 가져오기
   const memberId = localStorage.getItem('memberId') || '1';
 
@@ -99,67 +83,10 @@ import api from '../api/axios'; // 💡 공통 axios 인스턴스 경로
   const handleChargeSubmit = async () => {
     if (chargeAmount <= 0) {
       alert('충전할 금액을 선택해 주세요.');
->>>>>>> 66d85f10d6d6a513845947078e6484d134e9d02e
       return;
     }
 
     try {
-<<<<<<< HEAD
-      // 💡 1. 로그인 시도 전에 브라우저에 남아있던 이전 계정의 찌꺼기 싹 청소하기 (철벽 방어)
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('memberId');
-
-      // 🌟 2. 백엔드 서버로 로그인 요청 쏘기
-      const response = await api.post('/api/auth/login', {
-        email: id, // 회원가입 명세에 맞춰 email로 전송
-        password: password,
-      });
-
-      console.log('로그인 성공 응답 데이터 전체:', response.data);
-
-      // 🌟 3. 백엔드가 준 진짜 출입증(토큰) 꺼내기
-      const token =
-        response.data.accessToken || response.data.data?.accessToken;
-
-      // 🌟 4. 백엔드가 준 회원 고유 ID(memberId) 유연하게 매핑해서 꺼내기
-      const dataContainer = response.data?.data || response.data;
-      const serverMemberId =
-        dataContainer?.memberId ?? dataContainer?.id ?? dataContainer?.userId;
-
-      if (token) {
-        // api.js가 꺼내 쓸 수 있도록 토큰 저장
-        localStorage.setItem('accessToken', token);
-        localStorage.setItem('isLoggedIn', 'true');
-
-        // 🌟 5. 추출한 회원 ID를 로컬스토리지에 확실히 저장 (크레딧 화면에서 이 ID별로 서랍을 쪼갬)
-        if (serverMemberId) {
-          localStorage.setItem('memberId', String(serverMemberId));
-          console.log(
-            '✅ 로컬스토리지에 memberId 격리 저장 완료:',
-            serverMemberId
-          );
-        } else {
-          console.warn(
-            '⚠️ 로그인 성공 응답에 회원 고유 ID(memberId/id) 필드가 보이지 않습니다.'
-          );
-          // 예비책으로 우선 '1' 대신 유니크하게 인식될 수 있는 임시 구분값 부여 가능
-          localStorage.setItem('memberId', '1');
-        }
-
-        alert('로그인 성공');
-        window.location.href = '/Menu';
-      } else {
-        alert('로그인에 실패했습니다. 토큰을 전달받지 못했습니다.');
-      }
-    } catch (error) {
-      console.error('로그인 실패:', error);
-      alert(
-        error.response?.data?.message ||
-          '아이디 또는 비밀번호가 올바르지 않습니다.'
-      );
-      setPassword(''); // 틀렸을 때 비밀번호 칸만 깔끔하게 비워주기
-=======
       const token = localStorage.getItem('accessToken');
 
       // 명세서 규격에 맞춰 전송! (예: 3000)
@@ -209,31 +136,10 @@ import api from '../api/axios'; // 💡 공통 axios 인스턴스 경로
     } catch (error) {
       console.error('크레딧 충전 연동 실패:', error);
       alert('크레딧 충전 중 오류가 발생했습니다.');
->>>>>>> 66d85f10d6d6a513845947078e6484d134e9d02e
     }
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex justify-center items-center min-h-screen bg-[#f9f9f9] px-4">
-      {/* 메인 박스 */}
-      <div className="relative w-full max-w-[625px] h-auto min-h-[845px] bg-white border-2 border-white rounded-[16px] shadow-[0_10px_25px_rgba(0,0,0,0.1)] px-[20px] py-[40px] flex flex-col items-center">
-        {/* 타이틀 로고 영역 */}
-        <h1 className="text-[#f0485f] text-[36px] font-bold mt-[40px] mb-[64px] text-center">
-          로그인하기
-        </h1>
-
-        <form
-          onSubmit={handleSubmit}
-          noValidate
-          className="w-full flex flex-col items-center gap-[24px]"
-        >
-          {/* 아이디 입력 영역 */}
-          <div className="flex flex-col w-full max-w-[553px]">
-            <label
-              htmlFor="id-input"
-              className="text-[20px] font-bold text-[#333333] mb-[8px] text-left"
-=======
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col">
       <Navbar
         left={
@@ -242,54 +148,11 @@ import api from '../api/axios'; // 💡 공통 axios 인스턴스 경로
               type="button"
               onClick={() => navigate(-1)}
               className="cursor-pointer bg-transparent border-none p-0 flex items-center justify-center"
->>>>>>> 66d85f10d6d6a513845947078e6484d134e9d02e
             >
-              아이디
-            </label>
-            <input
-              id="id-input"
-              type="text"
-              placeholder="아이디를 입력하세요"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              required
-              className="w-full h-[63px] px-[16px] border border-[#e0e0e0] rounded-[4px] text-[20px] outline-none box-border focus:border-[#0099ff] transition-colors"
-            />
+              <img src={Leftarrow} alt="뒤로가기" />
+            </button>
+            <span className="text-[36px] font-bold">크레딧 충전</span>
           </div>
-<<<<<<< HEAD
-
-          {/* 비밀번호 입력 영역 */}
-          <div className="flex flex-col w-full max-w-[553px]">
-            <label
-              htmlFor="password-input"
-              className="text-[20px] font-bold text-[#333333] mb-[8px] text-left"
-            >
-              비밀번호
-            </label>
-            <input
-              id="password-input"
-              type="password"
-              placeholder="비밀번호를 입력하세요"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full h-[63px] px-[16px] border border-[#e0e0e0] rounded-[4px] text-[20px] outline-none box-border focus:border-[#0099ff] transition-colors"
-            />
-          </div>
-
-          {/* 회원가입 링크 영역 */}
-          <div className="flex items-center gap-[12px] mt-[16px] text-[16px] text-[#555555]">
-            <span>계정이 없나요?</span>
-            <span
-              onClick={() => navigate('/signup')}
-              className="text-red-primary font-bold cursor-pointer hover:underline transition-all"
-            >
-              회원가입 하기
-            </span>
-          </div>
-
-          {/* 로그인 버튼 */}
-=======
         }
         right={
           <div className="text-black flex flex-col pr-5 items-end">
@@ -378,15 +241,22 @@ import api from '../api/axios'; // 💡 공통 axios 인스턴스 경로
           </div>
 
           {/* 4. 충전 버튼 */}
->>>>>>> 66d85f10d6d6a513845947078e6484d134e9d02e
           <button
-            type="submit"
-            className="w-[244px] h-[54px] bg-[#f0f0f0] text-[#555555] border-none rounded-[20px] text-[20px] font-bold cursor-pointer mx-auto mt-[64px] transition-all duration-200 ease-in-out hover:bg-red-primary hover:text-white"
+            type="button"
+            onClick={handleChargeSubmit}
+            disabled={chargeAmount <= 0}
+            className={`w-full py-[20px] text-[20px] font-bold rounded-[16px] text-center border-none shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition-all duration-200 mt-auto ${
+              chargeAmount > 0
+                ? 'bg-[#F0485F] text-white cursor-pointer hover:bg-[#D63F54]'
+                : 'bg-[#F1F3F5] text-[#AAAAAA] cursor-not-allowed'
+            }`}
           >
-            로그인
+            충전하기
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default CreditCharge;

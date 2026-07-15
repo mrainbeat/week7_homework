@@ -60,7 +60,7 @@ export default function Login() {
 
         <form
           onSubmit={handleSubmit}
-          noValemailate
+          noValidate
           className="w-full flex flex-col items-center gap-[24px]"
         >
           {/* 이메일 입력 영역 */}
