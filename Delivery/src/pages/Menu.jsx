@@ -23,12 +23,33 @@ const Menu = () => {
   // 로컬스토리지에서 현재 보유 크레딧 불러오기 (기본값 5000C)
   const [myCredit, setMyCredit] = useState(() => {
     const savedCredit = localStorage.getItem('myCredit');
-    return savedCredit ? Number(savedCredit) : 5000;
+    return savedCredit ? Number(savedCredit) : 0;
   });
+
+  const [totalQuantity, setTotalQuantity] = useState(0);
+
+  //서버에 원래 있던 개수를 전부 다. 더함
+  useEffect(() => {
+    if (cart) {
+      let total = 0;
+
+      cart.forEach((element) => {
+        //{items : [] 구조인 경우 (즉, 서버에서 받아온 카트묶음일 경우)}
+        if (element.items && Array.isArray(element.items)) {
+          element.items.forEach((item) => {
+            total += Number(item.quantity || 0);
+          });
+        }
+      });
+
+      setTotalQuantity(total);
+    }
+  }, [cart]); //cart배열이 바뀔때마다 실행되도록 변경
 
   // 로그아웃 버튼 동작 함수
   const handleLogout = (e) => {
     e.preventDefault();
+    clearCart();
     localStorage.removeItem('myCart');
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('accessToken');
@@ -37,9 +58,6 @@ const Menu = () => {
     setIsLoggedIn(false);
   };
 
-  const quantityArray = cart.map((item) => Number(item.quantity || 0));
-  const totalQuantity = quantityArray.reduce((sum, qty) => sum + qty, 0);
-
   return (
     <div>
       <Navbar
@@ -47,19 +65,21 @@ const Menu = () => {
         right={
           <div className="flex flex-col dt:flex-row dt:gap-[38px] dt:items-center font-bold ">
             {/* 1. 크레딧 잔액 표시 및 충전 페이지 이동 링크 */}
-            <Link
-              to="/CreditCharge"
-              className="hidden dt:flex flex-col items-center justify-center cursor-pointer gap-[4px] hover:opacity-80 transition-opacity"
-            >
-              <img
-                src={cardIcon}
-                alt="크레딧 충전"
-                className="w-[24px] h-[24px]"
-              />
-              <span className="text-[12px] font-bold">
-                {myCredit.toLocaleString()}C
-              </span>
-            </Link>
+            {isLoggedIn && (
+              <Link
+                to="/CreditCharge"
+                className="hidden dt:flex flex-col items-center justify-center cursor-pointer gap-[4px] hover:opacity-80 transition-opacity"
+              >
+                <img
+                  src={cardIcon}
+                  alt="크레딧 충전"
+                  className="w-[24px] h-[24px]"
+                />
+                <span className="text-[12px] font-bold">
+                  {myCredit.toLocaleString()}C
+                </span>
+              </Link>
+            )}
 
             {/* 2. 기존 장바구니 링크 */}
             <Link
@@ -72,7 +92,7 @@ const Menu = () => {
                 className="w-[24px] h-[24px]"
               />
               <div className="absolute -top-2 -right-2 bg-[#FDF7C3] text-black text-[8px] font-bold px-[8px] h-[14px] rounded-[20px] flex items-center justify-center min-w-[11px]">
-                {totalQuantity}
+                {isLoggedIn ? totalQuantity : 0}
               </div>
             </Link>
 

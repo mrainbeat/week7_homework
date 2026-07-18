@@ -31,8 +31,8 @@ const CreditCharge = () => {
 
   // 💡 최초 진입 시 브라우저 로컬스토리지에 저장된 누적 잔액이 있으면 읽고, 없으면 기본값 5000C 세팅
   const [myCredit, setMyCredit] = useState(() => {
-    const saved = localStorage.getItem('myCredit');
-    return saved ? Number(saved) : 0;
+    const serverCurrentCredit = localStorage.getItem('myCredit');
+    return serverCurrentCredit ? Number(serverCurrentCredit) : 0;
   });
 
   // 사용자가 선택한 충전 금액 상태
@@ -49,18 +49,18 @@ const CreditCharge = () => {
           },
         });
 
-        console.log('📥 [내 정보 API 응답 전체 데이터]:', response.data);
+        console.log('내정보(me) 응답 데이터:', response.data);
 
         // 내 정보 API에서 크레딧 정보를 주지 않으므로, 에러를 내지 않고
         // 기존에 로컬스토리지에 보관해 두었던 안전한 보유 크레딧을 그대로 유지합니다.
-        const saved = localStorage.getItem('myCredit');
-        if (saved) {
-          setMyCredit(Number(saved));
+        const serverCurrentCredit = response.data?.data?.credit;
+        if (serverCurrentCredit) {
+          setMyCredit(Number(serverCurrentCredit));
         }
       } catch (error) {
-        console.error('❌ 보유 크레딧 조회 완전히 실패:', error);
-        const saved = localStorage.getItem('myCredit');
-        setMyCredit(saved ? Number(saved) : 5000);
+        console.error('보유 크레딧 조회 실패:', error);
+        const serverCurrentCredit = localStorage.getItem('myCredit');
+        setMyCredit(serverCurrentCredit ? Number(serverCurrentCredit) : 0);
       }
     };
 
@@ -109,8 +109,8 @@ const CreditCharge = () => {
         response.status === 201 ||
         response.data?.status === 200
       ) {
-        // 1. 우선 백엔드 응답에서 진짜 최신 잔액(currentCredit)이 들어오는지 체크
-        const serverCurrentCredit = response.data?.data?.currentCredit;
+        // 1. 우선 백엔드 응답에서 진짜 최신 잔액(credit)이 들어오는지 체크
+        const serverCurrentCredit = response.data?.data?.credit;
         console.log(
           '🔥 [서버가 돌려준 충전 후 최종 잔액]:',
           serverCurrentCredit
@@ -122,7 +122,6 @@ const CreditCharge = () => {
           // 서버 데이터가 정상적으로 들어오면 서버 데이터로 덮어쓰기!
           nextCredit = Number(serverCurrentCredit);
         }
-
         // 2. 화면 상태 및 로컬스토리지에 안전하게 실시간 보존
         setMyCredit(nextCredit);
         localStorage.setItem('myCredit', String(nextCredit));

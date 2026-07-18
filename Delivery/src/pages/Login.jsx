@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios'; //axios 추가
 
-export default function Login() {
+export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -45,10 +45,14 @@ export default function Login() {
           console.log('로그인 직후 내 정보 응답 :', meResponse.data);
 
           //응답 데이터속 크레딧 정보 저장
-          const userCredit = meResponse.data.credit ?? 0;
+          const userCredit = meResponse.data.data.credit;
           localStorage.setItem('myCredit', String(userCredit));
         } catch (meError) {
           console.error('내 정보 가져오기 실패:', meError);
+        }
+
+        if (typeof onLoginSuccess) {
+          await onLoginSuccess(token);
         }
       }
 
@@ -57,6 +61,7 @@ export default function Login() {
     } catch (error) {
       console.error('로그인 실패:', error);
       // 백엔드가 틀렸다고 알려주면 에러 메시지 띄우기
+
       alert(
         error.response?.data?.message ||
           '이메일 또는 비밀번호가 올바르지 않습니다.'
