@@ -5,31 +5,21 @@ import { Link, useNavigate } from 'react-router-dom';
 import CartList from '../components/Cart/CartList';
 import api from '../api/axios'; // 💡 공통 axios 인스턴스 임포트
 
-const Order = ({ clearCart }) => {
+const Order = ({ cart, clearCart, updateCartQuantity, removeCartItem }) => {
   const navigate = useNavigate();
 
   const loginStatus = localStorage.getItem('isLoggedIn');
-
   const token = localStorage.getItem('accessToken');
 
-  const memberId = localStorage.getItem('memberId') || '1';
-
-  // 💡 서버에서 실시간으로 가져오는 장바구니 리스트 상태
-
-  const [serverCart, setServerCart] = useState([]);
-
-  const [totalPrice, setTotalPrice] = useState(0);
-
   // 모바일 화면에서 장바구니(false)와 결제창(true)을 스위칭하는 상태
-
   const [isPayView, setIsPayView] = useState(false);
 
   // 로그인 여부 체크
-
   const [isLoggedIn, setIsLoggedIn] = useState(loginStatus === 'true');
 
   const handleLogout = (e) => {
     e.preventDefault();
+    clearCart();
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('myCart');
     localStorage.removeItem('accessToken');
@@ -40,7 +30,6 @@ const Order = ({ clearCart }) => {
   };
 
   // 로그인 제한 가드
-
   useEffect(() => {
     if (loginStatus !== 'true') {
       navigate('/Login', { replace: true });
@@ -48,92 +37,37 @@ const Order = ({ clearCart }) => {
   }, [loginStatus, navigate]);
 
   // 로컬스토리지에서 유저의 보유 크레딧 읽기 (기본값 0C)
-
   const [myCredit, setMyCredit] = useState(() => {
     const savedCredit = localStorage.getItem('myCredit');
     return savedCredit ? Number(savedCredit) : 0;
   });
 
-  // 💡 [GET] 4. 내 장바구니 전체 목록 조회 API 연동 함수
-  const fetchCartList = useCallback(async () => {
-    if (loginStatus !== 'true') return;
+  //부모에서 cart를 읽어오기떄문에 여기서 읽을 필요 없음!
+  let totalQuantity = 0;
+  let totalPrice = 0;
 
-    try {
-      const response = await api.get('/api/carts', {
-        headers: {
-          'Member-Id': String(memberId),
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  if (cart && Array.isArray(cart)) {
+    cart.forEach((store) => {
+      if (store.items && Array.isArray(store.items)) {
+        store.items.forEach((item) => {
+          const itemQty = Number(item.quantity) || 1;
+          totalQuantity += itemQty;
 
-      console.log('📥 [장바구니 API 응답 데이터]:', response.data);
-
-      const cartData = response.data?.data;
-
-      if (cartData) {
-        // 서버의 총액 세팅
-
-        setTotalPrice(cartData.totalPrice || 0);
-
-        // 🌟 [중요] 명세서의 'stores' 대신 진짜 백엔드가 내려주는 변수명 'storeGroups' 매핑!
-
-        const targetGroups = cartData.storeGroups || cartData.stores;
-
-        const allItems = [];
-
-        if (targetGroups && Array.isArray(targetGroups)) {
-          targetGroups.forEach((store) => {
-            store.items.forEach((item) => {
-              allItems.push({
-                ...item,
-
-                storeName: store.storeName, // 가게 이름 매핑
-
-                storeId: store.storeId,
-              });
-            });
-          });
-        }
-
-        setServerCart(allItems);
-      } else {
-        setServerCart([]);
-
-        setTotalPrice(0);
+          const itemPrice = item.basePrice ?? 0;
+          totalPrice += itemPrice * itemQty;
+        });
       }
-    } catch (error) {
-      console.error('❌ 장바구니 전체 목록 조회 실패:', error);
-    }
-  }, [loginStatus, memberId, token]);
-
-  // 페이지 최초 진입 시 장바구니 조회 실행
-
-  useEffect(() => {
-    fetchCartList();
-  }, [fetchCartList]);
+    });
+  }
 
   // 차감 후 잔액 계산 및 부족 여부 판별
-
   const afterCredit = myCredit - totalPrice;
-
   const isShortage = afterCredit < 0;
-
-  // 장바구니 데이터를 가게 이름 기준으로 그룹화 (서버 데이터를 기반으로 가공)
-
-  const groupedCart = serverCart.reduce((groups, item) => {
-    if (!groups[item.storeName]) {
-      groups[item.storeName] = [];
-    }
-
-    groups[item.storeName].push(item);
-
-    return groups;
-  }, {});
 
   // 💡 [POST] 8. 장바구니 결제 및 주문 완료 API 연동
   const handlePaymentSubmit = async () => {
     // 1. 방어 코드
-    if (serverCart.length === 0) {
+    if (cart.length === 0) {
       alert('장바구니가 비어있습니다.');
       return;
     }
@@ -150,7 +84,6 @@ const Order = ({ clearCart }) => {
         {}, // Request Body는 명세대로 비워둠
         {
           headers: {
-            'Member-Id': String(memberId), // 여기서 사용자 ID 전달
             Authorization: `Bearer ${token}`,
           },
         }
@@ -177,11 +110,12 @@ const Order = ({ clearCart }) => {
       alert(error.response?.data?.message || '결제 실패');
     }
   };
+
   return (
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col pt-[83px] dt:pt-0">
       <Navbar
         totalPrice={totalPrice}
-        cartLength={serverCart.length}
+        cartLength={cart.length}
         left={
           <div className="flex gap-[48px] items-center">
             {isPayView ? (
@@ -236,7 +170,7 @@ const Order = ({ clearCart }) => {
         }
       />
 
-      {serverCart.length === 0 ? (
+      {cart.length === 0 ? (
         <div className="w-full h-[100vh] flex flex-col items-center justify-center">
           <p className="text-[24px] font-semibold text-[#333333] mb-[32px]">
             장바구니가 비어있습니다.
@@ -258,21 +192,22 @@ const Order = ({ clearCart }) => {
           >
             <div className="w-full h-auto dt:h-full bg-transparent flex flex-col box-border dt:overflow-y-auto">
               <div className="flex flex-col gap-[34px] dt:gap-[51px]">
-                {Object.keys(groupedCart).map((storeName) => (
+                {cart.map((store) => (
                   <div
-                    key={storeName}
+                    key={store.storeName}
                     className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#F1F3F5]"
                   >
                     <div className="bg-red-assistive text-[20px] py-[12px] px-[24px]">
-                      <h4 className="font-bold">{storeName}</h4>
+                      <h4 className="font-bold">{store.storeName}</h4>
                     </div>
 
                     <div>
-                      {groupedCart[storeName].map((item) => (
+                      {store.items.map((item) => (
                         <CartList
                           key={item.cartItemId}
                           item={item}
-                          onCartUpdate={fetchCartList} // 💡 수량 업데이트 성공 시 목록 재조회 트리거
+                          updateCartQuantity={updateCartQuantity}
+                          removeCartItem={removeCartItem}
                         />
                       ))}
                     </div>
@@ -343,9 +278,9 @@ const Order = ({ clearCart }) => {
             <button
               type="button"
               onClick={handlePaymentSubmit}
-              disabled={serverCart.length === 0 || isShortage}
+              disabled={cart.length === 0 || isShortage}
               className={`w-full py-[20px] text-[20px] font-bold rounded-[16px] text-center border-none shadow-[0_4px_6px_rgba(0,0,0,0.02)] transition-all duration-200 ${
-                serverCart.length > 0 && !isShortage
+                cart.length > 0 && !isShortage
                   ? 'bg-red-primary text-white cursor-pointer hover:bg-[#D63F54]'
                   : 'bg-[#F1F3F5] text-[#AAAAAA] cursor-not-allowed'
               }`}
@@ -367,23 +302,6 @@ const Order = ({ clearCart }) => {
       )}
     </div>
   );
-
-  // Order.jsx 내부
-
-  // 1. 전체 아이템의 수량 합산 로직
-
-  const totalQuantity = serverCart.reduce(
-    (sum, item) => sum + (item.quantity || 1),
-
-    0
-  );
-
-  // 2. Navbar에 totalQuantity 전달
-
-  <Navbar
-    totalPrice={totalPrice}
-    cartLength={totalQuantity} // 기존 serverCart.length 대신 수량 합계 전달
-  />;
 };
 
 export default Order;

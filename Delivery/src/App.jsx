@@ -10,6 +10,7 @@ import CompleteOrder from './pages/CompleteOrder';
 import CreditCharge from './pages/CreditCharge';
 import api from './api/axios';
 
+//
 function App() {
   //모든 음식을 담을 리스트 만들기
   const [cart, setCart] = useState(() => {
@@ -18,6 +19,28 @@ function App() {
     return saveCart ? JSON.parse(saveCart) : [];
   });
 
+  //서버에 있는 카트 정보 받아와서 저장하기
+  const fetchAndSetCart = async (token) => {
+    try {
+      const cartResponse = await api.get('/api/carts', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const serverCart = cartResponse.data.data.stores || [];
+
+      //상태 동기화
+      localStorage.setItem('myCart', JSON.stringify(serverCart));
+      setCart(serverCart);
+
+      console.log('장바구니 동기화 성공 :', serverCart);
+    } catch (error) {
+      console.error('서버 장바구니 가져오기 실패', error);
+    }
+  };
+  //!!!!! 함수를 원래는 addToCart로 통일해서 담고 삭제하고 더하고 했는데, 나누기로함!
+
+  //1. 장바구니에 아이템 담는 함수
   const addToCart = async (newItem) => {
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const token = localStorage.getItem('accessToken');
@@ -30,7 +53,7 @@ function App() {
     }
 
     try {
-      console.log('📡 서버로 POST 통신 시도 중...');
+      console.log('서버로 POST 통신 보내기');
       //백엔드 서버에 POST 통신 보내기
       const requestBody = {
         menuId: newItem.originalID,
@@ -45,43 +68,66 @@ function App() {
       });
       console.log('서버 장바구니에 담기 성공 : ', response.data);
 
-      setCart((prev) => {
-        // item.id 대신 item.cartitem으로 교체
-        const isExist = prev.find(
-          (item) => item.cartItemId === newItem.cartItemId
-        );
-        let updatedCart = [];
-        //만약에 장바구니에 이미 해당 item 이 있다면, map으로 돌아보면서 그 아이템의 선택량을 바꿈
-        if (isExist) {
-          updatedCart = prev.map((item) =>
-            // item.id 대신 item.cartitem으로 교체
-            item.cartItemId === newItem.cartItemId
-              ? { ...item, quantity: item.quantity + newItem.quantity }
-              : item
-          );
-        }
-        //장바구니에 없는 아이템이었다면 그냥 그대로 배열에 새로 추가
-        else {
-          updatedCart = [...prev, newItem];
-        }
-
-        localStorage.setItem('myCart', JSON.stringify(updatedCart));
-        return updatedCart;
-      });
+      await fetchAndSetCart(token);
     } catch (error) {
       console.error('장바구니 담기 API 실패', error);
     }
   };
 
-  //아예 삭제하는 함수
-  const removeCartItem = (cartItemId) => {
-    setCart((prev) => {
-      // item.id 대신 item.cartitem으로 교체
-      const updatedCart = prev.filter((item) => item.cartItemId !== cartItemId);
+  //2. 장바구니 페이지에서 수량 플러스/마이너스 할 때 사용하는 함수
+  const updateCartQuantity = async (cartItemId, newQuantity) => {
+    const token = localStorage.getItem('accessToken');
+    //토큰 없으면 패스
+    if (!token) return;
 
-      localStorage.setItem('myCart', JSON.stringify(updatedCart));
-      return updatedCart;
-    });
+    //수량이 0이하가 된다면 자동으로 삭제
+    if (newQuantity <= 0) {
+      await removeCartItem(cartItemId);
+      return;
+    }
+
+    try {
+      console.log(
+        `서버 수량 변경 요청 (ID:${cartItemId}, 수량 : ${newQuantity})`
+      );
+
+      await api.patch(
+        `/api/carts/items/${cartItemId}`,
+        {
+          quantity: newQuantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      //장바구니 상품 수량 조절 후 최신 장바귄 데이터로 새로고침
+      await fetchAndSetCart(token);
+    } catch (error) {
+      console.error('장바구니 수량 변경 API 실패', error);
+    }
+  };
+
+  //3. 서버에서 아예 아이템을 삭제하는 함수
+  const removeCartItem = async (cartItemId) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return;
+
+    try {
+      console.log(`서버 아이템 삭제 요청 (ID:${cartItemId})`);
+      await api.delete(`/api/carts/items/${cartItemId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // 삭제 성공 후 최신 장바구니 데이터로 새로고침
+      await fetchAndSetCart(token);
+    } catch (error) {
+      console.error('장바구니 아이템 삭제 API 실패', error);
+    }
   };
 
   //카트에 있었던 모든 아이템을 삭제(로그아웃시 사용)
@@ -93,7 +139,10 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/Login" element={<Login />}></Route>
+        <Route
+          path="/Login"
+          element={<Login onLoginSuccess={fetchAndSetCart} />}
+        ></Route>
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/CompleteOrder" element={<CompleteOrder />} />
         <Route path="/CreditCharge" element={<CreditCharge />} />
@@ -110,7 +159,7 @@ function App() {
             element={
               <Order
                 cart={cart}
-                addToCart={addToCart}
+                updateCartQuantity={updateCartQuantity}
                 removeCartItem={removeCartItem}
                 clearCart={clearCart}
               />

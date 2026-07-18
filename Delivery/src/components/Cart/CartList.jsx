@@ -5,58 +5,27 @@ import remove from '../../assets/ion_close-outline.svg';
 import OptionList from '../main/OptionList';
 import api from '../../api/axios';
 
-const CartList = ({ item, onCartUpdate }) => {
-  const memberId = localStorage.getItem('memberId') || '1';
+//!!!! app.jsx 에서 만든 함수를 여기에도 사용하도록 수정!!
+const CartList = ({
+  item,
+  onCartUpdate,
+  updateCartQuantity,
+  removeCartItem,
+}) => {
   const token = localStorage.getItem('accessToken');
 
-  // [PATCH] 수량 변경
+  // [PATCH] 수량 변경 -> updateCartQauntity 사용
   const handleUpdateQuantity = async (newQuantity) => {
-    if (newQuantity < 1) {
-      handleDelete();
-      return;
-    }
-
-    try {
-      const targetItemId = Number(item.cartItemId || item.id);
-      const qty = Number(newQuantity);
-
-      await api.patch(
-        `/api/carts/items/${targetItemId}`,
-        { quantity: qty },
-        {
-          headers: {
-            'Member-Id': String(memberId),
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (onCartUpdate) onCartUpdate();
-    } catch (error) {
-      console.error('❌ 수량 변경 API 실패:', error);
-      alert(error.response?.data?.message || '수량 변경에 실패했습니다.');
-    }
+    const targetItemId = Number(item.cartItemId || item.id);
+    updateCartQuantity(targetItemId, newQuantity);
   };
 
-  // [DELETE] 항목 삭제
+  // [DELETE] 항목 삭제 -> removeCartItem 사용
   const handleDelete = async () => {
     if (!window.confirm('이 메뉴를 장바구니에서 삭제하시겠습니까?')) return;
 
-    try {
-      const targetItemId = Number(item.cartItemId || item.id);
-
-      await api.delete(`/api/carts/items/${targetItemId}`, {
-        headers: {
-          'Member-Id': String(memberId),
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (onCartUpdate) onCartUpdate();
-    } catch (error) {
-      console.error('❌ 장바구니 상품 삭제 실패:', error);
-      alert(error.response?.data?.message || '상품 삭제에 실패했습니다.');
-    }
+    const targetItemId = Number(item.cartItemId || item.id);
+    removeCartItem(targetItemId);
   };
 
   // 🌟 백엔드가 주는 가격 이름이 다를 수 있으므로 안전하게 모두 탐색
