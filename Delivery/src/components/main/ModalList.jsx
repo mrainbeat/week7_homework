@@ -12,6 +12,8 @@ const ModalList = ({
   addToCart,
   options,
   isMultiple,
+  updateCartQuantity,
+  removeCartItem,
 }) => {
   const [selectedFood, setSelectedFood] = useState(false);
   const [count, setCount] = useState(1);

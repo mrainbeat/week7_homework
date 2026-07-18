@@ -149,7 +149,14 @@ function App() {
         <Route
           path="/"
           element={
-            <Layout cart={cart} addToCart={addToCart} clearCart={clearCart} />
+            <Layout
+              cart={cart}
+              addToCart={addToCart}
+              clearCart={clearCart}
+              updateCartQuantity={updateCartQuantity}
+              removeCartItem={removeCartItem}
+              clearCart={clearCart}
+            />
           }
         >
           <Route index element={<Navigate to="/Menu" replace />} />

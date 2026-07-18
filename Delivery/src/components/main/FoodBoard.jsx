@@ -5,7 +5,7 @@ import FilterButton from './FilterButton';
 import FoodModal from './FoodModal';
 import Background from '../../assets/Background/background.png';
 
-const FoodBoard = ({ addToCart, cart }) => {
+const FoodBoard = ({ addToCart, cart, updateCartQuantity, removeCartItem }) => {
   const [category, setCategory] = useState('전체');
   const categories = ['전체', '중식', '한식', '기타'];
 
@@ -23,7 +23,7 @@ const FoodBoard = ({ addToCart, cart }) => {
         const response = await api.get(url);
         setStoreList(response.data.data);
       } catch (error) {
-        console.error('❌ 가게 목록 불러오기 실패:', error);
+        console.error('가게 목록 불러오기 실패:', error);
       }
     };
     fetchStores();
@@ -35,7 +35,7 @@ const FoodBoard = ({ addToCart, cart }) => {
       setSelectedMenu(response.data.data);
       setIsModalOpen(true);
     } catch (error) {
-      console.error('❌ 가게 상세 정보 불러오기 실패:', error);
+      console.error('가게 상세 정보 불러오기 실패:', error);
     }
   };
 
@@ -160,6 +160,8 @@ const FoodBoard = ({ addToCart, cart }) => {
             item={selectedMenu}
             onClose={handleMenuClose}
             addToCart={addToCart}
+            updateCartQuantity={updateCartQuantity}
+            removeCartItem={removeCartItem}
           />
         </div>
       )}

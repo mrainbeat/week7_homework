@@ -3,7 +3,13 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Background from '../../assets/Background/background.png';
 
-const Layout = ({ cart = [], addToCart, clearCart }) => {
+const Layout = ({
+  cart = [],
+  addToCart,
+  clearCart,
+  updateCartQuantity,
+  removeCartItem,
+}) => {
   return (
     <div>
       <Navbar />
@@ -11,7 +17,15 @@ const Layout = ({ cart = [], addToCart, clearCart }) => {
         style={{ backgroundImage: `url(${Background})` }}
         className="bg-cover bg-center bg-no-repeat min-h-screen w-full "
       >
-        <Outlet context={{ cart, addToCart, clearCart }} />
+        <Outlet
+          context={{
+            cart,
+            addToCart,
+            clearCart,
+            updateCartQuantity,
+            removeCartItem,
+          }}
+        />
       </div>
     </div>
   );
