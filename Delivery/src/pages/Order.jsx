@@ -60,6 +60,12 @@ const Order = ({ cart, clearCart, updateCartQuantity, removeCartItem }) => {
     });
   }
 
+  //가게이름 순으로 정렬 (수량 조절시 변동 없도록)
+  const sortedCart =
+    cart && Array.isArray(cart)
+      ? [...cart].sort((a, b) => a.storeName.localeCompare(b.storeName))
+      : [];
+
   // 차감 후 잔액 계산 및 부족 여부 판별
   const afterCredit = myCredit - totalPrice;
   const isShortage = afterCredit < 0;
@@ -115,7 +121,7 @@ const Order = ({ cart, clearCart, updateCartQuantity, removeCartItem }) => {
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col pt-[83px] dt:pt-0">
       <Navbar
         totalPrice={totalPrice}
-        cartLength={cart.length}
+        cartLength={totalQuantity}
         left={
           <div className="flex gap-[48px] items-center">
             {isPayView ? (
@@ -192,27 +198,38 @@ const Order = ({ cart, clearCart, updateCartQuantity, removeCartItem }) => {
           >
             <div className="w-full h-auto dt:h-full bg-transparent flex flex-col box-border dt:overflow-y-auto">
               <div className="flex flex-col gap-[34px] dt:gap-[51px]">
-                {cart.map((store) => (
-                  <div
-                    key={store.storeName}
-                    className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#F1F3F5]"
-                  >
-                    <div className="bg-red-assistive text-[20px] py-[12px] px-[24px]">
-                      <h4 className="font-bold">{store.storeName}</h4>
-                    </div>
+                {sortedCart.map((store) => {
+                  //가게 내 메뉴 아이템들도 순서 정렬
+                  const sortedItems =
+                    store.items && Array.isArray(store.items)
+                      ? [...store.items].sort((a, b) =>
+                          String(a.cartItemId).localeCompare(
+                            String(b.cartItemId)
+                          )
+                        )
+                      : [];
+                  return (
+                    <div
+                      key={store.storeName}
+                      className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#F1F3F5]"
+                    >
+                      <div className="bg-red-assistive text-[20px] py-[12px] px-[24px]">
+                        <h4 className="font-bold">{store.storeName}</h4>
+                      </div>
 
-                    <div>
-                      {store.items.map((item) => (
-                        <CartList
-                          key={item.cartItemId}
-                          item={item}
-                          updateCartQuantity={updateCartQuantity}
-                          removeCartItem={removeCartItem}
-                        />
-                      ))}
+                      <div>
+                        {sortedItems.map((item) => (
+                          <CartList
+                            key={item.cartItemId}
+                            item={item}
+                            updateCartQuantity={updateCartQuantity}
+                            removeCartItem={removeCartItem}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

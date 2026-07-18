@@ -13,7 +13,8 @@ import {
 
 const Menu = () => {
   const navigate = useNavigate();
-  const { cart, addToCart, clearCart } = useOutletContext();
+  const { cart, addToCart, clearCart, updateCartQuantity, removeCartItem } =
+    useOutletContext();
 
   // 로그인 상태 관리
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -28,7 +29,7 @@ const Menu = () => {
 
   const [totalQuantity, setTotalQuantity] = useState(0);
 
-  //서버에 원래 있던 개수를 전부 다. 더함
+  //서버에 원래 있던 개수를 전부 다 더함
   useEffect(() => {
     if (cart) {
       let total = 0;
@@ -149,7 +150,12 @@ const Menu = () => {
           </div>
         }
       />
-      <FoodBoard addToCart={addToCart} cart={cart} />
+      <FoodBoard
+        addToCart={addToCart}
+        cart={cart}
+        updateCartQuantity={updateCartQuantity}
+        removeCartItem={removeCartItem}
+      />
     </div>
   );
 };

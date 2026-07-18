@@ -3,6 +3,8 @@ import minus from '../../assets/minus.svg';
 import plus from '../../assets/plus.svg';
 import OptionList from './OptionList';
 
+//!!!! +/- 버튼을 누르자마자 장바구니에 담기는건 너무 비효율적인거같아서.. 수량을 수정하고 최종 수량만 서버로 보내도록 수정함! UI 수정사항도 있으니 참고바랍니다..ㅎㅎ (너무별로면 말좀해주세요(!!!! 하고 적힌 내용들은 보면 지워주세요)))
+
 const ModalList = ({
   menuId,
   name,
@@ -12,6 +14,8 @@ const ModalList = ({
   addToCart,
   options,
   isMultiple,
+  updateCartQuantity,
+  removeCartItem,
 }) => {
   const [selectedFood, setSelectedFood] = useState(false);
   const [count, setCount] = useState(1);
@@ -68,6 +72,20 @@ const ModalList = ({
     price: opt.additionalPrice,
   }));
 
+  //한번에 통일
+  const handleFinalSendToCart = (finalCount) => {
+    addToCart({
+      cartItemId: uniqueId,
+      originalID: menuId,
+      menuName: name,
+      price: totalPrice,
+      storeName,
+      quantity: count,
+      options: options,
+      selectedOptions: selectedOptions,
+    });
+  };
+
   return (
     <div className="flex flex-col gap-5 dt:gap-10 dt:flex-row dt:justify-between">
       <div className="flex flex-col flex-1 min-w-0">
@@ -90,86 +108,70 @@ const ModalList = ({
           ))}
         </div>
       </div>
-      <div className="dt:flex-row dt:items-center dt:gap-[24px] flex flex-col items-end gap-2 shrink-0">
-        <p className="font-bold text-[20px]">{price.toLocaleString()}원</p>
+      <div className="dt:flex-row dt:items-center dt:gap-[40px] flex flex-col items-end gap-2 shrink-0">
+        <p className="font-bold text-[20px]">{totalPrice.toLocaleString()}원</p>
         <div>
           {!selectedFood ? (
             <button
               onClick={() => {
                 setSelectedFood(true);
                 setCount(1);
-                addToCart({
-                  cartItemId: uniqueId,
-                  originalID: menuId,
-                  menuName: name,
-                  price: totalPrice,
-                  storeName,
-                  quantity: 1,
-                  options: options,
-                  selectedOptions: selectedOptions,
-                });
               }}
               className="px-[64px] py-[16px] w-[167px] h-[54px] rounded-lg mt-[12px] dt:my-[13px] bg-red-assistive cursor-pointer"
             >
               담기
             </button>
           ) : (
-            <div className="flex gap-[32px] w-[155px] h-[56px] items-center">
-              <button
-                className="cursor-pointer"
-                onClick={() => {
-                  //수량 하나 빼기
-                  if (count > 1) {
-                    setCount(count - 1);
-                    addToCart({
-                      cartItemId: uniqueId,
-                      originalID: menuId,
-                      menuName: name,
-                      price: totalPrice,
-                      storeName,
-                      quantity: -1,
-                      options: options,
-                      selectedOptions: selectedOptions,
-                    });
-                  } else {
-                    setSelectedFood(false);
-                    //1-1 해서 아예 0으로 만들기
-                    addToCart({
-                      cartItemId: uniqueId,
-                      originalID: menuId,
-                      menuName: name,
-                      price: totalPrice,
-                      storeName,
-                      quantity: -1,
-                      options: options,
-                      selectedOptions: selectedOptions,
-                    });
-                  }
-                }}
-              >
-                <img src={minus} alt="minus" />
-              </button>
-              <div className="text-[24px]">{count}</div>
-              <button
-                className="cursor-pointer"
-                //수량 하나 더하기
-                onClick={() => {
-                  setCount(count + 1);
+            <div className="flex flex-col gap-1 items-center w-full">
+              <div className="flex gap-[20px] w-[167px] h-[56px] items-center justify-between">
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    if (count > 1) {
+                      setCount((prev) => prev - 1);
+                    } else {
+                      setSelectedFood(false);
+                      //이후 다시 담을때 사용할 1
+                      setCount(1);
+                    }
+                  }}
+                  /*수량 하나 빼기
+                    onClick = { () => 
+                    if (count > 1) {
+                      setCount(count - 1);
+                      handleSendToCart(count - 1);
+                    } else {
+                      setSelectedFood(false);
+                      handleSendToCart(0);
+                    }}*/
+                >
+                  <img src={minus} alt="minus" />
+                </button>
+                <div className="text-[24px]">{count}</div>
+                <button
+                  className="cursor-pointer"
+                  onClick={() => setCount((prev) => prev + 1)}
                   //수량 하나 더하기
-                  addToCart({
-                    cartItemId: uniqueId,
-                    originalID: menuId,
-                    menuName: name,
-                    price: totalPrice,
-                    storeName,
-                    quantity: 1,
-                    options: options,
-                    selectedOptions: selectedOptions,
-                  });
-                }}
-              >
-                <img src={plus} alt="plus" />
-              </button>
+                  /*onClick={() => {
+                    setCount(count + 1);
+                    //수량 하나 더하기
+                    handleSendToCart(count + 1);
+                  }}*/
+                >
+                  <img src={plus} alt="plus" />
+                </button>
+              </div>
+              <div>
+                <button
+                  className="w-[167px] h-[40px] bg-red-assistive cursor-pointer rounded text-[15px]"
+                  onClick={() => {
+                    handleFinalSendToCart();
+                    setSelectedFood(false);
+                  }}
+                >
+                  담기
+                </button>
+              </div>
             </div>
           )}
         </div>
