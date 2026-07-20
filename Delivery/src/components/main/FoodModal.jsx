@@ -26,8 +26,16 @@ const FoodModal = ({
     item?.menus?.length > 0 ? item.menus : mockStore?.menus || [];
 
   return (
-    <div className="fixed z-50 flex top-[83px] left-0 right-0 bottom-0 dt:justify-center dt:items-center dt:inset-0">
-      <div className="bg-white w-full h-full dt:h-[750px] dt:w-[1000px] flex flex-col p-[40px] dt:rounded-xl dt:border dt:border-gray-2 dt:border-[1px]">
+    // 💡 최상위 레이어: 반투명 검은 배경 추가 및 클릭 시 onClose 실행
+    <div
+      onClick={onClose}
+      className="fixed z-50 flex top-[83px] left-0 right-0 bottom-0 bg-black/5 dt:justify-center dt:items-center dt:inset-0"
+    >
+      {/* 💡 모달 본체: e.stopPropagation()으로 안쪽 클릭 이벤트가 배경으로 퍼지는 것을 방지 */}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white w-full h-full dt:h-[750px] dt:w-[1000px] flex flex-col p-[40px] dt:rounded-xl dt:border dt:border-gray-2 dt:border-[1px]"
+      >
         <div className="flex dt:justify-center relative items-center w-full pb-10 dt:pb-0">
           <div>
             <h3 className="font-bold text-[36px] text-left dt:text-center">

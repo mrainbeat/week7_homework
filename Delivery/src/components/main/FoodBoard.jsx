@@ -16,18 +16,47 @@ const FoodBoard = ({ addToCart, cart, updateCartQuantity, removeCartItem }) => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const url =
-          category === '전체'
-            ? '/api/stores'
-            : `/api/stores?category=${category}`;
-        const response = await api.get(url);
-        setStoreList(response.data.data);
+        if (category === '기타') {
+          // '기타'일 때는 일단 전체 데이터를 다 가져옴
+          const response = await api.get('/api/stores');
+          const allStores = response.data.data;
+
+          // 한식도 아니고 중식도 아닌 데이터만 남기기
+          const etcStores = allStores.filter(
+            (store) => store.category !== '한식' && store.category !== '중식'
+          );
+          setStoreList(etcStores);
+        } else {
+          // '전체', '한식', '중식'은 기존처럼 쿼리스트링 활용
+          const url =
+            category === '전체'
+              ? '/api/stores'
+              : `/api/stores?category=${category}`;
+          const response = await api.get(url);
+          setStoreList(response.data.data);
+        }
       } catch (error) {
         console.error('가게 목록 불러오기 실패:', error);
       }
     };
+
     fetchStores();
   }, [category]);
+  // useEffect(() => {
+  //   const fetchStores = async () => {
+  //     try {
+  //       const url =
+  //         category === '전체'
+  //           ? '/api/stores'
+  //           : `/api/stores?category=${category}`;
+  //       const response = await api.get(url);
+  //       setStoreList(response.data.data);
+  //     } catch (error) {
+  //       console.error('가게 목록 불러오기 실패:', error);
+  //     }
+  //   };
+  //   fetchStores();
+  // }, [category]);
 
   const handleMenuClick = async (store) => {
     try {

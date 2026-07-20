@@ -57,6 +57,7 @@ const Menu = () => {
     localStorage.removeItem('memberId');
     localStorage.removeItem('myCredit'); // 로그아웃 시 크레딧 초기화
     setIsLoggedIn(false);
+    alert('로그아웃 되었습니다.');
   };
 
   return (
