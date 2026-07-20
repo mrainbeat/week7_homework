@@ -20,8 +20,17 @@ const ModalList = ({
   const [selectedFood, setSelectedFood] = useState(false);
   const [count, setCount] = useState(1);
 
-  //옵션 선택을 배열로 받기
+  // 옵션 선택을 배열로 받기
   const [selectedOptions, setSelectedOptions] = useState([]);
+  // 💡 옵션 검사 함수 (옵션이 존재하는 메뉴인데 아무것도 안 골랐다면 false 반환)
+  const validateOption = () => {
+    const hasOptions = options && options.length > 0;
+    if (hasOptions && selectedOptions.length === 0) {
+      alert('옵션을 선택해 주세요!');
+      return false;
+    }
+    return true;
+  };
 
   const handleFoodClick = (option) => {
     setCount(1);
@@ -114,6 +123,8 @@ const ModalList = ({
           {!selectedFood ? (
             <button
               onClick={() => {
+                // 옵션 검사 통과 못 하면 여기서 멈춤
+                if (!validateOption()) return;
                 setSelectedFood(true);
                 setCount(1);
               }}
@@ -165,6 +176,8 @@ const ModalList = ({
                 <button
                   className="w-[167px] h-[40px] bg-red-assistive cursor-pointer rounded text-[15px]"
                   onClick={() => {
+                    // 옵션 검사 통과 못 하면 여기서 멈춤
+                    if (!validateOption()) return;
                     handleFinalSendToCart();
                     setSelectedFood(false);
                   }}
