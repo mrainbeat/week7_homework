@@ -93,6 +93,7 @@ const ModalList = ({
       options: options,
       selectedOptions: selectedOptions,
     });
+    alert('장바구니에 담겼습니다!');
   };
 
   return (
