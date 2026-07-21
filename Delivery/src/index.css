@@ -14,7 +14,7 @@
   --font-sans: 'GmarketSansMedium', sans-serif;
   /* 반응형 브레이크포인트 설정 (크기순 정렬) */
   --breakpoint-ph: 402px;
-  --breakpoint-dt: 1725px;
+  --breakpoint-dt: 1280px;
 
   /* Gray 스케일 */
   --color-gray-0: #ffffff;
