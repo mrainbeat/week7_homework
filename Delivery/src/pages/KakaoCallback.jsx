@@ -4,19 +4,16 @@ import api from '../api/axios';
 
 const KakaoCallback = () => {
   const navigate = useNavigate();
-  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const [searchParams] = useSearchParams();
 
-  const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URL;
-
   useEffect(() => {
-    // 주소창에서 accessToken 꺼내오기
+    //주소창에서 accessToken 꺼내오기
     const token = searchParams.get('accessToken');
 
     if (token) {
       console.log('카카오 로그인 성공! 토큰:', token);
 
-      // 로컬 스토리지에 토큰 및 로그인 상태 저장
+      //로컬 스토리지에 토큰 및 로그인 상태 저장
       localStorage.setItem('accessToken', token);
       localStorage.setItem('isLoggedIn', 'true');
 
@@ -30,7 +27,7 @@ const KakaoCallback = () => {
   }, [searchParams, navigate]);
 
   return (
-    <div className="w-full h-screen flex items center justify-center text=white text-2xl">
+    <div className="w-full h-screen flex items-center justify-center text=white text-2xl">
       <p className="text-lg font-medium text-gray-300">
         카카오 로그인 처리 중입니다...
       </p>
