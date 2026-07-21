@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import KakaoLoginButton from '../components/KakaoLoginButton';
 import api from '../api/axios'; //axios 추가
 
 export default function Login({ onLoginSuccess }) {
@@ -136,11 +137,14 @@ export default function Login({ onLoginSuccess }) {
           {/* 로그인 버튼 */}
           <button
             type="submit"
-            className="w-[244px] h-[54px] bg-[#f0f0f0] text-[#555555] border-none rounded-[20px] text-[20px] font-bold cursor-pointer mx-auto mt-[64px] transition-all duration-200 ease-in-out hover:bg-red-primary hover:text-white"
+            className="w-[400px] h-[54px] bg-[#f0f0f0] text-[#555555] border-none rounded-[10px] text-[20px] font-bold cursor-pointer mx-auto mt-[64px] transition-all duration-200 ease-in-out hover:bg-red-primary hover:text-white"
           >
             로그인
           </button>
         </form>
+        <div className="relative z-10 w-[400px] mx-auto mt-4 cursor-pointer">
+          <KakaoLoginButton />
+        </div>
       </div>
     </div>
   );
