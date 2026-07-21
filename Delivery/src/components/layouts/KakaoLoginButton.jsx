@@ -10,8 +10,9 @@ export const KakaoLoginButton = () => {
   };
   return (
     <button
+      type="button"
       onClick={handleLogin}
-      className="w-full flex flex-row gap-4 justify-center py-2 items-center bg-[#FFE812] rounded-sm mt-4 hover:cursor-pointer"
+      className="w-full flex flex-row gap-4 justify-center py-2 items-center bg-[#FFE812] rounded-sm mt-6 hover:cursor-pointer"
     >
       <img src={KakaoIcon} alt="카카오 로그인" className="w-8 h-8" />
       <p className="text-black font-semibold ">카카오로 계속하기</p>
