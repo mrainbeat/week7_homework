@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound';
 import CompleteOrder from './pages/CompleteOrder';
 import CreditCharge from './pages/CreditCharge';
 import api from './api/axios';
+import KakaoCallback from './pages/KakaoCallback';
 
 //
 function App() {
@@ -146,6 +147,7 @@ function App() {
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/CompleteOrder" element={<CompleteOrder />} />
         <Route path="/CreditCharge" element={<CreditCharge />} />
+        <Route path="/oauth/success" element={<KakaoCallback />} />
         <Route
           path="/"
           element={

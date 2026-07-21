@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import useAuthStore from '../stores/useAuthStore';
+import api from '../api/axios';
 
 const KakaoCallback = () => {
   const navigate = useNavigate();
@@ -10,48 +10,24 @@ const KakaoCallback = () => {
   const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URL;
 
   useEffect(() => {
-    const code = searchParams.get('code');
+    // 주소창에서 accessToken 꺼내오기
+    const token = searchParams.get('accessToken');
 
-    const getTokenFromKakao = async (code) => {
-      const params = new URLSearchParams();
-      params.append('grant_type', 'authorization_code');
-      params.append('client_id', import.meta.env.VITE_KAKAO_API_KEY);
-      params.append('redirect_uri', REDIRECT_URI);
-      params.append('code', code);
+    if (token) {
+      console.log('카카오 로그인 성공! 토큰:', token);
 
-      try {
-        const response = await fetch('https://kauth.kakao.com/oauth/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-          },
-          body: params,
-        });
+      // 로컬 스토리지에 토큰 및 로그인 상태 저장
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('isLoggedIn', 'true');
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log('카카오 토큰 발급 성공:', data);
-
-          // 스토리지에 토큰 저장
-          setAccessToken(data.access_token);
-
-          // 메인으로 이동
-          navigate('/', { replace: true });
-        } else {
-          const errorData = await response.json();
-          console.error('카카오 에러 상세내역:', errorData);
-          throw new Error('토큰 발급 실패');
-        }
-      } catch (error) {
-        console.error('에러 발생:', error);
-        alert('로그인에 실패했습니다.');
-        navigate('/login');
-      }
-    };
-    if (code) {
-      getTokenFromKakao(code);
+      //홈 화면으로 이동
+      navigate('/', { replace: true });
+    } else {
+      // 주소창에 토큰이 없다면 에러 처리
+      console.error('토큰을 찾을 수 없습니다.');
+      alert('카카오 로그인에 실패했습니다.');
     }
-  }, [searchParams]);
+  }, [searchParams, navigate]);
 
   return (
     <div className="w-full h-screen flex items center justify-center text=white text-2xl">

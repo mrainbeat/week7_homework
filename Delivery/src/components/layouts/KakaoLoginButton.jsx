@@ -1,12 +1,9 @@
+import KakaoIcon from '../../assets/kakaotalk.png';
+
 export const KakaoLoginButton = () => {
-  const REST_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
-  const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URL;
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-  const KakaoIcon = './src/assets/kakaotalk.png';
-
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
   const handleLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
+    window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
   };
   return (
     <button
