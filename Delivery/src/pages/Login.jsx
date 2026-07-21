@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/axios'; //axios 추가
-
+import api from '../api/axios'; // axios 추가
+import KakaoLoginButton from '../components/layouts/KakaoLoginButton';
 export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,13 +20,13 @@ export default function Login({ onLoginSuccess }) {
     try {
       // 백엔드 쪽으로 형식 맞춰서 보냄
       const response = await api.post('/api/auth/login', {
-        email: email, // 회원가입 때처럼 email로 맞춰서 전송
+        email: email,
         password: password,
       });
 
       console.log('로그인 성공:', response.data);
 
-      //accessToken 저장하기
+      // accessToken 저장하기
       const token =
         response.data.accessToken || response.data.data?.accessToken;
 
@@ -35,7 +35,7 @@ export default function Login({ onLoginSuccess }) {
         localStorage.setItem('accessToken', token);
         localStorage.setItem('isLoggedIn', 'true');
 
-        //내 정보 조회하는 응답 받기
+        // 내 정보 조회하는 응답 받기
         try {
           const meResponse = await api.get('/api/users/me', {
             headers: {
@@ -44,14 +44,14 @@ export default function Login({ onLoginSuccess }) {
           });
           console.log('로그인 직후 내 정보 응답 :', meResponse.data);
 
-          //응답 데이터속 크레딧 정보 저장
+          // 응답 데이터속 크레딧 정보 저장
           const userCredit = meResponse.data.data.credit;
           localStorage.setItem('myCredit', String(userCredit));
         } catch (meError) {
           console.error('내 정보 가져오기 실패:', meError);
         }
 
-        if (typeof onLoginSuccess) {
+        if (typeof onLoginSuccess === 'function') {
           await onLoginSuccess(token);
         }
       }
@@ -60,7 +60,6 @@ export default function Login({ onLoginSuccess }) {
       navigate('/Menu');
     } catch (error) {
       console.error('로그인 실패:', error);
-      // 백엔드가 틀렸다고 알려주면 에러 메시지 띄우기
 
       alert(
         error.response?.data?.message ||
@@ -72,20 +71,20 @@ export default function Login({ onLoginSuccess }) {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#f9f9f9] px-4">
-      {/* 회원가입 페이지와 동일한 규격의 메인 박스 */}
+      {/* 메인 박스 */}
       <div className="relative w-full max-w-[625px] h-auto min-h-[845px] bg-white border-2 border-white rounded-[16px] shadow-[0_10px_25px_rgba(0,0,0,0.1)] px-[20px] py-[40px] flex flex-col items-center">
-        {/* 타이틀 로고 영역 */}
-        <h1 className="text-[#f0485f] text-[36px] font-bold mt-[40px] mb-[64px] text-center">
+        {/* 타이틀 영역 */}
+        <h1 className="text-[#f0485f] text-[36px] font-bold mt-[40px] mb-[48px] text-center">
           로그인하기
         </h1>
 
         <form
           onSubmit={handleSubmit}
           noValidate
-          className="w-full flex flex-col items-center gap-[24px]"
+          className="w-full max-w-[553px] flex flex-col items-center gap-[24px]"
         >
           {/* 이메일 입력 영역 */}
-          <div className="flex flex-col w-full max-w-[553px]">
+          <div className="flex flex-col w-full">
             <label
               htmlFor="email-input"
               className="text-[20px] font-bold text-[#333333] mb-[8px] text-left"
@@ -104,7 +103,7 @@ export default function Login({ onLoginSuccess }) {
           </div>
 
           {/* 비밀번호 입력 영역 */}
-          <div className="flex flex-col w-full max-w-[553px]">
+          <div className="flex flex-col w-full">
             <label
               htmlFor="password-input"
               className="text-[20px] font-bold text-[#333333] mb-[8px] text-left"
@@ -123,7 +122,7 @@ export default function Login({ onLoginSuccess }) {
           </div>
 
           {/* 회원가입 링크 영역 */}
-          <div className="flex items-center gap-[12px] mt-[16px] text-[16px] text-[#555555]">
+          <div className="flex items-center gap-[12px] mt-[8px] text-[16px] text-[#555555]">
             <span>계정이 없나요?</span>
             <span
               onClick={() => navigate('/signup')}
@@ -133,13 +132,25 @@ export default function Login({ onLoginSuccess }) {
             </span>
           </div>
 
-          {/* 로그인 버튼 */}
+          {/* 일반 로그인 버튼 */}
           <button
             type="submit"
-            className="w-[244px] h-[54px] bg-[#f0f0f0] text-[#555555] border-none rounded-[20px] text-[20px] font-bold cursor-pointer mx-auto mt-[64px] transition-all duration-200 ease-in-out hover:bg-red-primary hover:text-white"
+            className="w-[244px] h-[54px] bg-[#f0f0f0] text-[#555555] border-none rounded-[20px] text-[20px] font-bold cursor-pointer mt-[32px] transition-all duration-200 ease-in-out hover:bg-red-primary hover:text-white"
           >
             로그인
           </button>
+
+          {/* 구분선 */}
+          <div className="w-full flex items-center my-4">
+            <div className="flex-grow border-t border-[#e0e0e0]"></div>
+            <span className="px-4 text-[14px] text-[#888888]">또는</span>
+            <div className="flex-grow border-t border-[#e0e0e0]"></div>
+          </div>
+
+          {/* 카카오 로그인 버튼 영역 */}
+          <div className="w-full">
+            <KakaoLoginButton />
+          </div>
         </form>
       </div>
     </div>
