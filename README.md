@@ -1,4 +1,5 @@
-# 👾 7주차 과제 - Delivery (배달 주문 웹 애플리케이션)
+# 👾 LionDelivery (배달 주문 웹 애플리케이션)
+
 피그마 시안의 디자인 레이아웃을 반영하고, 실시간 백엔드 API 서버와의 비동기 통신을 중심으로 상태 변화를 추적하며 로컬스토리지(localStorage)를 경유해 데이터를 유기적으로 동기화합니다. 사용자가 로그인 후 원하는 음식점을 클릭하면 실제 서버 데이터 기반의 상세 메뉴와 정보(옵션 목록 등)를 실시간으로 확인하고, 장바구니 추가부터 서버 연동 결제 처리까지 원스톱으로 제어하는 리액트 기반 배달 주문 웹 애플리케이션입니다.
 
 ## 🚀 주요 기능
@@ -34,15 +35,17 @@
    결제 수단 선택 및 보유 크레딧 잔액 현황 요약 기능을 제공하며, 결제 완료 시 데이터 차감 및 완료 리다이렉션을 지원합니다.
 
 ## 🛠 기술 스택
+
 프레임워크: React (Vite)
 
-스타일링: CSS3 (Vanilla CSS), TailwindCSS
+스타일링: TailwindCSS
 
 라우팅: React Router DOM
 
 HTTP 클라이언트: Axios (공통 인스턴스 및 인터셉터 아키텍처)
 
 ## 💾 핵심 로직 및 데이터 연동
+
 ### 📌 백엔드 서버 데이터 연동 및 처리 아키텍처
 기존 로컬스토리지 중심의 연동 방식에서 완전히 탈피하여, 모든 장바구니 데이터의 추가, 조회, 삭제 및 결제는 실제 백엔드 개발 서버(`https://mutsa-food.shop`)의 비동기 API 엔드포인트와 통신하여 제어합니다.
 
@@ -87,13 +90,13 @@ HTTP 클라이언트: Axios (공통 인스턴스 및 인터셉터 아키텍처)
 CartList 컴포넌트 내에서도 상호 연동되어 동일한 방식으로 서버 및 로컬 브라우저 세션과 실시간으로 통신하며 장바구니 화면 내부에서의 추가 및 삭제 조작이 가능합니다.
 
 ### 📌 장바구니 결제 및 주문 처리 (POST)
-URL: /api/orders
+URL : /api/orders
 
-Headers: Member-Id: {id}, Authorization: Bearer {token}
+Headers : Member-Id: {id}, Authorization: Bearer {token}
 
-Response (201 Created): 결제 정상 처리 완료 시 실제 서버가 차감 후 뱉어내는 잔액(remainCredit)을 수신하여 로컬스토리지 myCredit에 즉시 동기화 처리 후 /CompleteOrder로 안전하게 리다이렉션합니다.
+Response (201 Created) : 결제 정상 처리 완료 시 실제 서버가 차감 후 뱉어내는 잔액(remainCredit)을 수신하여 로컬스토리지 myCredit에 즉시 동기화 처리 후 /CompleteOrder로 안전하게 리다이렉션합니다.
 
-Response (400 Bad Request): 보유 크레딧이 부족할 경우 서버 예외 메시지("보유 크레딧이 부족합니다.")를 수신하여 Alert로 유저에게 명확하게 피드백합니다.
+Response (400 Bad Request) : 보유 크레딧이 부족할 경우 서버 예외 메시지("보유 크레딧이 부족합니다.")를 수신하여 Alert로 유저에게 명확하게 피드백합니다.
 
 ## 📁 프로젝트 구조
 본 프로젝트의 소스코드는 루트 경로의 Delivery 폴더 내에서 관리됩니다.
@@ -103,21 +106,12 @@ Delivery/
 │   ├── 📂 api/
 │   │   └── ⚛️ axios.js
 │   ├── 📂 assets/
-│   │   ├── 📂 Background/
-│   │   │   └── 📜 background.png
-│   │   ├── 📜 card.svg
-│   │   ├── 📜 cart.svg
-│   │   ├── 📜 close.svg
-│   │   ├── 📜 fa-solid_arrow-left.svg
-│   │   ├── 📜 hamburger.svg
-│   │   ├── 📜 ion_close-outline.svg
-│   │   ├── 📜 minus.svg
-│   │   └── 📜 plus.svg
 │   ├── 📂 components/
 │   │   ├── 📂 Cart/
 │   │   │   ├── ⚛️ CartList.jsx
 │   │   │   └── ⚛️ Payment.jsx
 │   │   ├── 📂 layouts/
+│   │   │   ├── ⚛️ KakaoLoginButton.jsx
 │   │   │   ├── ⚛️ Layout.jsx
 │   │   │   └── ⚛️ Navbar.jsx
 │   │   └── 📂 main/
@@ -128,6 +122,7 @@ Delivery/
 │   │       ├── ⚛️ ModalList.jsx
 │   │       └── ⚛️ OptionList.jsx
 │   ├── 📂 pages/
+│   │   ├── ⚛️ KakaoCallback.jsx
 │   │   ├── ⚛️ CompleteOrder.jsx
 │   │   ├── ⚛️ CreditCharge.jsx
 │   │   ├── ⚛️ Login.jsx
@@ -148,29 +143,56 @@ Delivery/
 ├── 📜 vercel.json
 └── 📜 vite.config.js
 ```
+
+## 📡 요약 API 명세서
+
+| 도메인        | 기능 (API 이름)                   | HTTP Method | URL                             |
+| :------------ | :-------------------------------- | :---------- | :------------------------------ |
+| **회원/인증** | 회원가입                          | `POST`      | `/api/auth/signup`              |
+|               | 로그인                            | `POST`      | `/api/auth/login`               |
+|               | 내 정보 조회                      | `GET`       | `/api/users/me`                 |
+| **가게/메뉴** | 전체 및 카테고리별 가게 목록 조회 | `GET`       | `/api/stores`                   |
+|               | 가게 상세 및 메뉴 목록 조회       | `GET`       | `/api/stores/{storeId}`         |
+| **장바구니**  | 장바구니 상품 및 옵션 담기        | `POST`      | `/api/carts/items`              |
+|               | 내 장바구니 전체 목록 조회        | `GET`       | `/api/carts`                    |
+|               | 장바구니 상품 수량 조절           | `PATCH`     | `/api/carts/items/{cartItemId}` |
+|               | 장바구니 상품 삭제                | `DELETE`    | `/api/carts/items/{cartItemId}` |
+| **결제/주문** | 크레딧 충전하기                   | `POST`      | `/api/credits/charge`           |
+|               | 장바구니 결제 및 주문 완료        | `POST`      | `/api/orders`                   |
+
+---
+
 ## 🌿 브랜치 및 작업 분담
+
 ### 🔹 main
 기능 구현 및 테스트가 완료된 코드만 최종적으로 병합하는 프로덕션 브랜치
 
 ### 🔹 seoyoung
-Navbar: 전체적인 상단 네비게이션 구조 및 햄버거 토글 모달 컴포넌트 구현, 모바일 뷰 렌더링 시 레이어 겹침 방지를 위한 계층 조율
+#### Navbar: 
+전체적인 상단 네비게이션 구조 및 햄버거 토글 모달 컴포넌트 구현, 모바일 뷰 렌더링 시 레이어 겹침 방지를 위한 계층 조율
 
-Menu 페이지 파트: 음식점 목록판(FoodBoard), 음식점 선택 카드(FoodCard), 카테고리 필터링 구조 설계 및 데이터 매핑
+#### Menu 페이지 파트: 
+음식점 목록판(FoodBoard), 음식점 선택 카드(FoodCard), 카테고리 필터링 구조 설계 및 데이터 매핑
 
-상세 모달 고도화: FoodModal 및 ModalList 내 사이드 메뉴(SideList) 선택 아키텍처 설계, 선택 옵션 조합에 따른 uniqueId 커스텀 분기 및 실시간 결제 가격(totalPrice) 가산 데이터 처리 구현
+#### 상세 모달 고도화: 
+FoodModal 및 ModalList 내 사이드 메뉴(SideList) 선택 아키텍처 설계, 선택 옵션 조합에 따른 uniqueId 커스텀 분기 및 실시간 결제 가격(totalPrice) 가산 데이터 처리 구현
 
-Order 페이지 파트: 장바구니 리스트(CartList) 렌더링 데이터 연동, 수량 가중치 연산에 따른 전역 상태 변경 추적, 모바일 화면에서의 독립 뷰 전환 스위칭 구현 및 결제수단(Payment) 선택 컴포넌트 설계
+#### Order 페이지 파트: 
+장바구니 리스트(CartList) 렌더링 데이터 연동, 수량 가중치 연산에 따른 전역 상태 변경 추적, 모바일 화면에서의 독립 뷰 전환 스위칭 구현 및 결제수단(Payment) 선택 컴포넌트 설계
 #### API 연동 (메뉴, 옵션, 결제):
 음식점 메뉴판 및 세부 옵션 목록 조회 API 실서버 연동
 주문 및 결제수단(`Payment`) 선택 아키텍처 설계 및 최종 결제하기 API 연동
 서버 연산 기반 금액 반영: 장바구니의 최종 금액(totalPrice)은 클라이언트에서 임의로 연산하지 않고, 옵션 선택 및 수량 변경 시 백엔드 서버가 계산하여 응답으로 내려주는 신뢰할 수 있는 데이터 객체의TotalPrice를 그대로 전달받아 화면에 동기화 및 렌더링합니다.
 
 ### 🔹 minjun
-인증 파트: 사용자의 접근 권한 제어를 위한 Login / Signup 페이지 전체 UI 마크업 및 입력 필드 유효성 검증(Validation) 로직 설계
+#### 인증 파트: 
+사용자의 접근 권한 제어를 위한 Login / Signup 페이지 전체 UI 마크업 및 입력 필드 유효성 검증(Validation) 로직 설계
 
-Order 페이지 파트: 데스크톱(dt) 기준 해상도 파편화 제어를 위한 피그마 기반의 기본 고정 픽셀 그리드 레이아웃(가로 폭 및 세로 높이) 구조 기획 및 구축
+#### Order 페이지 파트: 
+데스크톱(dt) 기준 해상도 파편화 제어를 위한 피그마 기반의 기본 고정 픽셀 그리드 레이아웃(가로 폭 및 세로 높이) 구조 기획 및 구축
 
-UI 컴포넌트 구성: 최초 진입 시의 장바구니 목록과 우측 결제창 카드 레이아웃 정렬 배치, 로컬스토리지를 경유하는 유저별 보유 크레딧 잔액 현황 및 실시간 대조 요약 정보 컴포넌트 마크업 설계
+#### UI 컴포넌트 구성: 
+최초 진입 시의 장바구니 목록과 우측 결제창 카드 레이아웃 정렬 배치, 로컬스토리지를 경유하는 유저별 보유 크레딧 잔액 현황 및 실시간 대조 요약 정보 컴포넌트 마크업 설계
 
 #### API 연동 (크레딧, 장바구니):
 보유 크레딧 연동: 유저별 보유 크레딧 잔액 조회 API 연동 및 부족 시 결제하기 버튼 비활성화(`disabled`) 제어 로직 설계, 크레딧 충전(`CreditCharge`) API 연동
